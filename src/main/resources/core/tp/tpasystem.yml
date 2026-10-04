@@ -1,0 +1,12 @@
+messages:
+  tpauto_enabled: "&aYou have enabled Tpauto!"
+  tpauto_disabled: "&cYou have disabled Tpauto!"
+  tpa_sent: "&eSent a teleport request to &b%target%&e."
+  tpa_received: "&eYou received a teleport request from &b%target%&e."
+  teleporting_actionbar: "&7Teleporting in &b%time%s"
+  teleport_cancelled: "&cTeleport cancelled because you moved or took damage!"
+
+settings:
+  countdown_seconds: 5
+  ticking_sound: "BLOCK_NOTE_BLOCK_PLING"
+  completion_sound: "ENTITY_ENDER_PEARL_THROW"
