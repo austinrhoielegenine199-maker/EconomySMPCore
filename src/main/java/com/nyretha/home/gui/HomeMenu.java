@@ -2,6 +2,7 @@ package com.nyretha.home.gui;
 
 import com.nyretha.home.model.HomeManager;
 import com.nyretha.home.service.HomeGuiConfigService;
+import com.nyretha.team.service.TeamManager;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
@@ -17,7 +18,7 @@ import java.util.Set;
 
 public class HomeMenu {
 
-    public static void open(Player player, HomeGuiConfigService configService, HomeManager homeManager /*, TeamManager teamManager */) {
+    public static void open(Player player, HomeGuiConfigService configService, HomeManager homeManager, TeamManager teamManager) {
         String title = ChatColor.translateAlternateColorCodes('&', configService.getGuiTitle());
         int rows = configService.getGuiRows();
         Inventory inv = Bukkit.createInventory(null, rows * 9, title);
@@ -26,7 +27,6 @@ public class HomeMenu {
         List<Integer> bedSlots = configService.getSlots("beds");
         List<Integer> dyeSlots = configService.getSlots("dyes");
 
-        // 1. Render Personal Homes (Beds & Dyes 1-5)
         for (int i = 0; i < 5; i++) {
             int slotNum = i + 1;
             String homeNameStr = String.valueOf(slotNum);
@@ -36,22 +36,19 @@ public class HomeMenu {
             if (i < bedSlots.size()) {
                 inv.setItem(bedSlots.get(i), createBedItem(slotNum, hasHome, hasPermission, configService));
             }
-
             if (i < dyeSlots.size()) {
                 inv.setItem(dyeSlots.get(i), createDyeItem(slotNum, hasHome, hasPermission, configService));
             }
         }
 
-        // 2. Render Team Banner & Dye
-        boolean isInTeam = false; // Replace with: teamManager.isInTeam(player.getUniqueId());
-        boolean hasTeamHome = false; // Replace with: teamManager.hasTeamHome(player.getUniqueId());
-        boolean canManageTeamHome = false; // Replace with: teamManager.canManageTeamHome(player.getUniqueId());
+        boolean isInTeam = teamManager.isInTeam(player.getUniqueId());
+        String teamName = teamManager.getTeamName(player.getUniqueId());
+        boolean hasTeamHome = isInTeam && teamManager.hasTeamHome(teamName);
 
         int teamBannerSlot = configService.getSlot("team-banner");
-        int teamDyeSlot = configService.getSlot("team-dye");
-
-        inv.setItem(teamBannerSlot, createTeamBannerItem(isInTeam, hasTeamHome, configService));
-        inv.setItem(teamDyeSlot, createTeamDyeItem(isInTeam, hasTeamHome, canManageTeamHome, configService));
+        if (teamBannerSlot >= 0 && teamBannerSlot < inv.getSize()) {
+            inv.setItem(teamBannerSlot, createTeamBannerItem(isInTeam, hasTeamHome, configService));
+        }
 
         player.openInventory(inv);
     }
@@ -122,55 +119,10 @@ public class HomeMenu {
 
     @SuppressWarnings("unchecked")
     private static ItemStack createTeamBannerItem(boolean isInTeam, boolean hasTeamHome, HomeGuiConfigService configService) {
-        String itemKey;
-        if (!isInTeam) {
-            itemKey = "team-banner-no-team";
-        } else if (hasTeamHome) {
-            itemKey = "team-banner-has-home";
-        } else {
-            itemKey = "team-banner-no-home";
-        }
-
+        String itemKey = !isInTeam ? "team-banner-no-team" : (hasTeamHome ? "team-banner-has-home" : "team-banner-no-home");
         Map<String, Object> itemData = configService.getItemConfig(itemKey);
+        
         Material material = Material.WHITE_BANNER;
-        String name = "&fᴛᴇᴀᴍ ʜᴏᴍᴇ";
-        List<String> loreList = new ArrayList<>();
-
-        if (itemData != null) {
-            if (itemData.containsKey("material")) {
-                try { material = Material.valueOf((String) itemData.get("material")); } catch (Exception ignored) {}
-            }
-            if (itemData.containsKey("name")) name = (String) itemData.get("name");
-            if (itemData.containsKey("lore")) loreList = (List<String>) itemData.get("lore");
-        }
-
-        ItemStack item = new ItemStack(material);
-        ItemMeta meta = item.getItemMeta();
-        if (meta != null) {
-            meta.setDisplayName(ChatColor.translateAlternateColorCodes('&', name));
-            List<String> coloredLore = new ArrayList<>();
-            for (String line : loreList) {
-                coloredLore.add(ChatColor.translateAlternateColorCodes('&', line));
-            }
-            meta.setLore(coloredLore);
-            item.setItemMeta(meta);
-        }
-        return item;
-    }
-
-    @SuppressWarnings("unchecked")
-    private static ItemStack createTeamDyeItem(boolean isInTeam, boolean hasTeamHome, boolean canManage, HomeGuiConfigService configService) {
-        String itemKey;
-        if (!isInTeam) {
-            itemKey = "team-dye-no-team";
-        } else if (hasTeamHome) {
-            itemKey = canManage ? "team-dye-has-home-manageable" : "team-dye-has-home-no-permission";
-        } else {
-            itemKey = "team-dye-no-home";
-        }
-
-        Map<String, Object> itemData = configService.getItemConfig(itemKey);
-        Material material = Material.BLUE_DYE;
         String name = "&fᴛᴇᴀᴍ ʜᴏᴍᴇ";
         List<String> loreList = new ArrayList<>();
 
