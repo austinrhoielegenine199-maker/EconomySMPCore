@@ -1,1 +1,87 @@
+title: "&8ѕᴇʀᴠᴇʀ ɪɴꜰᴏ"
 
+size: 27
+
+items:
+  donutsmp:
+    material: LANTERN
+    slot: 10
+    name: '#38C1FCDonutSMP'
+    lore:
+      - '#FFFFFFBuild a base, fight players,'
+      - '#FFFFFFand become the richest.'
+      - ''
+      - '#38C1FCPVP: #FF5555Enabled'
+      - '#38C1FCDifficulty: #FF5555Hard'
+      - '#38C1FCkeepInventory: #FF5555False'
+      - '#AAAAAAWorth: #00FF00$4'
+
+  economy:
+    material: GOLD_INGOT
+    slot: 11
+    name: '#38C1FCEconomy'
+    lore:
+      - '#FFFFFFYou can earn server money by selling items in game.'
+      - '#FFFFFFThis allows you to buy better things like armor and pvp gear.'
+      - ''
+      - '#38C1FCCommands: #FFFFFF/sell and /auction'
+      - '#AAAAAAWorth: #00FF00$5'
+
+  rules:
+    material: KNOWLEDGE_BOOK
+    slot: 12
+    name: '#38C1FCRules'
+    lore:
+      - '#FFFFFFTo keep the community safe, everyone must'
+      - '#FFFFFFfollow the rules or be subject to punishment.'
+      - ''
+      - '#38C1FCCommand: #FFFFFF/rules'
+      - '#AAAAAAWorth: #00FF00$10'
+
+  leaderboards:
+    material: CLOCK
+    slot: 13
+    name: '#38C1FCLeaderboards'
+    lore:
+      - '#FFFFFFLook at the top players and'
+      - '#FFFFFFcompete for the top spots.'
+      - ''
+      - '#38C1FCCommand: #FFFFFF/leaderboards'
+      - '#AAAAAAWorth: #00FF00$25'
+
+  afkshards:
+    material: AMETHYST_SHARD
+    slot: 14
+    name: '#38C1FCAFK Shards'
+    lore:
+      - '#FFFFFFYou can earn shards by sitting idle, then'
+      - '#FFFFFFbuy things like spawners, keys, and more.'
+      - ''
+      - '#38C1FCCommand: #FFFFFF/afk'
+      - '#AAAAAAWorth: #00FF00$50'
+
+  settings:
+    material: GRAY_DYE
+    slot: 15
+    name: '#38C1FCSettings'
+    lore:
+      - '#FFFFFFYou can change certain settings'
+      - '#FFFFFFbased on your preferences.'
+      - ''
+      - '#38C1FCCommand: #FFFFFF/settings'
+      - '#AAAAAAWorth: #00FF00$1'
+
+  rtp:
+    material: OAK_SAPLING
+    slot: 16
+    name: '#38C1FCRandom Teleport'
+    lore:
+      - '#FFFFFFUse the random teleport to'
+      - '#FFFFFFget far away from spawn.'
+      - ''
+      - '#38C1FCOverworld: #FFFFFF175k x 175k'
+      - '#38C1FCNether: #FFFFFF7.5k x 7.5k'
+      - '#38C1FCEnd: #FFFFFF225k x 225k'
+      - ''
+      - '#38C1FCCommand: #FFFFFF/rtp'
+      - '#AAAAAAWorth: #00FF00$3'
