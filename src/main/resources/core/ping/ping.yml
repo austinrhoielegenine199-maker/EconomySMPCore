@@ -1,1 +1,19 @@
+ping:
+  enabled: true
 
+  display:
+    chat: true
+    actionbar: true
+
+  messages:
+    chat: "&7You have #009bff%ping%&7ms"
+    actionbar: "&7You have #009bff%ping%&7ms"
+    disabled: "&cThe ping command is currently disabled."
+    no-permission: "&cYou don't have permission to use this command."
+    player-only: "&cOnly players can use this command."
+
+  sound:
+    enabled: false
+    name: "ENTITY_EXPERIENCE_ORB_PICKUP"
+    volume: 1.0
+    pitch: 1.0
