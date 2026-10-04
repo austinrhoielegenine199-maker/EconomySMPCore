@@ -1,8 +1,8 @@
 package com.nyretha.home.command;
 
+import com.nyretha.home.listener.HomeRenameListener;
 import com.nyretha.home.model.HomeManager;
 import com.nyretha.home.service.HomeConfig;
-import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Sound;
 import org.bukkit.command.Command;
@@ -42,7 +42,21 @@ public class HomeCommand implements CommandExecutor {
         String cmdName = command.getName().toLowerCase();
 
         if (cmdName.equals("sethome")) {
-            String homeName = args.length > 0 ? args[0] : "home";
+            String homeName = "home";
+            if (args.length > 0) {
+                String arg = args[0];
+                try {
+                    int slotNum = Integer.parseInt(arg);
+                    if (slotNum < 1 || slotNum > 5) {
+                        player.sendMessage("§cHome slots must be between 1 and 5!");
+                        return true;
+                    }
+                    homeName = String.valueOf(slotNum);
+                } catch (NumberFormatException e) {
+                    homeName = arg;
+                }
+            }
+
             homeManager.setHome(player.getUniqueId(), homeName, player.getLocation());
             player.sendMessage("§aHome §e" + homeName + " §aset successfully!");
             player.playSound(player.getLocation(), Sound.ENTITY_PLAYER_LEVELUP, 1.0f, 1.0f);
@@ -50,7 +64,21 @@ public class HomeCommand implements CommandExecutor {
         }
 
         if (cmdName.equals("home")) {
-            String homeName = args.length > 0 ? args[0] : "home";
+            String homeName = "home";
+            if (args.length > 0) {
+                String arg = args[0];
+                try {
+                    int slotNum = Integer.parseInt(arg);
+                    if (slotNum >= 1 && slotNum <= 5) {
+                        homeName = String.valueOf(slotNum);
+                    } else {
+                        homeName = arg;
+                    }
+                } catch (NumberFormatException e) {
+                    homeName = arg;
+                }
+            }
+
             Location targetLoc = homeManager.getHome(player.getUniqueId(), homeName);
 
             if (targetLoc == null) {
