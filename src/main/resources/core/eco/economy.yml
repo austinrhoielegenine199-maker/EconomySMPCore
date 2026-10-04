@@ -1,0 +1,11 @@
+economy:
+  currency:
+    symbol: "$"
+    name_singular: "Coin"
+    name_plural: "Coins"
+    starting_balance: 1000.0
+  number_formatting:
+    enabled: true  # Set to false to disable K/M/B/T shorthand formatting
+  sounds:
+    pay_sender: "ENTITY_PLAYER_LEVELUP"
+    pay_receiver: "ENTITY_EXPERIENCE_ORB_PICKUP"
