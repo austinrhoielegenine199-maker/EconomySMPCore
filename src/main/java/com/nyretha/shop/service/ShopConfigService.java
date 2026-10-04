@@ -9,6 +9,7 @@ public class ShopConfigService {
     private Map<String, Object> mainShopConfig = new HashMap<>();
     private final Map<String, Map<String, Object>> categoryConfigs = new HashMap<>();
 
+    @SuppressWarnings("unchecked")
     public void loadConfigs() {
         Yaml yaml = new Yaml();
         
@@ -21,18 +22,26 @@ public class ShopConfigService {
             e.printStackTrace();
         }
 
-        // 2. Load Category Configurations (gear, flake, flakeshop, end, nether, food)
-        String[] categories = {"gear", "flake", "flakeshop", "end", "nether", "food"};
-        for (String cat : categories) {
-            try (InputStream in = getClass().getClassLoader().getResourceAsStream("shop/categories/" + cat + ".yml")) {
-                if (in != null) {
-                    Map<String, Object> data = yaml.load(in);
-                    if (data != null) {
-                        categoryConfigs.put(cat, data);
+        // 2. Dynamically load category files based on the 'file' property inside shopgui.yml
+        Map<String, Map<String, Object>> categories = (Map<String, Map<String, Object>>) mainShopConfig.get("categories");
+        if (categories != null) {
+            for (Map.Entry<String, Map<String, Object>> entry : categories.entrySet()) {
+                String categoryKey = entry.getKey().toLowerCase();
+                Map<String, Object> catData = entry.getValue();
+                
+                String fileName = (String) catData.get("file");
+                if (fileName != null) {
+                    try (InputStream in = getClass().getClassLoader().getResourceAsStream("shop/categories/" + fileName)) {
+                        if (in != null) {
+                            Map<String, Object> data = yaml.load(in);
+                            if (data != null) {
+                                categoryConfigs.put(categoryKey, data);
+                            }
+                        }
+                    } catch (Exception e) {
+                        e.printStackTrace();
                     }
                 }
-            } catch (Exception e) {
-                e.printStackTrace();
             }
         }
     }
@@ -42,10 +51,6 @@ public class ShopConfigService {
     }
 
     public Map<String, Object> getCategoryConfig(String categoryName) {
-        Map<String, Object> config = categoryConfigs.get(categoryName.toLowerCase());
-        if (config == null && categoryName.equalsIgnoreCase("flake")) {
-            config = categoryConfigs.get("flakeshop");
-        }
-        return config;
+        return categoryConfigs.get(categoryName.toLowerCase());
     }
 }
