@@ -21,7 +21,7 @@ public class ShopConfigService {
             e.printStackTrace();
         }
 
-        // 2. Load Category Configurations (gear, flake, end, nether, food)
+        // 2. Load Category Configurations (gear, flake, flakeshop, end, nether, food)
         String[] categories = {"gear", "flake", "flakeshop", "end", "nether", "food"};
         for (String cat : categories) {
             try (InputStream in = getClass().getClassLoader().getResourceAsStream("shop/categories/" + cat + ".yml")) {
