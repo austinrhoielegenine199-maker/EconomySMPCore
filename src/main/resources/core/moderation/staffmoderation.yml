@@ -1,0 +1,16 @@
+moderation:
+  webhooks:
+    enabled: false
+    url: "YOUR_DISCORD_WEBHOOK_URL_HERE"
+  
+  disconnect_messages:
+    ban: |
+      §4§lYOU ARE BANNED!
+      §fReason: §7{reason}
+      §fDuration: §e{duration}
+      §bAppeal at: §bdiscord.gg/nyrethasmp
+    tempban: |
+      §4§lYOU ARE BANNED!
+      §fReason: §7{reason}
+      §fDuration: §e{duration}
+      §bAppeal at: §bdiscord.gg/nyrethasmp
