@@ -52,10 +52,14 @@ public class HelpCommand implements CommandExecutor, Listener {
         Inventory inventory = Bukkit.createInventory(null, size, title);
 
         if (helpConfig.getConfig().isConfigurationSection("items")) {
-            for (String key : helpConfig.getConfig().getConfigurationSection("items").getKeys(false)) {
+            for (String key : helpConfig.getConfig()
+                    .getConfigurationSection("items")
+                    .getKeys(false)) {
+
                 String path = "items." + key;
 
-                String materialName = helpConfig.getConfig().getString(path + ".material");
+                String materialName = helpConfig.getConfig()
+                        .getString(path + ".material");
 
                 if (materialName == null) {
                     continue;
@@ -69,7 +73,8 @@ public class HelpCommand implements CommandExecutor, Listener {
                     continue;
                 }
 
-                int slot = helpConfig.getConfig().getInt(path + ".slot", -1);
+                int slot = helpConfig.getConfig()
+                        .getInt(path + ".slot", -1);
 
                 if (slot < 0 || slot >= size) {
                     continue;
@@ -82,18 +87,22 @@ public class HelpCommand implements CommandExecutor, Listener {
                     continue;
                 }
 
-                String name = helpConfig.getConfig().getString(path + ".name");
+                String name = helpConfig.getConfig()
+                        .getString(path + ".name");
 
                 if (name != null) {
                     meta.setDisplayName(color(name));
                 }
 
-                List<String> lore = helpConfig.getConfig().getStringList(path + ".lore");
+                List<String> lore = helpConfig.getConfig()
+                        .getStringList(path + ".lore");
 
                 if (!lore.isEmpty()) {
-                    meta.setLore(lore.stream()
-                            .map(this::color)
-                            .toList());
+                    meta.setLore(
+                            lore.stream()
+                                    .map(this::color)
+                                    .toList()
+                    );
                 }
 
                 item.setItemMeta(meta);
@@ -149,6 +158,9 @@ public class HelpCommand implements CommandExecutor, Listener {
             result.append(character);
         }
 
-        return ChatColor.translateAlternateColorCodes('&', result.toString());
+        return ChatColor.translateAlternateColorCodes(
+                '&',
+                result.toString()
+        );
     }
 }
