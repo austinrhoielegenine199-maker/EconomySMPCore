@@ -39,6 +39,25 @@ public class HomeMenuListener implements Listener {
             event.setCancelled(true);
             int slot = event.getRawSlot();
 
+            // 1. Check Team Banner & Dye Slot Clicks First
+            int teamBannerSlot = configService.getSlot("team-banner");
+            int teamDyeSlot = configService.getSlot("team-dye");
+
+            if (slot == teamBannerSlot) {
+                player.closeInventory();
+                // TODO: Hook into your team manager (e.g., teleport to team home or create)
+                player.sendMessage("§bTeam banner clicked!");
+                return;
+            }
+
+            if (slot == teamDyeSlot) {
+                player.closeInventory();
+                // TODO: Hook into your team manager (e.g., delete team home or create)
+                player.sendMessage("§bTeam dye clicked!");
+                return;
+            }
+
+            // 2. Personal Homes Check (Beds & Dyes)
             List<Integer> bedSlots = configService.getSlots("beds");
             List<Integer> dyeSlots = configService.getSlots("dyes");
 
