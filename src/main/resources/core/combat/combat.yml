@@ -1,0 +1,20 @@
+settings:
+  combat_duration_seconds: 20
+
+messages:
+  combat_entered: "&4⚠ ʏᴏᴜ ᴀʀᴇ ɪɴ ᴄᴏᴍʙᴀᴛ! ᴅᴏ ɴᴏᴛ ʟᴇᴀᴠᴇ ᴛ𝙝ᴇ ɢᴀᴍᴇ ⚠"
+  combat_expired: "&aYou are no longer in combat."
+  actionbar_format: "&7Combat: &c%time%s"
+  command_blocked: "&cYou cannot use this command while in combat!"
+
+blacklisted_commands:
+  - "fly"
+  - "heal"
+  - "feed"
+  - "home"
+  - "tp"
+  - "tpa"
+  - "spawn"
+
+others:
+  disable_elytra_in_combat: true
