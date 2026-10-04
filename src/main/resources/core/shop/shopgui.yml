@@ -1,0 +1,43 @@
+title: "ѕʜᴏᴘ"
+size: 27
+
+categories:
+  end:
+    file: "end.yml"
+    material: END_STONE
+    slot: 11
+    name: "#00FC88ᴇɴᴅ"
+    lore:
+      - "#FFFFFFClick to view the end shop"
+
+  nether:
+    file: "nether.yml"
+    material: NETHERRACK
+    slot: 12
+    name: "#00FC88ɴᴇᴛʜᴇʀ"
+    lore:
+      - "#FFFFFFClick to view the nether shop"
+
+  gear:
+    file: "gear.yml"
+    material: TOTEM_OF_UNDYING
+    slot: 13
+    name: "#00FC88ɢᴇᴀʀ"
+    lore:
+      - "#FFFFFFClick to view the gear shop"
+
+  food:
+    file: "food.yml"
+    material: COOKED_BEEF
+    slot: 14
+    name: "#00FC88ꜰᴏᴏᴅ"
+    lore:
+      - "#FFFFFFClick to view the food shop"
+
+  flake:
+    file: "flakeshop.yml"
+    material: SNOWBALL
+    slot: 22
+    name: "#73cffaꜰʟᴀᴋᴇ ѕʜᴏᴘ"
+    lore:
+      - "#FFFFFFClick to view the flake shop"
