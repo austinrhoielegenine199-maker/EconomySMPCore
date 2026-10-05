@@ -1,0 +1,87 @@
+name: NyrethaCore
+version: 1.0
+api-version: '1.21'
+author: ArchiveAustxn, Lzy
+
+commands:
+  archiveaustxn:
+    description: Special developer command for ArchiveAustxn.
+    usage: /<command>
+  team:
+    description: Manage your team or faction.
+    usage: /<command> <create|leave|disband>
+  home:
+    description: Teleport to your home.
+    usage: /<command>
+  sethome:
+    description: Set your home location.
+    usage: /<command>
+  bal:
+    description: Check balance.
+    aliases: [balance]
+    usage: /<command> [player]
+  pay:
+    description: Send money to a player.
+    usage: /<command> <player> <amount>
+  eco:
+    description: Manage player economy balances.
+    permission: nyretha.eco.admin
+    usage: /<command> <give/take/set> <player> <amount>
+  tpa:
+    description: Send a teleport request to a player.
+    usage: /<command> <player>
+  tpahere:
+    description: Request a player to teleport to you.
+    usage: /<command> <player>
+  tp:
+    description: Teleport to a player or location.
+    permission: nyretha.staff.tp
+    usage: /<command> <player>
+  nv:
+    description: Toggle night vision.
+    usage: /<command>
+  shop:
+    description: Open the server shop.
+    usage: /<command>
+  ping:
+    description: Check your network latency.
+    usage: /<command>
+  ban:
+    description: Permanently ban a player.
+    permission: nyretha.staff.ban
+    usage: /<command> <player> [reason]
+  tempban:
+    description: Temporarily ban a player.
+    permission: nyretha.staff.tempban
+    usage: /<command> <player> <time> [reason]
+  mute:
+    description: Mute a player.
+    permission: nyretha.staff.mute
+    usage: /<command> <player> [time]
+  warn:
+    description: Warn a player.
+    permission: nyretha.staff.warn
+    usage: /<command> <player> [reason]
+  help:
+    description: View help information.
+    usage: /<command>
+
+permissions:
+  nyretha.eco.admin:
+    description: Allows full access to administrative economy commands.
+    default: op
+  nyretha.staff.tp:
+    description: Allows teleportation moderation.
+    default: op
+  nyretha.staff.ban:
+    description: Allows banning players.
+    default: op
+  nyretha.staff.tempban:
+    description: Allows temporary banning.
+    default: op
+  nyretha.staff.mute:
+    description: Allows muting players.
+    default: op
+  nyretha.staff.warn:
+    description: Allows warning players.
+    default: op
