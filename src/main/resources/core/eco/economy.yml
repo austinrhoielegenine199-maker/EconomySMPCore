@@ -1,11 +1,18 @@
 economy:
   currency:
     symbol: "$"
-    name_singular: "Coin"
-    name_plural: "Coins"
-    starting_balance: 1000.0
   number_formatting:
-    enabled: true  # Set to false to disable K/M/B/T shorthand formatting
+    enabled: true
   sounds:
-    pay_sender: "ENTITY_PLAYER_LEVELUP"
-    pay_receiver: "ENTITY_EXPERIENCE_ORB_PICKUP"
+    pay_sender: "ENTITY_EXPERIENCE_ORB_PICKUP"
+    pay_receiver: "ENTITY_PLAYER_LEVELUP"
+
+messages:
+  balance_self: "&eYour balance is &a%symbol%%amount%"
+  balance_other: "&#009bff%target% &ehas &a%symbol%%amount%"
+  player_not_found: "&cPlayer not found or offline!"
+  self_pay: "&cYou cannot pay yourself!"
+  invalid_amount: "&cInvalid amount specified!"
+  negative_amount: "&cAmount must be greater than zero!"
+  paid_target: "&#009bffYou paid &b%target% &a%symbol%%amount%"
+  received_payment: "&#009bff%player% &ehas paid you &a%symbol%%amount%"
