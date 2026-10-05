@@ -3,57 +3,83 @@ package com.nyretha.economy.service;
 import org.bukkit.ChatColor;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
-import org.bukkit.plugin.Plugin;
+import org.bukkit.plugin.java.JavaPlugin;
 
 import java.io.File;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class EconomyConfigService {
-    private final Plugin plugin;
-    private File configFile;
-    private FileConfiguration config;
 
-    public EconomyConfigService(Plugin plugin) {
+    private final JavaPlugin plugin;
+    private FileConfiguration economyConfig;
+    private File economyFile;
+
+    public EconomyConfigService(JavaPlugin plugin) {
         this.plugin = plugin;
-        reloadConfig();
+        loadEconomyConfig();
     }
 
-    public void reloadConfig() {
-        if (configFile == null) {
-            configFile = new File(plugin.getDataFolder(), "eco/economy.yml");
+    public void loadEconomyConfig() {
+        if (economyFile == null) {
+            economyFile = new File(plugin.getDataFolder(), "eco/economy.yml");
         }
-        if (!configFile.exists()) {
-            configFile.getParentFile().mkdirs();
-            plugin.saveResource("eco/economy.yml", false);
+        if (!economyFile.exists()) {
+            economyFile.getParentFile().mkdirs();
+            if (plugin.getResource("eco/economy.yml") != null) {
+                plugin.saveResource("eco/economy.yml", false);
+            } else {
+                try {
+                    economyFile.createNewFile();
+                } catch (Exception e) {
+                    plugin.getLogger().severe("Could not create economy.yml!");
+                }
+            }
         }
-        config = YamlConfiguration.loadConfiguration(configFile);
+        economyConfig = YamlConfiguration.loadConfiguration(economyFile);
 
-        InputStream defStream = plugin.getResource("eco/economy.yml");
-        if (defStream != null) {
-            YamlConfiguration defConfig = YamlConfiguration.loadConfiguration(new InputStreamReader(defStream, StandardCharsets.UTF_8));
-            config.setDefaults(defConfig);
+        InputStream defConfigStream = plugin.getResource("eco/economy.yml");
+        if (defConfigStream != null) {
+            YamlConfiguration defConfig = YamlConfiguration.loadConfiguration(new InputStreamReader(defConfigStream, StandardCharsets.UTF_8));
+            economyConfig.setDefaults(defConfig);
         }
     }
 
     public FileConfiguration getConfig() {
-        if (config == null) {
-            reloadConfig();
+        if (economyConfig == null) {
+            loadEconomyConfig();
         }
-        return config;
+        return economyConfig;
     }
 
-    public String getMessage(String path, String def) {
-        String raw = getConfig().getString("messages." + path, def);
-        return ChatColor.translateAlternateColorCodes('&', raw.replaceAll("&#([0-9a-fA-F]{6})", "§x§$1§$2§$3§$4§$5§$6"));
+    public void reloadConfig() {
+        if (economyFile == null) {
+            economyFile = new File(plugin.getDataFolder(), "eco/economy.yml");
+        }
+        economyConfig = YamlConfiguration.loadConfiguration(economyFile);
     }
 
-    public String getCurrencySymbol() {
-        return getConfig().getString("economy.currency.symbol", "$");
-    }
-
-    public String getSound(String key) {
-        return getConfig().getString("economy.sounds." + key, null);
+    public String colorize(String message) {
+        if (message == null) return "";
+        
+        // Hex color support (e.g. &#009bff)
+        Pattern pattern = Pattern.compile("&#([A-Fa-f0-9]{6})");
+        Matcher matcher = pattern.matcher(message);
+        StringBuilder buffer = new StringBuilder();
+        while (matcher.find()) {
+            String hex = matcher.group(1);
+            StringBuilder replacement = new StringBuilder("§x");
+            for (char c : hex.toCharArray()) {
+                replacement.append('§').append(c);
+            }
+            matcher.appendReplacement(buffer, replacement.toString());
+        }
+        matcher.appendTail(buffer);
+        
+        // Legacy color support (&)
+        return ChatColor.translateAlternateColorCodes('&', buffer.toString());
     }
 }
