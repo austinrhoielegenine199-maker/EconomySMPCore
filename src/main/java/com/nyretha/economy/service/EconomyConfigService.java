@@ -1,4 +1,4 @@
-package com.nyretha.eco;
+package com.nyretha.economy.service;
 
 import org.bukkit.ChatColor;
 import org.bukkit.configuration.file.FileConfiguration;
