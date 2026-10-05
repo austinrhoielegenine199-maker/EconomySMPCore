@@ -66,6 +66,10 @@ commands:
   help:
     description: View help information.
     usage: /<command>
+  core:
+    description: Core plugin management command.
+    permission: nyretha.admin
+    usage: /core reload
 
 permissions:
   nyretha.eco.admin:
