@@ -3,14 +3,19 @@ package com.nyretha.tp.command;
 import com.nyretha.tp.gui.TpConfirmGui;
 import com.nyretha.tp.service.TpConfigService;
 import com.nyretha.tp.service.TpTaskService;
+import net.md_5.bungee.api.ChatColor;
+import net.md_5.bungee.api.chat.ClickEvent;
+import net.md_5.bungee.api.chat.ComponentBuilder;
+import net.md_5.bungee.api.chat.HoverEvent;
+import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 
+import java.awt.Color;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
@@ -29,7 +34,6 @@ public class TpCommand implements CommandExecutor {
         this.plugin = plugin;
     }
 
-    // Helper method to resolve partial/short player names efficiently
     private Player findPlayer(String nameQuery) {
         String lowerQuery = nameQuery.toLowerCase();
         Player exactMatch = Bukkit.getPlayerExact(nameQuery);
@@ -55,41 +59,37 @@ public class TpCommand implements CommandExecutor {
         Player player = (Player) sender;
         String cmdName = command.getName().toLowerCase();
 
-        // 1. Handling /tpauto
         if (cmdName.equals("tpauto")) {
             UUID uuid = player.getUniqueId();
             if (tpAutoEnabled.contains(uuid)) {
                 tpAutoEnabled.remove(uuid);
-                String msg = configService.getMessage("tpauto_disabled", "&cYou have disabled Tpauto!");
-                player.sendMessage(ChatColor.translateAlternateColorCodes('&', msg));
+                player.sendMessage(org.bukkit.ChatColor.translateAlternateColorCodes('&', configService.getMessage("tpauto_disabled", "&cYou have disabled Tpauto!")));
             } else {
                 tpAutoEnabled.add(uuid);
-                String msg = configService.getMessage("tpauto_enabled", "&aYou have enabled Tpauto!");
-                player.sendMessage(ChatColor.translateAlternateColorCodes('&', msg));
+                player.sendMessage(org.bukkit.ChatColor.translateAlternateColorCodes('&', configService.getMessage("tpauto_enabled", "&aYou have enabled Tpauto!")));
             }
             return true;
         }
 
-        // 2. Handling /tp (Admin Instant Teleport)
         if (cmdName.equals("tp")) {
             if (!player.hasPermission("nyretha.tp.admin")) {
-                player.sendMessage(ChatColor.translateAlternateColorCodes('&', "&cYou do not have permission to use /tp!"));
+                player.sendMessage(org.bukkit.ChatColor.translateAlternateColorCodes('&', "&cYou do not have permission to use /tp!"));
                 return true;
             }
 
             if (args.length == 0) {
-                player.sendMessage(ChatColor.translateAlternateColorCodes('&', "&cUsage: /tp <player> [target]"));
+                player.sendMessage(org.bukkit.ChatColor.translateAlternateColorCodes('&', "&cUsage: /tp <player> [target]"));
                 return true;
             }
 
             if (args.length == 1) {
                 Player target = findPlayer(args[0]);
                 if (target == null || !target.isOnline()) {
-                    player.sendMessage(ChatColor.translateAlternateColorCodes('&', "&cPlayer not found or offline!"));
+                    player.sendMessage(org.bukkit.ChatColor.translateAlternateColorCodes('&', "&cPlayer not found or offline!"));
                     return true;
                 }
                 player.teleport(target.getLocation());
-                player.sendMessage(ChatColor.translateAlternateColorCodes('&', "&aTeleported to &b" + target.getName() + "&a!"));
+                player.sendMessage(org.bukkit.ChatColor.translateAlternateColorCodes('&', "&aTeleported to &b" + target.getName() + "&a!"));
                 return true;
             }
 
@@ -97,38 +97,36 @@ public class TpCommand implements CommandExecutor {
                 Player target1 = findPlayer(args[0]);
                 Player target2 = findPlayer(args[1]);
                 if (target1 == null || target2 == null || !target1.isOnline() || !target2.isOnline()) {
-                    player.sendMessage(ChatColor.translateAlternateColorCodes('&', "&cOne or both players not found or offline!"));
+                    player.sendMessage(org.bukkit.ChatColor.translateAlternateColorCodes('&', "&cOne or both players not found or offline!"));
                     return true;
                 }
                 target1.teleport(target2.getLocation());
-                player.sendMessage(ChatColor.translateAlternateColorCodes('&', "&aTeleported &b" + target1.getName() + " &ato &b" + target2.getName() + "&a!"));
+                player.sendMessage(org.bukkit.ChatColor.translateAlternateColorCodes('&', "&aTeleported &b" + target1.getName() + " &ato &b" + target2.getName() + "&a!"));
                 return true;
             }
             return true;
         }
 
-        // 3. Handling /tpa or /tpahere (with shortcut/short name support)
         if (args.length == 0) {
-            player.sendMessage(ChatColor.translateAlternateColorCodes('&', "&cUsage: /" + label + " <player>"));
+            player.sendMessage(org.bukkit.ChatColor.translateAlternateColorCodes('&', "&cUsage: /" + label + " <player>"));
             return true;
         }
 
         Player target = findPlayer(args[0]);
         if (target == null || !target.isOnline()) {
-            player.sendMessage(ChatColor.translateAlternateColorCodes('&', "&cPlayer not found or offline!"));
+            player.sendMessage(org.bukkit.ChatColor.translateAlternateColorCodes('&', "&cPlayer not found or offline!"));
             return true;
         }
 
         if (target.equals(player)) {
-            player.sendMessage(ChatColor.translateAlternateColorCodes('&', "&cYou cannot teleport to yourself!"));
+            player.sendMessage(org.bukkit.ChatColor.translateAlternateColorCodes('&', "&cYou cannot teleport to yourself!"));
             return true;
         }
 
         String type = cmdName.startsWith("tpah") ? "tpahere" : "tpa";
 
-        // If target has tpauto active, skip GUI and trigger countdown instantly
         if (tpAutoEnabled.contains(target.getUniqueId())) {
-            player.sendMessage(ChatColor.translateAlternateColorCodes('&', "&a" + target.getName() + " has Tpauto enabled. Teleporting..."));
+            player.sendMessage(org.bukkit.ChatColor.translateAlternateColorCodes('&', "&a" + target.getName() + " has Tpauto enabled. Teleporting..."));
             
             Player traveler = type.equals("tpa") ? player : target;
             Player destinationHolder = type.equals("tpa") ? target : player;
@@ -137,17 +135,43 @@ public class TpCommand implements CommandExecutor {
             return true;
         }
 
-        // Open 3-row confirmation GUI
-        activeSessions.put(player.getUniqueId(), new PendingTpSession(target.getUniqueId(), type));
-        TpConfirmGui.open(player, target, type);
+        // Save session for confirmation lookup (Keyed by target recipient's UUID)
+        activeSessions.put(target.getUniqueId(), new PendingTpSession(player.getUniqueId(), type));
+
+        String rawMsg = configService.getMessage("tpa_received", "&b%target% &esent you a &b%type% &erequest! &#009bff&l[Click Me]");
+        String parsedMsg = rawMsg.replace("%target%", player.getName()).replace("%type%", type.toUpperCase());
+        String[] parts = parsedMsg.split("&#009bff&l\\[Click Me\\]");
+        
+        TextComponent finalMessage = new TextComponent();
+        
+        if (parts.length > 0) {
+            finalMessage.addExtra(TextComponent.fromLegacyText(org.bukkit.ChatColor.translateAlternateColorCodes('&', parts[0])));
+        }
+
+        TextComponent clickButton = new TextComponent("[Click Me]");
+        clickButton.setColor(ChatColor.of(new Color(0, 155, 255)));
+        clickButton.setBold(true);
+        // Clicking runs /tpaccept, or they can use /tpdeny manually
+        clickButton.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/tpaccept " + player.getName()));
+        clickButton.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ComponentBuilder("Click to open confirmation GUI").create()));
+        
+        finalMessage.addExtra(clickButton);
+
+        if (parts.length > 1) {
+            finalMessage.addExtra(TextComponent.fromLegacyText(org.bukkit.ChatColor.translateAlternateColorCodes('&', parts[1])));
+        }
+
+        target.spigot().sendMessage(finalMessage);
+        player.sendMessage(org.bukkit.ChatColor.translateAlternateColorCodes('&', configService.getMessage("tpa_sent", "&eSent a teleport request to &b%target%&e.").replace("%target%", target.getName())));
+
         return true;
     }
 
     public static class PendingTpSession {
-        public final UUID targetUuid;
+        public final UUID requesterUuid;
         public final String type;
-        public PendingTpSession(UUID targetUuid, String type) {
-            this.targetUuid = targetUuid;
+        public PendingTpSession(UUID requesterUuid, String type) {
+            this.requesterUuid = requesterUuid;
             this.type = type;
         }
     }
