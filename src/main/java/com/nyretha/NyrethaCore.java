@@ -17,9 +17,8 @@ public final class NyrethaCore extends JavaPlugin {
             getDataFolder().mkdirs();
         }
 
-        // Initialize SQLite Database
-        databaseService = new DatabaseService();
-        databaseService.initDatabase();
+        // Initialize SQLite Database by passing 'this' (the plugin instance)
+        databaseService = new DatabaseService(this);
 
         getLogger().info("NyrethaCore has been enabled successfully!");
     }
