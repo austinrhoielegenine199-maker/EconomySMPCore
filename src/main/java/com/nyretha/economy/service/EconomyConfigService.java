@@ -1,74 +1,59 @@
-package com.nyretha.economy.service;
+package com.nyretha.eco;
 
-import org.yaml.snakeyaml.Yaml;
+import org.bukkit.ChatColor;
+import org.bukkit.configuration.file.FileConfiguration;
+import org.bukkit.configuration.file.YamlConfiguration;
+import org.bukkit.plugin.Plugin;
+
+import java.io.File;
 import java.io.InputStream;
-import java.util.Map;
+import java.io.InputStreamReader;
+import java.nio.charset.StandardCharsets;
 
 public class EconomyConfigService {
-    private Map<String, Object> configData;
+    private final Plugin plugin;
+    private File configFile;
+    private FileConfiguration config;
 
-    public void loadConfig() {
-        Yaml yaml = new Yaml();
-        try (InputStream inputStream = getClass().getClassLoader().getResourceAsStream("core/eco/economy.yml")) {
-            if (inputStream != null) {
-                configData = yaml.load(inputStream);
-            } else {
-                System.err.println("[EconomyConfig] Could not find economy.yml in resources!");
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
+    public EconomyConfigService(Plugin plugin) {
+        this.plugin = plugin;
+        reloadConfig();
+    }
+
+    public void reloadConfig() {
+        if (configFile == null) {
+            configFile = new File(plugin.getDataFolder(), "eco/economy.yml");
+        }
+        if (!configFile.exists()) {
+            configFile.getParentFile().mkdirs();
+            plugin.saveResource("eco/economy.yml", false);
+        }
+        config = YamlConfiguration.loadConfiguration(configFile);
+
+        InputStream defStream = plugin.getResource("eco/economy.yml");
+        if (defStream != null) {
+            YamlConfiguration defConfig = YamlConfiguration.loadConfiguration(new InputStreamReader(defStream, StandardCharsets.UTF_8));
+            config.setDefaults(defConfig);
         }
     }
 
-    @SuppressWarnings("unchecked")
-    public boolean isNumberFormattingEnabled() {
-        if (configData == null) return true;
-        try {
-            Map<String, Object> economy = (Map<String, Object>) configData.get("economy");
-            Map<String, Object> formatting = (Map<String, Object>) economy.get("number_formatting");
-            return (boolean) formatting.getOrDefault("enabled", true);
-        } catch (Exception e) {
-            return true;
+    public FileConfiguration getConfig() {
+        if (config == null) {
+            reloadConfig();
         }
+        return config;
     }
 
-    @SuppressWarnings("unchecked")
+    public String getMessage(String path, String def) {
+        String raw = getConfig().getString("messages." + path, def);
+        return ChatColor.translateAlternateColorCodes('&', raw.replaceAll("&#([0-9a-fA-F]{6})", "§x§$1§$2§$3§$4§$5§$6"));
+    }
+
     public String getCurrencySymbol() {
-        if (configData == null) return "$";
-        try {
-            Map<String, Object> economy = (Map<String, Object>) configData.get("economy");
-            Map<String, Object> currency = (Map<String, Object>) economy.get("currency");
-            return (String) currency.getOrDefault("symbol", "$");
-        } catch (Exception e) {
-            return "$";
-        }
+        return getConfig().getString("economy.currency.symbol", "$");
     }
 
-    @SuppressWarnings("unchecked")
-    public String getSound(String type) {
-        if (configData == null) return "ENTITY_EXPERIENCE_ORB_PICKUP";
-        try {
-            Map<String, Object> economy = (Map<String, Object>) configData.get("economy");
-            Map<String, Object> sounds = (Map<String, Object>) economy.get("sounds");
-            return (String) sounds.getOrDefault(type, "ENTITY_EXPERIENCE_ORB_PICKUP");
-        } catch (Exception e) {
-            return "ENTITY_EXPERIENCE_ORB_PICKUP";
-        }
-    }
-
-    @SuppressWarnings("unchecked")
-    public double getStartingBalance() {
-        if (configData == null) return 1000.0;
-        try {
-            Map<String, Object> economy = (Map<String, Object>) configData.get("economy");
-            Map<String, Object> currency = (Map<String, Object>) economy.get("currency");
-            Object start = currency.get("starting_balance");
-            if (start instanceof Number) {
-                return ((Number) start).doubleValue();
-            }
-        } catch (Exception e) {
-            // Fallback
-        }
-        return 1000.0;
+    public String getSound(String key) {
+        return getConfig().getString("economy.sounds." + key, null);
     }
 }
