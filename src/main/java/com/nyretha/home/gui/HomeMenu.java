@@ -57,7 +57,7 @@ public class HomeMenu {
     private static ItemStack createBedItem(int number, boolean hasHome, boolean hasPermission, HomeGuiConfigService configService) {
         String itemKey = !hasPermission ? "no-permission-bed" : (hasHome ? "existing-bed" : "empty-bed");
         Map<String, Object> itemData = configService.getItemConfig(itemKey);
-        
+
         Material material = Material.LIGHT_GRAY_BED;
         String name = "&7ɴᴏ ʜᴏᴍᴇ ѕᴇᴛ";
         List<String> loreList = new ArrayList<>();
@@ -89,7 +89,7 @@ public class HomeMenu {
     private static ItemStack createDyeItem(int number, boolean hasHome, boolean hasPermission, HomeGuiConfigService configService) {
         String itemKey = !hasPermission ? "no-permission-dye" : (hasHome ? "existing-dye" : "empty-dye");
         Map<String, Object> itemData = configService.getItemConfig(itemKey);
-        
+
         Material material = Material.GRAY_DYE;
         String name = "&7ɴᴏ ʜᴏᴍᴇ ѕᴇᴛ";
         List<String> loreList = new ArrayList<>();
@@ -121,7 +121,7 @@ public class HomeMenu {
     private static ItemStack createTeamBannerItem(boolean isInTeam, boolean hasTeamHome, HomeGuiConfigService configService) {
         String itemKey = !isInTeam ? "team-banner-no-team" : (hasTeamHome ? "team-banner-has-home" : "team-banner-no-home");
         Map<String, Object> itemData = configService.getItemConfig(itemKey);
-        
+
         Material material = Material.WHITE_BANNER;
         String name = "&fᴛᴇᴀᴍ ʜᴏᴍᴇ";
         List<String> loreList = new ArrayList<>();
