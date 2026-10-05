@@ -1,5 +1,6 @@
 package com.nyretha.economy.command;
 
+import com.nyretha.economy.service.EconomyConfigService;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Sound;
