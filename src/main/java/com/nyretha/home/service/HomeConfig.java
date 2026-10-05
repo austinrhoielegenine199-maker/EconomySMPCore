@@ -17,14 +17,14 @@ public class HomeConfig {
     }
 
     public void loadConfig() {
-
         Yaml yaml = new Yaml();
 
         try (
                 InputStream inputStream =
-                        plugin.getResource("core/home/homegui.yml")
+                        plugin.getResource(
+                                "core/home/homegui.yml"
+                        )
         ) {
-
             if (inputStream != null) {
                 configData = yaml.load(inputStream);
             } else {
@@ -32,15 +32,60 @@ public class HomeConfig {
                         "Could not find core/home/homegui.yml!"
                 );
             }
-
         } catch (Exception e) {
             plugin.getLogger().severe(
-                    "Failed to load homegui.yml: " + e.getMessage()
+                    "Failed to load homegui.yml: " +
+                    e.getMessage()
             );
         }
     }
 
-    public Map<String, Object> getConfigData() {
-        return configData;
+    @SuppressWarnings("unchecked")
+    public int getTeleportCountdown() {
+        if (configData == null) {
+            return 5;
+        }
+
+        try {
+            Map<String, Object> teleport =
+                    (Map<String, Object>)
+                            configData.get("teleport");
+
+            Object seconds =
+                    teleport.get("countdown-seconds");
+
+            if (seconds instanceof Number) {
+                return ((Number) seconds).intValue();
+            }
+
+        } catch (Exception ignored) {
+        }
+
+        return 5;
+    }
+
+    @SuppressWarnings("unchecked")
+    public String getMessage(String key) {
+        if (configData == null) {
+            return "";
+        }
+
+        try {
+            Map<String, Object> teleport =
+                    (Map<String, Object>)
+                            configData.get("teleport");
+
+            Object message =
+                    teleport.get(key);
+
+            if (message == null) {
+                return "";
+            }
+
+            return String.valueOf(message);
+
+        } catch (Exception ignored) {
+            return "";
+        }
     }
 }
