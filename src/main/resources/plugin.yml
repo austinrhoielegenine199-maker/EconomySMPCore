@@ -1,5 +1,6 @@
 name: NyrethaCore
 version: 1.0
+main: com.nyretha.NyrethaCore
 api-version: '1.21'
 author: ArchiveAustxn, Lzy
 
