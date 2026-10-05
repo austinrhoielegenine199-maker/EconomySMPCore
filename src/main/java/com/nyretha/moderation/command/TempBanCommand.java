@@ -3,37 +3,127 @@ package com.nyretha.moderation.command;
 import com.nyretha.moderation.service.ConfigService;
 import com.nyretha.moderation.service.WebhookService;
 import com.nyretha.moderation.util.TimeParser;
+
+import org.bukkit.BanList;
+import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
+import org.bukkit.command.Command;
+import org.bukkit.command.CommandExecutor;
+import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
+
+import java.util.Date;
 import java.util.Map;
 
-public class TempBanCommand {
+public class TempBanCommand implements CommandExecutor {
+
     private final ConfigService configService;
     private final WebhookService webhookService;
 
-    public TempBanCommand(ConfigService configService, WebhookService webhookService) {
+    public TempBanCommand(
+            ConfigService configService,
+            WebhookService webhookService
+    ) {
         this.configService = configService;
         this.webhookService = webhookService;
     }
 
-    public void execute(String moderatorIGN, String targetIGN, String durationArg, String reason) {
-        if (targetIGN == null || targetIGN.isBlank()) {
-            System.out.println("[Command Error] Invalid target IGN.");
-            return;
+    @Override
+    public boolean onCommand(
+            CommandSender sender,
+            Command command,
+            String label,
+            String[] args
+    ) {
+        if (args.length < 2) {
+            sender.sendMessage(
+                    ChatColor.RED +
+                    "Usage: /tempban <player> <time> [reason]"
+            );
+            return true;
         }
 
-        long durationMillis = TimeParser.parseToMillis(durationArg);
-        if (durationMillis <= 0) {
-            System.out.println("[Command Error] Invalid duration format. Use formats like 1s, 10h, 1w.");
-            return;
+        String target = args[0];
+        String duration = args[1];
+
+        long millis =
+                TimeParser.parseToMillis(duration);
+
+        if (millis <= 0) {
+            sender.sendMessage(
+                    ChatColor.RED +
+                    "Invalid duration. Examples: 10m, 2h, 7d."
+            );
+            return true;
         }
 
-        Map<String, String> placeholders = Map.of(
-            "{reason}", reason,
-            "{duration}", durationArg
+        String reason =
+                args.length > 2
+                        ? String.join(
+                                " ",
+                                java.util.Arrays.copyOfRange(
+                                        args,
+                                        2,
+                                        args.length
+                                )
+                        )
+                        : "Temporarily banned by staff";
+
+        Date expiry =
+                new Date(
+                        System.currentTimeMillis() + millis
+                );
+
+        Bukkit.getBanList(
+                BanList.Type.NAME
+        ).addBan(
+                target,
+                reason,
+                expiry,
+                sender.getName()
         );
-        String kickMessage = configService.getFormattedMessage("tempban", placeholders);
 
-        System.out.println("[Command] " + moderatorIGN + " temp-banned " + targetIGN + " for " + durationArg + ". Kick Message:\n" + kickMessage);
+        Map<String, String> placeholders =
+                Map.of(
+                        "{reason}", reason,
+                        "{duration}", duration
+                );
 
-        webhookService.sendBanLog(moderatorIGN, targetIGN, durationArg, reason, "TEMPBAN");
+        String kickMessage =
+                configService.getFormattedMessage(
+                        "tempban",
+                        placeholders
+                );
+
+        Player player =
+                Bukkit.getPlayerExact(target);
+
+        if (player != null) {
+            player.kickPlayer(
+                    ChatColor.translateAlternateColorCodes(
+                            '&',
+                            kickMessage
+                    )
+            );
+        }
+
+        sender.sendMessage(
+                ChatColor.GREEN +
+                "Temporarily banned " +
+                target +
+                " for " +
+                duration +
+                "."
+        );
+
+        webhookService.sendBanLog(
+                sender.getName(),
+                target,
+                duration,
+                reason,
+                "TEMPBAN"
+        );
+
+        return true;
     }
 }
