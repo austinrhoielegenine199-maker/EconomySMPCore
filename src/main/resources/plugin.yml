@@ -23,7 +23,7 @@ commands:
     usage: /sethome
 
   bal:
-    description: Check your balance.
+    description: Check balance.
     aliases:
       - balance
     usage: /bal [player]
@@ -48,10 +48,11 @@ commands:
   tp:
     description: Teleport to a player or location.
     permission: nyretha.staff.tp
-    usage: /tp <player>
+    usage: /tp <player> [target]
 
   nv:
     description: Toggle night vision.
+    permission: nyretha.nv
     usage: /nv
 
   shop:
@@ -60,6 +61,7 @@ commands:
 
   ping:
     description: Check your network latency.
+    permission: nyretha.ping
     usage: /ping
 
   ban:
@@ -91,7 +93,6 @@ commands:
     permission: nyretha.admin
     usage: /core reload
 
-
 permissions:
 
   nyretha.eco.admin:
@@ -116,6 +117,18 @@ permissions:
 
   nyretha.staff.warn:
     description: Allows warning players.
+    default: op
+
+  nyretha.nv:
+    description: Allows use of night vision.
+    default: op
+
+  nyretha.ping:
+    description: Allows use of /ping.
+    default: true
+
+  nyretha.shop.admin:
+    description: Allows shop administration commands.
     default: op
 
   nyretha.admin:
