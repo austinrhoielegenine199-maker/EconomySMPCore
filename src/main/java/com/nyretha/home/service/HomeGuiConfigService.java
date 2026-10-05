@@ -59,6 +59,21 @@ public class HomeGuiConfigService {
     }
 
     @SuppressWarnings("unchecked")
+    public int getSlot(String key) {
+        if (configData == null) return -1;
+        try {
+            Map<String, Object> slots = (Map<String, Object>) configData.get("slots");
+            Object slotObj = slots.get(key);
+            if (slotObj instanceof Number) {
+                return ((Number) slotObj).intValue();
+            }
+        } catch (Exception e) {
+            // Fallback
+        }
+        return -1;
+    }
+
+    @SuppressWarnings("unchecked")
     public Map<String, Object> getItemConfig(String itemName) {
         if (configData == null) return null;
         try {
