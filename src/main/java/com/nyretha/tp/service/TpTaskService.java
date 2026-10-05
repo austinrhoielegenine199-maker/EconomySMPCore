@@ -11,6 +11,13 @@ import org.bukkit.scheduler.BukkitRunnable;
 
 public class TpTaskService {
 
+    public static void sendAcceptedNotification(Player player, TpConfigService configService) {
+        String msg = configService.getMessage("teleport_accepted", "&aTeleport request accepted!");
+        if (msg != null && !msg.isEmpty()) {
+            player.sendMessage(ChatColor.translateAlternateColorCodes('&', msg));
+        }
+    }
+
     public static void startTeleportCountdown(Player traveler, Location destination, Plugin plugin, TpConfigService configService) {
         int totalSeconds = configService.getIntSetting("countdown_seconds", 5);
         String actionbarMsgTemplate = configService.getMessage("teleporting_actionbar", "&7Teleporting in &b%time%s");
@@ -29,7 +36,6 @@ public class TpTaskService {
                     return;
                 }
 
-                // Verify movement or damage cancellation check
                 Location currentLoc = traveler.getLocation();
                 if (currentLoc.getWorld() != startLocation.getWorld() || currentLoc.distanceSquared(startLocation) > 0.25) {
                     traveler.sendMessage(ChatColor.translateAlternateColorCodes('&', configService.getMessage("teleport_cancelled", "&cTeleport cancelled because you moved!")));
