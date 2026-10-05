@@ -1,92 +1,123 @@
 name: NyrethaCore
-version: 1.0
+version: '1.0'
 main: com.nyretha.NyrethaCore
 api-version: '1.21'
 author: ArchiveAustxn, Lzy
 
 commands:
+
   archiveaustxn:
     description: Special developer command for ArchiveAustxn.
-    usage: /<command>
+    usage: /archiveaustxn
+
   team:
     description: Manage your team or faction.
-    usage: /<command> <create|leave|disband>
+    usage: /team <create|leave|disband>
+
   home:
     description: Teleport to your home.
-    usage: /<command>
+    usage: /home
+
   sethome:
     description: Set your home location.
-    usage: /<command>
+    usage: /sethome
+
   bal:
-    description: Check balance.
-    aliases: [balance]
-    usage: /<command> [player]
+    description: Check your balance.
+    aliases:
+      - balance
+    usage: /bal [player]
+
   pay:
     description: Send money to a player.
-    usage: /<command> <player> <amount>
+    usage: /pay <player> <amount>
+
   eco:
     description: Manage player economy balances.
     permission: nyretha.eco.admin
-    usage: /<command> <give/take/set> <player> <amount>
+    usage: /eco <give|take|set> <player> <amount>
+
   tpa:
     description: Send a teleport request to a player.
-    usage: /<command> <player>
+    usage: /tpa <player>
+
   tpahere:
     description: Request a player to teleport to you.
-    usage: /<command> <player>
+    usage: /tpahere <player>
+
   tp:
     description: Teleport to a player or location.
     permission: nyretha.staff.tp
-    usage: /<command> <player>
+    usage: /tp <player>
+
   nv:
     description: Toggle night vision.
-    usage: /<command>
+    usage: /nv
+
   shop:
     description: Open the server shop.
-    usage: /<command>
+    usage: /shop
+
   ping:
     description: Check your network latency.
-    usage: /<command>
+    usage: /ping
+
   ban:
     description: Permanently ban a player.
     permission: nyretha.staff.ban
-    usage: /<command> <player> [reason]
+    usage: /ban <player> [reason]
+
   tempban:
     description: Temporarily ban a player.
     permission: nyretha.staff.tempban
-    usage: /<command> <player> <time> [reason]
+    usage: /tempban <player> <time> [reason]
+
   mute:
     description: Mute a player.
     permission: nyretha.staff.mute
-    usage: /<command> <player> [time]
+    usage: /mute <player> [time]
+
   warn:
     description: Warn a player.
     permission: nyretha.staff.warn
-    usage: /<command> <player> [reason]
+    usage: /warn <player> [reason]
+
   help:
     description: View help information.
-    usage: /<command>
+    usage: /help
+
   core:
     description: Core plugin management command.
     permission: nyretha.admin
     usage: /core reload
 
+
 permissions:
+
   nyretha.eco.admin:
     description: Allows full access to administrative economy commands.
     default: op
+
   nyretha.staff.tp:
     description: Allows teleportation moderation.
     default: op
+
   nyretha.staff.ban:
     description: Allows banning players.
     default: op
+
   nyretha.staff.tempban:
     description: Allows temporary banning.
     default: op
+
   nyretha.staff.mute:
     description: Allows muting players.
     default: op
+
   nyretha.staff.warn:
     description: Allows warning players.
+    default: op
+
+  nyretha.admin:
+    description: Allows access to NyrethaCore administration commands.
     default: op
