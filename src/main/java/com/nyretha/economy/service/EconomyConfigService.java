@@ -62,10 +62,21 @@ public class EconomyConfigService {
         economyConfig = YamlConfiguration.loadConfiguration(economyFile);
     }
 
+    public String getMessage(String key, String def) {
+        return colorize(getConfig().getString("messages." + key, def));
+    }
+
+    public String getCurrencySymbol() {
+        return colorize(getConfig().getString("currency.symbol", "$"));
+    }
+
+    public String getSound(String key) {
+        return getConfig().getString("sounds." + key, "");
+    }
+
     public String colorize(String message) {
         if (message == null) return "";
-        
-        // Hex color support (e.g. &#009bff)
+
         Pattern pattern = Pattern.compile("&#([A-Fa-f0-9]{6})");
         Matcher matcher = pattern.matcher(message);
         StringBuilder buffer = new StringBuilder();
@@ -78,8 +89,7 @@ public class EconomyConfigService {
             matcher.appendReplacement(buffer, replacement.toString());
         }
         matcher.appendTail(buffer);
-        
-        // Legacy color support (&)
+
         return ChatColor.translateAlternateColorCodes('&', buffer.toString());
     }
 }
