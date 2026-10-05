@@ -1,6 +1,7 @@
 package com.nyretha;
 
 import com.nyretha.commands.ArchiveCommand;
+import com.nyretha.commands.CoreCommand;
 import com.nyretha.core.database.DatabaseService;
 import com.nyretha.economy.command.EconomyCommand;
 import com.nyretha.economy.service.EconomyConfigService;
