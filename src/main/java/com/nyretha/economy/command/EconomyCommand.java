@@ -1,186 +1,88 @@
-package com.nyretha.economy.command;
+package com.nyretha.economy.service;
 
-import com.nyretha.economy.service.EconomyConfigService;
-import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
-import org.bukkit.Sound;
-import org.bukkit.command.Command;
-import org.bukkit.command.CommandExecutor;
-import org.bukkit.command.CommandSender;
-import org.bukkit.entity.Player;
-import org.bukkit.plugin.Plugin;
+import org.bukkit.configuration.file.FileConfiguration;
+import org.bukkit.configuration.file.YamlConfiguration;
+import org.bukkit.plugin.java.JavaPlugin;
 
-public class EconomyCommand implements CommandExecutor {
-    private final Plugin plugin;
-    private final EconomyConfigService configService;
+import java.io.File;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.nio.charset.StandardCharsets;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
-    public EconomyCommand(Plugin plugin, EconomyConfigService configService) {
+public class EconomyConfigService {
+
+    private final JavaPlugin plugin;
+    private FileConfiguration economyConfig;
+    private File economyFile;
+
+    public EconomyConfigService(JavaPlugin plugin) {
         this.plugin = plugin;
-        this.configService = configService;
+        loadEconomyConfig();
     }
 
-    private double getBalance(Player player) {
-        return 1000.0; 
-    }
-
-    private void setBalance(Player player, double amount) {}
-
-    private void playConfigSound(Player player, String soundKey) {
-        String soundName = configService.getSound(soundKey);
-        if (soundName != null && !soundName.isEmpty()) {
-            try {
-                Sound sound = Sound.valueOf(soundName.toUpperCase());
-                player.playSound(player.getLocation(), sound, 1.0f, 1.0f);
-            } catch (Exception ignored) {}
+    public void loadEconomyConfig() {
+        if (economyFile == null) {
+            economyFile = new File(plugin.getDataFolder(), "eco/economy.yml");
         }
-    }
-
-    @Override
-    public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
-        String cmdName = command.getName().toLowerCase();
-        String symbol = configService.getCurrencySymbol();
-
-        if (cmdName.equals("bal") || cmdName.equals("balance")) {
-            if (args.length == 0) {
-                if (!(sender instanceof Player)) {
-                    sender.sendMessage("Console must specify a player: /bal <player>");
-                    return true;
+        if (!economyFile.exists()) {
+            economyFile.getParentFile().mkdirs();
+            if (plugin.getResource("eco/economy.yml") != null) {
+                plugin.saveResource("eco/economy.yml", false);
+            } else {
+                try {
+                    economyFile.createNewFile();
+                } catch (Exception e) {
+                    plugin.getLogger().severe("Could not create economy.yml!");
                 }
-                Player player = (Player) sender;
-                double bal = getBalance(player);
-                String msg = configService.getMessage("balance_self", "&eYour balance is &a%symbol%%amount%")
-                        .replace("%symbol%", symbol)
-                        .replace("%amount%", String.valueOf(bal));
-                player.sendMessage(msg);
-                return true;
             }
-
-            Player target = Bukkit.getPlayer(args[0]);
-            if (target == null || !target.isOnline()) {
-                sender.sendMessage(configService.getMessage("player_not_found", "&cPlayer not found or offline!"));
-                return true;
-            }
-
-            double bal = getBalance(target);
-            String msg = configService.getMessage("balance_other", "&#009bff%target% &ehas &a%symbol%%amount%")
-                    .replace("%target%", target.getName())
-                    .replace("%symbol%", symbol)
-                    .replace("%amount%", String.valueOf(bal));
-            sender.sendMessage(msg);
-            return true;
         }
+        economyConfig = YamlConfiguration.loadConfiguration(economyFile);
 
-        if (cmdName.equals("pay")) {
-            if (!(sender instanceof Player)) {
-                sender.sendMessage("Only players can use /pay.");
-                return true;
-            }
-
-            Player player = (Player) sender;
-
-            if (args.length < 2) {
-                player.sendMessage(ChatColor.translateAlternateColorCodes('&', "&cUsage: /pay <player> <amount>"));
-                return true;
-            }
-
-            Player target = Bukkit.getPlayer(args[0]);
-            if (target == null || !target.isOnline()) {
-                player.sendMessage(configService.getMessage("player_not_found", "&cPlayer not found or offline!"));
-                return true;
-            }
-
-            if (target.equals(player)) {
-                player.sendMessage(configService.getMessage("self_pay", "&cYou cannot pay yourself!"));
-                return true;
-            }
-
-            double amount;
-            try {
-                amount = Double.parseDouble(args[1]);
-            } catch (NumberFormatException e) {
-                player.sendMessage(configService.getMessage("invalid_amount", "&cInvalid amount specified!"));
-                return true;
-            }
-
-            if (amount <= 0) {
-                player.sendMessage(configService.getMessage("negative_amount", "&cAmount must be greater than zero!"));
-                return true;
-            }
-
-            double senderBal = getBalance(player);
-            if (senderBal < amount) {
-                player.sendMessage(ChatColor.translateAlternateColorCodes('&', "&cYou don't have enough money!"));
-                return true;
-            }
-
-            setBalance(player, senderBal - amount);
-            setBalance(target, getBalance(target) + amount);
-
-            String payerMsg = configService.getMessage("paid_target", "&#009bffYou paid &b%target% &a%symbol%%amount%")
-                    .replace("%target%", target.getName())
-                    .replace("%symbol%", symbol)
-                    .replace("%amount%", String.valueOf(amount));
-            player.sendMessage(payerMsg);
-            playConfigSound(player, "pay_sender");
-
-            String targetMsg = configService.getMessage("received_payment", "&#009bff%player% &ehas paid you &a%symbol%%amount%")
-                    .replace("%player%", player.getName())
-                    .replace("%symbol%", symbol)
-                    .replace("%amount%", String.valueOf(amount));
-            target.sendMessage(targetMsg);
-            playConfigSound(player, "pay_receiver");
-
-            return true;
+        InputStream defConfigStream = plugin.getResource("eco/economy.yml");
+        if (defConfigStream != null) {
+            YamlConfiguration defConfig = YamlConfiguration.loadConfiguration(new InputStreamReader(defConfigStream, StandardCharsets.UTF_8));
+            economyConfig.setDefaults(defConfig);
         }
+    }
 
-        if (cmdName.equals("eco")) {
-            if (!sender.hasPermission("nyretha.eco.admin")) {
-                sender.sendMessage(ChatColor.translateAlternateColorCodes('&', "&cYou do not have permission to use /eco!"));
-                return true;
-            }
-
-            if (args.length < 3) {
-                sender.sendMessage(ChatColor.translateAlternateColorCodes('&', "&cUsage: /eco <give/take/set> <player> <amount>"));
-                return true;
-            }
-
-            Player target = Bukkit.getPlayer(args[1]);
-            if (target == null || !target.isOnline()) {
-                sender.sendMessage(configService.getMessage("player_not_found", "&cPlayer not found or offline!"));
-                return true;
-            }
-
-            double amount;
-            try {
-                amount = Double.parseDouble(args[2]);
-            } catch (NumberFormatException e) {
-                sender.sendMessage(configService.getMessage("invalid_amount", "&cInvalid amount specified!"));
-                return true;
-            }
-
-            String action = args[0].toLowerCase();
-            double currentBal = getBalance(target);
-
-            switch (action) {
-                case "give":
-                    setBalance(target, currentBal + amount);
-                    sender.sendMessage(ChatColor.translateAlternateColorCodes('&', "&#009bff" + target.getName() + " &ehas been given &a" + symbol + amount));
-                    break;
-                case "take":
-                    setBalance(target, Math.max(0, currentBal - amount));
-                    sender.sendMessage(ChatColor.translateAlternateColorCodes('&', "&#009bff" + target.getName() + " &ehas had &a" + symbol + amount + " &etaken."));
-                    break;
-                case "set":
-                    setBalance(target, amount);
-                    sender.sendMessage(ChatColor.translateAlternateColorCodes('&', "&#009bff" + target.getName() + "'s &ebalance set to &a" + symbol + amount));
-                    break;
-                default:
-                    sender.sendMessage(ChatColor.translateAlternateColorCodes('&', "&cUnknown action. Use give, take, or set."));
-                    break;
-            }
-            return true;
+    public FileConfiguration getConfig() {
+        if (economyConfig == null) {
+            loadEconomyConfig();
         }
+        return economyConfig;
+    }
 
-        return false;
+    public String getCurrencySymbol() {
+        return colorize(getConfig().getString("currency.symbol", "$"));
+    }
+
+    public String getSound(String key) {
+        return getConfig().getString("sounds." + key, "");
+    }
+
+    public String getMessage(String key, String def) {
+        return colorize(getConfig().getString("messages." + key, def));
+    }
+
+    public String colorize(String message) {
+        if (message == null) return "";
+        
+        Pattern pattern = Pattern.compile("&#([A-Fa-f0-9]{6})");
+        Matcher matcher = pattern.matcher(message);
+        StringBuilder buffer = new StringBuilder();
+        while (matcher.find()) {
+            String hex = matcher.group(1);
+            StringBuilder replacement = new StringBuilder("§x");
+            for (char c : hex.toCharArray()) {
+                replacement.append('§').append(c);
+            }
+            matcher.appendReplacement(buffer, replacement.toString());
+        }
+        matcher.appendTail(buffer);
+        
+        return ChatColor.translateAlternateColorCodes('&', buffer.toString());
     }
 }
