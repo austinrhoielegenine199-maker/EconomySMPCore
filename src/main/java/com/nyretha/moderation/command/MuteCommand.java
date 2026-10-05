@@ -1,21 +1,68 @@
 package com.nyretha.moderation.command;
 
+import com.nyretha.moderation.service.ModerationService;
 import com.nyretha.moderation.util.TimeParser;
 
-public class MuteCommand {
+import org.bukkit.ChatColor;
+import org.bukkit.command.Command;
+import org.bukkit.command.CommandExecutor;
+import org.bukkit.command.CommandSender;
 
-    public void execute(String moderatorIGN, String targetIGN, String durationArg, String reason) {
-        if (targetIGN == null || targetIGN.isBlank()) {
-            System.out.println("[Command Error] Invalid target IGN.");
-            return;
+public class MuteCommand implements CommandExecutor {
+
+    private final ModerationService moderationService;
+
+    public MuteCommand() {
+        this.moderationService = new ModerationService();
+    }
+
+    @Override
+    public boolean onCommand(
+            CommandSender sender,
+            Command command,
+            String label,
+            String[] args
+    ) {
+        if (args.length < 1) {
+            sender.sendMessage(
+                    ChatColor.RED +
+                    "Usage: /mute <player> [time]"
+            );
+            return true;
         }
 
-        long durationMillis = TimeParser.parseToMillis(durationArg);
-        if (durationMillis <= 0) {
-            System.out.println("[Command Error] Invalid mute duration format. Use formats like 1s, 10h, 1w.");
-            return;
+        String duration =
+                args.length > 1
+                        ? args[1]
+                        : "permanent";
+
+        if (
+                !duration.equalsIgnoreCase("permanent")
+                && TimeParser.parseToMillis(duration) <= 0
+        ) {
+            sender.sendMessage(
+                    ChatColor.RED +
+                    "Invalid mute duration. Examples: 10m, 2h, 7d."
+            );
+            return true;
         }
 
-        System.out.println("[Command] " + moderatorIGN + " muted " + targetIGN + " for " + durationArg + ". Reason: " + reason);
+        moderationService.addInfraction(
+                args[0],
+                sender.getName(),
+                duration,
+                "MUTE"
+        );
+
+        sender.sendMessage(
+                ChatColor.GREEN +
+                "Muted " +
+                args[0] +
+                " for " +
+                duration +
+                "."
+        );
+
+        return true;
     }
 }
