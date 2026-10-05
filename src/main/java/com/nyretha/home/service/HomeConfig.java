@@ -1,49 +1,46 @@
 package com.nyretha.home.service;
 
+import org.bukkit.plugin.java.JavaPlugin;
 import org.yaml.snakeyaml.Yaml;
+
 import java.io.InputStream;
 import java.util.Map;
-import java.util.List;
 
 public class HomeConfig {
+
+    private final JavaPlugin plugin;
     private Map<String, Object> configData;
 
+    public HomeConfig(JavaPlugin plugin) {
+        this.plugin = plugin;
+        loadConfig();
+    }
+
     public void loadConfig() {
+
         Yaml yaml = new Yaml();
-        try (InputStream inputStream = getClass().getClassLoader().getResourceAsStream("core/home/home.yml")) {
+
+        try (
+                InputStream inputStream =
+                        plugin.getResource("core/home/homegui.yml")
+        ) {
+
             if (inputStream != null) {
                 configData = yaml.load(inputStream);
             } else {
-                System.err.println("[HomeConfig] Could not find home.yml in resources!");
+                plugin.getLogger().warning(
+                        "Could not find core/home/homegui.yml!"
+                );
             }
+
         } catch (Exception e) {
-            e.printStackTrace();
+            plugin.getLogger().severe(
+                    "Failed to load homegui.yml: " + e.getMessage()
+            );
         }
     }
 
-    @SuppressWarnings("unchecked")
-    public int getTeleportCountdown() {
-        if (configData == null) return 5;
-        try {
-            Map<String, Object> teleport = (Map<String, Object>) configData.get("teleport");
-            Object seconds = teleport.get("countdown-seconds");
-            if (seconds instanceof Number) {
-                return ((Number) seconds).intValue();
-            }
-        } catch (Exception e) {
-            // Fallback
-        }
-        return 5;
-    }
-
-    @SuppressWarnings("unchecked")
-    public String getMessage(String key) {
-        if (configData == null) return "";
-        try {
-            Map<String, Object> teleport = (Map<String, Object>) configData.get("teleport");
-            return (String) teleport.getOrDefault(key, "");
-        } catch (Exception e) {
-            return "";
-        }
+    public Map<String, Object> getConfigData() {
+        return configData;
     }
 }
