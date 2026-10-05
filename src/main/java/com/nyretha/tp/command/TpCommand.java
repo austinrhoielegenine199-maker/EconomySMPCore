@@ -1,9 +1,9 @@
 package com.nyretha.tp.command;
 
-import com.nyretha.tp.gui.TpConfirmGui;
 import com.nyretha.tp.service.TpConfigService;
 import com.nyretha.tp.service.TpTaskService;
 import net.md_5.bungee.api.ChatColor;
+import net.md_5.bungee.api.chat.BaseComponent;
 import net.md_5.bungee.api.chat.ClickEvent;
 import net.md_5.bungee.api.chat.ComponentBuilder;
 import net.md_5.bungee.api.chat.HoverEvent;
@@ -26,7 +26,7 @@ public class TpCommand implements CommandExecutor {
     private final TpConfigService configService;
     private final Plugin plugin;
     private final Set<UUID> tpAutoEnabled = new HashSet<>();
-    
+
     public static final Map<UUID, PendingTpSession> activeSessions = new HashMap<>();
 
     public TpCommand(TpConfigService configService, Plugin plugin) {
@@ -127,7 +127,7 @@ public class TpCommand implements CommandExecutor {
 
         if (tpAutoEnabled.contains(target.getUniqueId())) {
             player.sendMessage(org.bukkit.ChatColor.translateAlternateColorCodes('&', "&a" + target.getName() + " has Tpauto enabled. Teleporting..."));
-            
+
             Player traveler = type.equals("tpa") ? player : target;
             Player destinationHolder = type.equals("tpa") ? target : player;
 
@@ -135,30 +135,32 @@ public class TpCommand implements CommandExecutor {
             return true;
         }
 
-        // Save session for confirmation lookup (Keyed by target recipient's UUID)
         activeSessions.put(target.getUniqueId(), new PendingTpSession(player.getUniqueId(), type));
 
         String rawMsg = configService.getMessage("tpa_received", "&b%target% &esent you a &b%type% &erequest! &#009bff&l[Click Me]");
         String parsedMsg = rawMsg.replace("%target%", player.getName()).replace("%type%", type.toUpperCase());
         String[] parts = parsedMsg.split("&#009bff&l\\[Click Me\\]");
-        
+
         TextComponent finalMessage = new TextComponent();
-        
+
         if (parts.length > 0) {
-            finalMessage.addExtra(TextComponent.fromLegacyText(org.bukkit.ChatColor.translateAlternateColorCodes('&', parts[0])));
+            for (BaseComponent comp : TextComponent.fromLegacyText(org.bukkit.ChatColor.translateAlternateColorCodes('&', parts[0]))) {
+                finalMessage.addExtra(comp);
+            }
         }
 
         TextComponent clickButton = new TextComponent("[Click Me]");
         clickButton.setColor(ChatColor.of(new Color(0, 155, 255)));
         clickButton.setBold(true);
-        // Clicking runs /tpaccept, or they can use /tpdeny manually
         clickButton.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/tpaccept " + player.getName()));
         clickButton.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ComponentBuilder("Click to open confirmation GUI").create()));
-        
+
         finalMessage.addExtra(clickButton);
 
         if (parts.length > 1) {
-            finalMessage.addExtra(TextComponent.fromLegacyText(org.bukkit.ChatColor.translateAlternateColorCodes('&', parts[1])));
+            for (BaseComponent comp : TextComponent.fromLegacyText(org.bukkit.ChatColor.translateAlternateColorCodes('&', parts[1]))) {
+                finalMessage.addExtra(comp);
+            }
         }
 
         target.spigot().sendMessage(finalMessage);
