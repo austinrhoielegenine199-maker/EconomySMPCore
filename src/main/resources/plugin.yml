@@ -12,18 +12,18 @@ commands:
 
   team:
     description: Manage your team or faction.
-    usage: /team <create|leave|disband>
+    usage: /team <create|leave|disband|sethome>
 
   home:
     description: Teleport to your home.
-    usage: /home
+    usage: /home [name]
 
   sethome:
     description: Set your home location.
-    usage: /sethome
+    usage: /sethome [name]
 
   bal:
-    description: Check balance.
+    description: Check your balance.
     aliases:
       - balance
     usage: /bal [player]
@@ -48,7 +48,7 @@ commands:
   tp:
     description: Teleport to a player or location.
     permission: nyretha.staff.tp
-    usage: /tp <player> [target]
+    usage: /tp <player>
 
   nv:
     description: Toggle night vision.
@@ -61,7 +61,6 @@ commands:
 
   ping:
     description: Check your network latency.
-    permission: nyretha.ping
     usage: /ping
 
   ban:
@@ -77,7 +76,7 @@ commands:
   mute:
     description: Mute a player.
     permission: nyretha.staff.mute
-    usage: /mute <player> [time]
+    usage: /mute <player> [time] [reason]
 
   warn:
     description: Warn a player.
@@ -121,14 +120,6 @@ permissions:
 
   nyretha.nv:
     description: Allows use of night vision.
-    default: op
-
-  nyretha.ping:
-    description: Allows use of /ping.
-    default: true
-
-  nyretha.shop.admin:
-    description: Allows shop administration commands.
     default: op
 
   nyretha.admin:
