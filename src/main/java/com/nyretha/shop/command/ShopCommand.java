@@ -31,27 +31,22 @@ public class ShopCommand implements CommandExecutor {
 
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
+        if (!(sender instanceof Player)) {
+            sender.sendMessage("Only players can use shop commands.");
+            return true;
+        }
+        Player player = (Player) sender;
+
         if (args.length == 0) {
-            if (!(sender instanceof Player)) {
-                sender.sendMessage("Only players can open the shop.");
-                return true;
-            }
-            ShopMenu.openMainShop((Player) sender, configService);
+            ShopMenu.openMainShop(player, configService);
             return true;
         }
 
         if (args[0].equalsIgnoreCase("addhanditem")) {
-            if (!sender.hasPermission("nyretha.shop.admin")) {
-                sender.sendMessage(ChatColor.translateAlternateColorCodes('&', "&cYou do not have permission to use this command."));
+            if (!player.hasPermission("nyretha.shop.admin")) {
+                player.sendMessage(ChatColor.translateAlternateColorCodes('&', "&cYou do not have permission to use this command."));
                 return true;
             }
-
-            if (!(sender instanceof Player)) {
-                sender.sendMessage("Only players can use this command.");
-                return true;
-            }
-
-            Player player = (Player) sender;
 
             if (args.length < 4) {
                 player.sendMessage(ChatColor.translateAlternateColorCodes('&', "&cUsage: /shop addhanditem <category> <slot> <price>"));
@@ -121,7 +116,7 @@ public class ShopCommand implements CommandExecutor {
         }
 
         String itemKey = item.getType().name().toLowerCase();
-        
+
         Map<String, Object> itemDetails = new LinkedHashMap<>();
         itemDetails.put("material", item.getType().name());
         itemDetails.put("slot", slot);
