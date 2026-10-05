@@ -27,7 +27,7 @@ public final class NyrethaCore extends JavaPlugin {
     @Override
     public void onDisable() {
         // Close database connections safely if needed
-        if (databaseService != and databaseService.getConnection() != null) {
+        if (databaseService != null && databaseService.getConnection() != null) {
             // handle closing connection if your DatabaseService has a close method
         }
         getLogger().info("NyrethaCore has been disabled.");
