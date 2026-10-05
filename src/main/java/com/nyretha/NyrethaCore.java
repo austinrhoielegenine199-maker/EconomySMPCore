@@ -1,6 +1,6 @@
 package com.nyretha;
 
-import com.nyretha.command.ArchiveCommand;
+import com.nyretha.commands.ArchiveCommand;
 import com.nyretha.core.database.DatabaseService;
 import com.nyretha.economy.command.EconomyCommand;
 import com.nyretha.economy.service.EconomyConfigService;
@@ -53,7 +53,6 @@ public final class NyrethaCore extends JavaPlugin {
 
     @Override
     public void onEnable() {
-
         instance = this;
 
         getDataFolder().mkdirs();
@@ -75,7 +74,7 @@ public final class NyrethaCore extends JavaPlugin {
         shopConfigService = new ShopConfigService();
         shopConfigService.loadConfigs();
 
-        moderationConfig = new ConfigService(this);
+        moderationConfig = new ConfigService();
         moderationConfig.loadConfig();
 
         moderationService = new ModerationService();
@@ -105,7 +104,6 @@ public final class NyrethaCore extends JavaPlugin {
 
     @Override
     public void onDisable() {
-
         if (databaseService != null) {
             databaseService.closeConnection();
         }
@@ -170,14 +168,13 @@ public final class NyrethaCore extends JavaPlugin {
                 "tempban",
                 new TempBanCommand(
                         moderationConfig,
-                        webhookService,
-                        this
+                        webhookService
                 )
         );
 
         register(
                 "mute",
-                new MuteCommand(moderationService)
+                new MuteCommand()
         );
 
         register(
@@ -200,14 +197,11 @@ public final class NyrethaCore extends JavaPlugin {
             String name,
             Object executor
     ) {
-
         if (getCommand(name) == null) {
-
             getLogger().severe(
                     "Command /" + name +
                     " is missing from plugin.yml!"
             );
-
             return;
         }
 
@@ -223,7 +217,6 @@ public final class NyrethaCore extends JavaPlugin {
     }
 
     private void extractAllConfigs() {
-
         saveConfigSafely("core/combat/combat.yml");
         saveConfigSafely("core/eco/economy.yml");
         saveConfigSafely("core/help/help.yml");
@@ -240,7 +233,6 @@ public final class NyrethaCore extends JavaPlugin {
     }
 
     private void saveConfigSafely(String resourcePath) {
-
         File file = new File(
                 getDataFolder(),
                 resourcePath
@@ -251,16 +243,12 @@ public final class NyrethaCore extends JavaPlugin {
         }
 
         if (!file.exists()) {
-
             try {
-
                 saveResource(
                         resourcePath,
                         false
                 );
-
             } catch (IllegalArgumentException e) {
-
                 getLogger().warning(
                         "Failed to find resource: " +
                         resourcePath
@@ -270,7 +258,6 @@ public final class NyrethaCore extends JavaPlugin {
     }
 
     public void reloadCore() {
-
         extractAllConfigs();
 
         if (economyConfigService != null) {
@@ -300,10 +287,6 @@ public final class NyrethaCore extends JavaPlugin {
         if (moderationConfig != null) {
             moderationConfig.loadConfig();
         }
-
-        getLogger().info(
-                "NyrethaCore configuration reloaded."
-        );
     }
 
     public DatabaseService getDatabaseService() {
