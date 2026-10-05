@@ -1,27 +1,25 @@
 package com.nyretha;
 
-import com.nyretha.core.database.DatabaseService;
-import com.nyretha.commands.ArchiveAustxnCommand;
-import com.nyretha.commands.TeamCommand;
-import com.nyretha.commands.HomeCommand;
-import com.nyretha.commands.SetHomeCommand;
-import com.nyretha.commands.BalCommand;
-import com.nyretha.commands.PayCommand;
-import com.nyretha.commands.EcoCommand;
-import com.nyretha.commands.TpaCommand;
-import com.nyretha.commands.TpaHereCommand;
-import com.nyretha.commands.TpCommand;
-import com.nyretha.commands.NvCommand;
-import com.nyretha.commands.ShopCommand;
-import com.nyretha.commands.PingCommand;
-import com.nyretha.commands.BanCommand;
-import com.nyretha.commands.TempBanCommand;
-import com.nyretha.commands.MuteCommand;
-import com.nyretha.commands.WarnCommand;
-import com.nyretha.commands.HelpCommand;
-import com.nyretha.commands.CoreCommand;
+import com.nyretha.command.ArchiveCommand;
+import com.nyretha.database.DatabaseService;
+import com.nyretha.economy.command.EconomyCommand;
+import com.nyretha.help.HelpCommand;
+import com.nyretha.home.command.HomeCommand;
+import com.nyretha.moderation.command.BanCommand;
+import com.nyretha.moderation.command.MuteCommand;
+import com.nyretha.moderation.command.TempBanCommand;
+import com.nyretha.moderation.command.WarnCommand;
+import com.nyretha.nv.NvCommand;
+import com.nyretha.ping.PingCommand;
+import com.nyretha.shop.command.ShopCommand;
+import com.nyretha.team.command.TeamCommand;
+import com.nyretha.tp.command.TpCommand;
 
+import org.bukkit.command.CommandExecutor;
+import org.bukkit.command.TabCompleter;
 import org.bukkit.plugin.java.JavaPlugin;
+
+import java.io.File;
 
 public final class NyrethaCore extends JavaPlugin {
 
@@ -37,13 +35,10 @@ public final class NyrethaCore extends JavaPlugin {
             getDataFolder().mkdirs();
         }
 
-        // Extract configuration files
         extractAllConfigs();
 
-        // Initialize SQLite database
         databaseService = new DatabaseService(this);
 
-        // Register all commands
         registerCommands();
 
         getLogger().info("=================================");
@@ -73,25 +68,33 @@ public final class NyrethaCore extends JavaPlugin {
 
     private void registerCommands() {
 
-        register("archiveaustxn", new ArchiveAustxnCommand(this));
+        register("archiveaustxn", new ArchiveCommand(this));
+
         register("team", new TeamCommand(this));
+
         register("home", new HomeCommand(this));
-        register("sethome", new SetHomeCommand(this));
-        register("bal", new BalCommand(this));
-        register("pay", new PayCommand(this));
-        register("eco", new EcoCommand(this));
-        register("tpa", new TpaCommand(this));
-        register("tpahere", new TpaHereCommand(this));
-        register("tp", new TpCommand(this));
+
+        register("bal", new EconomyCommand(this));
+        register("pay", new EconomyCommand(this));
+        register("eco", new EconomyCommand(this));
+
         register("nv", new NvCommand(this));
+
         register("shop", new ShopCommand(this));
+
         register("ping", new PingCommand(this));
+
         register("ban", new BanCommand(this));
+
         register("tempban", new TempBanCommand(this));
+
         register("mute", new MuteCommand(this));
+
         register("warn", new WarnCommand(this));
+
         register("help", new HelpCommand(this));
-        register("core", new CoreCommand(this));
+
+        register("tp", new TpCommand(this));
     }
 
     private void register(String name, Object executor) {
@@ -104,15 +107,15 @@ public final class NyrethaCore extends JavaPlugin {
             return;
         }
 
-        if (executor instanceof org.bukkit.command.CommandExecutor) {
+        if (executor instanceof CommandExecutor) {
             getCommand(name).setExecutor(
-                    (org.bukkit.command.CommandExecutor) executor
+                    (CommandExecutor) executor
             );
         }
 
-        if (executor instanceof org.bukkit.command.TabCompleter) {
+        if (executor instanceof TabCompleter) {
             getCommand(name).setTabCompleter(
-                    (org.bukkit.command.TabCompleter) executor
+                    (TabCompleter) executor
             );
         }
 
@@ -122,12 +125,21 @@ public final class NyrethaCore extends JavaPlugin {
     private void extractAllConfigs() {
 
         saveConfigSafely("core/combat/combat.yml");
+
         saveConfigSafely("core/eco/economy.yml");
+
         saveConfigSafely("core/help/help.yml");
+
         saveConfigSafely("core/home/homegui.yml");
-        saveConfigSafely("core/moderation/staffmoderation.yml");
+
+        saveConfigSafely(
+                "core/moderation/staffmoderation.yml"
+        );
+
         saveConfigSafely("core/ping/ping.yml");
+
         saveConfigSafely("core/tp/tpasystem.yml");
+
         saveConfigSafely("core/shop/shopgui.yml");
 
         saveConfigSafely(
@@ -153,8 +165,8 @@ public final class NyrethaCore extends JavaPlugin {
 
     private void saveConfigSafely(String resourcePath) {
 
-        java.io.File file =
-                new java.io.File(getDataFolder(), resourcePath);
+        File file =
+                new File(getDataFolder(), resourcePath);
 
         if (file.getParentFile() != null &&
                 !file.getParentFile().exists()) {
