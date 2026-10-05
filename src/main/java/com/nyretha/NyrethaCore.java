@@ -39,24 +39,16 @@ public final class NyrethaCore extends JavaPlugin {
     private static NyrethaCore instance;
 
     private DatabaseService databaseService;
-
     private EconomyConfigService economyConfigService;
-
     private HomeConfig homeConfig;
     private HomeManager homeManager;
-
     private HelpConfig helpConfig;
-
     private PingConfig pingConfig;
-
     private TpConfigService tpConfigService;
-
     private ShopConfigService shopConfigService;
-
     private ConfigService moderationConfig;
     private ModerationService moderationService;
     private WebhookService webhookService;
-
     private TeamManager teamManager;
 
     @Override
@@ -66,48 +58,33 @@ public final class NyrethaCore extends JavaPlugin {
 
         getDataFolder().mkdirs();
 
-        // Create all configuration files
         extractAllConfigs();
 
-        // Database
         databaseService = new DatabaseService(this);
-
-        // Economy
         economyConfigService = new EconomyConfigService(this);
 
-        // Homes
         homeManager = new HomeManager();
         homeConfig = new HomeConfig(this);
 
-        // Help
         helpConfig = new HelpConfig(this);
-
-        // Ping
         pingConfig = new PingConfig(this);
 
-        // TPA
         tpConfigService = new TpConfigService();
         tpConfigService.loadConfig();
 
-        // Shop
         shopConfigService = new ShopConfigService();
         shopConfigService.loadConfigs();
 
-        // Moderation
         moderationConfig = new ConfigService(this);
         moderationConfig.loadConfig();
 
         moderationService = new ModerationService();
-
         webhookService = new WebhookService(moderationConfig);
 
-        // Teams
         teamManager = new TeamManager();
 
-        // Commands
         registerCommands();
 
-        // Listeners
         getServer().getPluginManager().registerEvents(
                 new HelpCommand(helpConfig),
                 this
@@ -123,10 +100,7 @@ public final class NyrethaCore extends JavaPlugin {
                 this
         );
 
-        getLogger().info("=================================");
-        getLogger().info("        NyrethaCore v1.0");
-        getLogger().info("        Plugin Enabled!");
-        getLogger().info("=================================");
+        getLogger().info("NyrethaCore v1.0 enabled.");
     }
 
     @Override
@@ -141,15 +115,9 @@ public final class NyrethaCore extends JavaPlugin {
 
     private void registerCommands() {
 
-        register(
-                "archiveaustxn",
-                new ArchiveCommand()
-        );
+        register("archiveaustxn", new ArchiveCommand());
 
-        register(
-                "team",
-                new TeamCommand(teamManager)
-        );
+        register("team", new TeamCommand(teamManager));
 
         HomeCommand homeCommand = new HomeCommand(
                 homeManager,
@@ -178,10 +146,7 @@ public final class NyrethaCore extends JavaPlugin {
         register("tpahere", tpCommand);
         register("tp", tpCommand);
 
-        register(
-                "nv",
-                new NvCommand()
-        );
+        register("nv", new NvCommand());
 
         register(
                 "shop",
@@ -191,10 +156,7 @@ public final class NyrethaCore extends JavaPlugin {
                 )
         );
 
-        register(
-                "ping",
-                new PingCommand(pingConfig)
-        );
+        register("ping", new PingCommand(pingConfig));
 
         register(
                 "ban",
@@ -250,84 +212,34 @@ public final class NyrethaCore extends JavaPlugin {
         }
 
         if (executor instanceof CommandExecutor commandExecutor) {
-
-            getCommand(name).setExecutor(
-                    commandExecutor
-            );
+            getCommand(name).setExecutor(commandExecutor);
         }
 
         if (executor instanceof TabCompleter tabCompleter) {
-
-            getCommand(name).setTabCompleter(
-                    tabCompleter
-            );
+            getCommand(name).setTabCompleter(tabCompleter);
         }
 
-        getLogger().info(
-                "Registered /" + name
-        );
+        getLogger().info("Registered /" + name);
     }
 
     private void extractAllConfigs() {
 
-        saveConfigSafely(
-                "core/combat/combat.yml"
-        );
-
-        saveConfigSafely(
-                "core/eco/economy.yml"
-        );
-
-        saveConfigSafely(
-                "core/help/help.yml"
-        );
-
-        // IMPORTANT:
-        // The file is homegui.yml, NOT home.yml.
-        saveConfigSafely(
-                "core/home/homegui.yml"
-        );
-
-        saveConfigSafely(
-                "core/moderation/staffmoderation.yml"
-        );
-
-        saveConfigSafely(
-                "core/ping/ping.yml"
-        );
-
-        saveConfigSafely(
-                "core/tp/tpasystem.yml"
-        );
-
-        saveConfigSafely(
-                "core/shop/shopgui.yml"
-        );
-
-        saveConfigSafely(
-                "core/shop/categories/gear.yml"
-        );
-
-        saveConfigSafely(
-                "core/shop/categories/end.yml"
-        );
-
-        saveConfigSafely(
-                "core/shop/categories/nether.yml"
-        );
-
-        saveConfigSafely(
-                "core/shop/categories/food.yml"
-        );
-
-        saveConfigSafely(
-                "core/shop/categories/flakeshop.yml"
-        );
+        saveConfigSafely("core/combat/combat.yml");
+        saveConfigSafely("core/eco/economy.yml");
+        saveConfigSafely("core/help/help.yml");
+        saveConfigSafely("core/home/homegui.yml");
+        saveConfigSafely("core/moderation/staffmoderation.yml");
+        saveConfigSafely("core/ping/ping.yml");
+        saveConfigSafely("core/tp/tpasystem.yml");
+        saveConfigSafely("core/shop/shopgui.yml");
+        saveConfigSafely("core/shop/categories/gear.yml");
+        saveConfigSafely("core/shop/categories/end.yml");
+        saveConfigSafely("core/shop/categories/nether.yml");
+        saveConfigSafely("core/shop/categories/food.yml");
+        saveConfigSafely("core/shop/categories/flakeshop.yml");
     }
 
-    private void saveConfigSafely(
-            String resourcePath
-    ) {
+    private void saveConfigSafely(String resourcePath) {
 
         File file = new File(
                 getDataFolder(),
@@ -350,8 +262,8 @@ public final class NyrethaCore extends JavaPlugin {
             } catch (IllegalArgumentException e) {
 
                 getLogger().warning(
-                        "FAILED to find resource in jar: "
-                                + resourcePath
+                        "Failed to find resource: " +
+                        resourcePath
                 );
             }
         }
