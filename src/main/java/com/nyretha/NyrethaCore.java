@@ -56,7 +56,6 @@ public final class NyrethaCore extends JavaPlugin {
     public void onEnable() {
         instance = this;
 
-        // Establish the core data folder for the plugin
         if (!getDataFolder().exists()) {
             getDataFolder().mkdirs();
         }
@@ -75,7 +74,7 @@ public final class NyrethaCore extends JavaPlugin {
         tpConfigService = new TpConfigService();
         tpConfigService.loadConfig();
 
-        shopConfigService = new ShopConfigService();
+        shopConfigService = new ShopConfigService(this);
         shopConfigService.loadConfigs();
 
         moderationConfig = new ConfigService();
@@ -228,7 +227,7 @@ public final class NyrethaCore extends JavaPlugin {
         saveConfigSafely("core/moderation/staffmoderation.yml");
         saveConfigSafely("core/ping/ping.yml");
         saveConfigSafely("core/tp/tpasystem.yml");
-        
+
         saveConfigSafely("core/shop/shopgui.yml");
         saveConfigSafely("core/shop/categories/gear.yml");
         saveConfigSafely("core/shop/categories/end.yml");
@@ -239,11 +238,10 @@ public final class NyrethaCore extends JavaPlugin {
 
     private void saveConfigSafely(String resourcePath) {
         File file = new File(getDataFolder(), resourcePath);
-        
+
         if (!file.exists()) {
             file.getParentFile().mkdirs();
             try {
-                // saveResource safely duplicates the internal file structure to the plugin folder
                 saveResource(resourcePath, false);
             } catch (IllegalArgumentException e) {
                 getLogger().warning("Failed to find or save resource inside jar: " + resourcePath);
@@ -285,6 +283,14 @@ public final class NyrethaCore extends JavaPlugin {
 
     public DatabaseService getDatabaseService() {
         return databaseService;
+    }
+
+    public TeamManager getTeamManager() {
+        return teamManager;
+    }
+
+    public HomeManager getHomeManager() {
+        return homeManager;
     }
 
     public static NyrethaCore getInstance() {
