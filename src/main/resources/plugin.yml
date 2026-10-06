@@ -22,19 +22,25 @@ commands:
     usage: /<command>
 
   bal:
-    description: Check your balance.
+    description: Check your money and flakes balance.
     aliases:
       - balance
     usage: /<command> [player]
 
   pay:
-    description: Send money to a player.
-    usage: /<command> <player> <amount>
+    description: Send money or flakes to a player.
+    usage: /<command> <player> <amount> [flakes]
+
+  flakes:
+    description: Check or manage your flakes balance.
+    aliases:
+      - flake
+    usage: /<command> [player|pay]
 
   eco:
-    description: Manage player economy balances.
-    permission: nyretha.eco.admin
-    usage: /<command> <give|take|set> <player> <amount>
+    description: Manage player economy balances and flakes.
+    permission: nyrethacore.admin.eco
+    usage: /<command> <give|take|set> <player> <amount> [money|flakes]
 
   tpa:
     description: Send a teleport request.
@@ -91,8 +97,8 @@ commands:
     usage: /<command> reload
 
 permissions:
-  nyretha.eco.admin:
-    description: Allows access to economy administration.
+  nyrethacore.admin.eco:
+    description: Allows access to economy and flakes administration.
     default: op
 
   nyretha.staff.tp:
