@@ -2,8 +2,8 @@ package com.nyretha.economy.command;
 
 import com.nyretha.NyrethaCore;
 import com.nyretha.economy.service.EconomyConfigService;
+import com.nyretha.utils.ColorUtils;
 import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -32,24 +32,25 @@ public class EconomyCommand implements CommandExecutor, TabCompleter {
         if (cmd.equals("bal") || cmd.equals("balance")) {
             if (args.length == 0) {
                 if (!(sender instanceof Player player)) {
-                    sender.sendMessage(ChatColor.RED + "Only players can check their own balance.");
+                    sender.sendMessage(ColorUtils.color("&cOnly players can check their own balance."));
                     return true;
                 }
                 double money = eco.getBalance(player.getUniqueId());
                 double flakes = eco.getFlakes(player.getUniqueId());
-                player.sendMessage(ChatColor.GREEN + "Balance: $" + String.format("%.2f", money));
-                player.sendMessage(ChatColor.AQUA + "Flakes: " + String.format("%.0f", flakes));
+                player.sendMessage(ColorUtils.color("&eBalance: &a$" + String.format("%.2f", money)));
+                player.sendMessage(ColorUtils.color("&bFlakes: &a" + String.format("%.0f", flakes) + " ❄"));
                 return true;
             } else {
                 OfflinePlayer target = Bukkit.getOfflinePlayer(args[0]);
                 if (!target.hasPlayedBefore() && !target.isOnline()) {
-                    sender.sendMessage(ChatColor.RED + "Player never joined the server.");
+                    sender.sendMessage(ColorUtils.color("&cPlayer never joined the server."));
                     return true;
                 }
+                String targetName = target.getName() != null ? target.getName() : args[0];
                 double money = eco.getBalance(target.getUniqueId());
                 double flakes = eco.getFlakes(target.getUniqueId());
-                sender.sendMessage(ChatColor.GREEN + target.getName() + "'s Balance: $" + String.format("%.2f", money));
-                sender.sendMessage(ChatColor.AQUA + target.getName() + "'s Flakes: " + String.format("%.0f", flakes));
+                sender.sendMessage(ColorUtils.color("&e" + targetName + "'s Balance: &a$" + String.format("%.2f", money)));
+                sender.sendMessage(ColorUtils.color("&b" + targetName + "'s Flakes: &a" + String.format("%.0f", flakes) + " ❄"));
                 return true;
             }
         }
@@ -57,22 +58,22 @@ public class EconomyCommand implements CommandExecutor, TabCompleter {
         // /pay <player> <amount> [flakes]
         if (cmd.equals("pay")) {
             if (!(sender instanceof Player player)) {
-                sender.sendMessage(ChatColor.RED + "Only players can send money.");
+                sender.sendMessage(ColorUtils.color("&cOnly players can send money or flakes."));
                 return true;
             }
             if (args.length < 2) {
-                player.sendMessage(ChatColor.RED + "Usage: /pay <player> <amount> [flakes]");
+                player.sendMessage(ColorUtils.color("&cUsage: /pay <player> <amount> [flakes]"));
                 return true;
             }
 
             OfflinePlayer target = Bukkit.getOfflinePlayer(args[0]);
             if (!target.hasPlayedBefore() && !target.isOnline()) {
-                player.sendMessage(ChatColor.RED + "Player not found.");
+                player.sendMessage(ColorUtils.color("&cPlayer not found or offline."));
                 return true;
             }
 
             if (target.getUniqueId().equals(player.getUniqueId())) {
-                player.sendMessage(ChatColor.RED + "You cannot pay yourself!");
+                player.sendMessage(ColorUtils.color("&cYou cannot pay yourself!"));
                 return true;
             }
 
@@ -81,97 +82,77 @@ public class EconomyCommand implements CommandExecutor, TabCompleter {
                 amount = Double.parseDouble(args[1]);
                 if (amount <= 0) throw new NumberFormatException();
             } catch (NumberFormatException e) {
-                player.sendMessage(ChatColor.RED + "Invalid amount.");
+                player.sendMessage(ColorUtils.color("&cInvalid amount specified."));
                 return true;
             }
 
             boolean isFlakes = args.length >= 3 && args[2].equalsIgnoreCase("flakes");
+            String targetName = target.getName() != null ? target.getName() : args[0];
 
             if (isFlakes) {
                 if (eco.getFlakes(player.getUniqueId()) < amount) {
-                    player.sendMessage(ChatColor.RED + "You don't have enough flakes!");
+                    player.sendMessage(ColorUtils.color("&cYou don't have enough flakes!"));
                     return true;
                 }
                 eco.removeFlakes(player.getUniqueId(), amount);
                 eco.addFlakes(target.getUniqueId(), amount);
-                player.sendMessage(ChatColor.GREEN + "Paid " + (long) amount + " flakes to " + target.getName());
-                if (target.isOnline()) {
-                    ((Player) target).sendMessage(ChatColor.GREEN + "Received " + (long) amount + " flakes from " + player.getName());
+                player.sendMessage(ColorUtils.color("&aPaid &b" + (long) amount + " ❄ flakes &ato &b" + targetName));
+                if (target.isOnline() && target.getPlayer() != null) {
+                    target.getPlayer().sendMessage(ColorUtils.color("&aReceived &b" + (long) amount + " ❄ flakes &afrom &b" + player.getName()));
                 }
             } else {
                 if (eco.getBalance(player.getUniqueId()) < amount) {
-                    player.sendMessage(ChatColor.RED + "You don't have enough money!");
+                    player.sendMessage(ColorUtils.color("&cYou don't have enough money!"));
                     return true;
                 }
                 eco.removeBalance(player.getUniqueId(), amount);
                 eco.addBalance(target.getUniqueId(), amount);
-                player.sendMessage(ChatColor.GREEN + "Paid $" + String.format("%.2f", amount) + " to " + target.getName());
-                if (target.isOnline()) {
-                    ((Player) target).sendMessage(ChatColor.GREEN + "Received $" + String.format("%.2f", amount) + " from " + player.getName());
+                player.sendMessage(ColorUtils.color("&aPaid &a$" + String.format("%.2f", amount) + " &ato &b" + targetName));
+                if (target.isOnline() && target.getPlayer() != null) {
+                    target.getPlayer().sendMessage(ColorUtils.color("&aReceived &a$" + String.format("%.2f", amount) + " &afrom &b" + player.getName()));
                 }
             }
             return true;
         }
 
-        // Admin command: /eco <give/take/set> <player> <amount> [money/flakes]
+        // Admin Command: /eco <give|take|set> <player> <amount> [money|flakes]
         if (cmd.equals("eco")) {
             if (!sender.hasPermission("nyrethacore.admin.eco")) {
-                sender.sendMessage(ChatColor.RED + "No permission.");
+                sender.sendMessage(ColorUtils.color("&cNo permission."));
                 return true;
             }
             if (args.length < 3) {
-                sender.sendMessage(ChatColor.RED + "Usage: /eco <give|take|set> <player> <amount> [money|flakes]");
+                sender.sendMessage(ColorUtils.color("&cUsage: /eco <give|take|set> <player> <amount> [money|flakes]"));
                 return true;
             }
 
             String action = args[0].toLowerCase();
             OfflinePlayer target = Bukkit.getOfflinePlayer(args[1]);
-            
+            String targetName = target.getName() != null ? target.getName() : args[1];
+
             double amount;
             try {
                 amount = Double.parseDouble(args[2]);
             } catch (NumberFormatException e) {
-                sender.sendMessage(ChatColor.RED + "Invalid amount.");
+                sender.sendMessage(ColorUtils.color("&cInvalid amount specified."));
                 return true;
             }
 
             boolean isFlakes = args.length >= 4 && args[3].equalsIgnoreCase("flakes");
+            String currencyName = isFlakes ? "flakes" : "money";
 
             switch (action) {
                 case "give" -> {
                     if (isFlakes) eco.addFlakes(target.getUniqueId(), amount);
                     else eco.addBalance(target.getUniqueId(), amount);
-                    sender.sendMessage(ChatColor.GREEN + "Gave " + amount + " " + (isFlakes ? "flakes" : "money") + " to " + target.getName());
+                    sender.sendMessage(ColorUtils.color("&aGave &b" + amount + " " + currencyName + " &ato &b" + targetName));
                 }
                 case "take" -> {
                     if (isFlakes) eco.removeFlakes(target.getUniqueId(), amount);
                     else eco.removeBalance(target.getUniqueId(), amount);
-                    sender.sendMessage(ChatColor.GREEN + "Took " + amount + " " + (isFlakes ? "flakes" : "money") + " from " + target.getName());
+                    sender.sendMessage(ColorUtils.color("&aTook &b" + amount + " " + currencyName + " &afrom &b" + targetName));
                 }
                 case "set" -> {
                     if (isFlakes) eco.setFlakes(target.getUniqueId(), amount);
                     else eco.setBalance(target.getUniqueId(), amount);
-                    sender.sendMessage(ChatColor.GREEN + "Set " + target.getName() + "'s " + (isFlakes ? "flakes" : "money") + " to " + amount);
-                }
-                default -> sender.sendMessage(ChatColor.RED + "Unknown action: " + action);
-            }
-            return true;
-        }
-
-        return false;
-    }
-
-    @Override
-    public List<String> onTabComplete(CommandSender sender, Command command, String alias, String[] args) {
-        List<String> completions = new ArrayList<>();
-        if (args.length == 1 && alias.equalsIgnoreCase("eco")) {
-            completions.add("give");
-            completions.add("take");
-            completions.add("set");
-        } else if (args.length == 4) {
-            completions.add("money");
-            completions.add("flakes");
-        }
-        return completions;
-    }
-}
+                    sender.sendMessage(ColorUtils.color("&aSet &b" + targetName + "'s " + currencyName + " &
