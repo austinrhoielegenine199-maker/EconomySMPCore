@@ -1,99 +1,63 @@
 package com.nyretha.economy.service;
 
 import com.nyretha.NyrethaCore;
+import org.bukkit.Sound;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 
 import java.io.File;
-import java.io.IOException;
-import java.util.UUID;
+import java.text.DecimalFormat;
 
-public class EconomyConfigService {
+public class EconomyConfig {
 
     private final NyrethaCore plugin;
-    private File configFile;
+    private File file;
     private FileConfiguration config;
 
-    private File dataFile;
-    private FileConfiguration dataConfig;
-
-    public EconomyConfigService(NyrethaCore plugin) {
+    public EconomyConfig(NyrethaCore plugin) {
         this.plugin = plugin;
         loadConfig();
     }
 
     public void loadConfig() {
-        configFile = new File(plugin.getDataFolder(), "core/eco/economy.yml");
-        if (!configFile.exists()) {
+        file = new File(plugin.getDataFolder(), "core/eco/economy.yml");
+        if (!file.exists()) {
+            file.getParentFile().mkdirs();
             plugin.saveResource("core/eco/economy.yml", false);
         }
-        config = YamlConfiguration.loadConfiguration(configFile);
-
-        dataFile = new File(plugin.getDataFolder(), "core/eco/userdata.yml");
-        if (!dataFile.exists()) {
-            try {
-                dataFile.getParentFile().mkdirs();
-                dataFile.createNewFile();
-            } catch (IOException e) {
-                plugin.getLogger().severe("Could not create userdata.yml!");
-            }
-        }
-        dataConfig = YamlConfiguration.loadConfiguration(dataFile);
-    }
-
-    public void reloadConfig() {
-        loadConfig();
-    }
-
-    public void saveData() {
-        try {
-            dataConfig.save(dataFile);
-        } catch (IOException e) {
-            plugin.getLogger().severe("Could not save userdata.yml!");
-        }
-    }
-
-    // --- Economy Balance ---
-
-    public double getBalance(UUID uuid) {
-        double defaultBal = config.getDouble("starting-balance", 1000.0);
-        return dataConfig.getDouble("users." + uuid.toString() + ".balance", defaultBal);
-    }
-
-    public void setBalance(UUID uuid, double amount) {
-        dataConfig.set("users." + uuid.toString() + ".balance", Math.max(0, amount));
-        saveData();
-    }
-
-    public void addBalance(UUID uuid, double amount) {
-        setBalance(uuid, getBalance(uuid) + amount);
-    }
-
-    public void removeBalance(UUID uuid, double amount) {
-        setBalance(uuid, getBalance(uuid) - amount);
-    }
-
-    // --- Flakes Currency ---
-
-    public double getFlakes(UUID uuid) {
-        double defaultFlakes = config.getDouble("starting-flakes", 0.0);
-        return dataConfig.getDouble("users." + uuid.toString() + ".flakes", defaultFlakes);
-    }
-
-    public void setFlakes(UUID uuid, double amount) {
-        dataConfig.set("users." + uuid.toString() + ".flakes", Math.max(0, amount));
-        saveData();
-    }
-
-    public void addFlakes(UUID uuid, double amount) {
-        setFlakes(uuid, getFlakes(uuid) + amount);
-    }
-
-    public void removeFlakes(UUID uuid, double amount) {
-        setFlakes(uuid, getFlakes(uuid) - amount);
+        config = YamlConfiguration.loadConfiguration(file);
     }
 
     public FileConfiguration getConfig() {
         return config;
+    }
+
+    public String getCurrencySymbol() {
+        return config.getString("economy.currency.symbol", "$");
+    }
+
+    public boolean isNumberFormattingEnabled() {
+        return config.getBoolean("economy.number_formatting.enabled", true);
+    }
+
+    public Sound getSound(String path) {
+        String soundName = config.getString("economy.sounds." + path, "");
+        try {
+            return Sound.valueOf(soundName.toUpperCase());
+        } catch (IllegalArgumentException e) {
+            return null;
+        }
+    }
+
+    public String formatAmount(double amount) {
+        if (isNumberFormattingEnabled()) {
+            DecimalFormat formatter = new DecimalFormat("#,##0.00");
+            return formatter.format(amount);
+        }
+        return String.valueOf(amount);
+    }
+
+    public String getMessage(String path) {
+        return config.getString("messages." + path, "");
     }
 }
