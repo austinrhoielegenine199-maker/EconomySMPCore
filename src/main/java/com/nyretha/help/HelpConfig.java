@@ -71,6 +71,10 @@ public final class HelpConfig {
         load();
     }
 
+    public Map<String, Object> getConfig() {
+        return configData;
+    }
+
     public Map<String, Object> getConfigData() {
         return configData;
     }
