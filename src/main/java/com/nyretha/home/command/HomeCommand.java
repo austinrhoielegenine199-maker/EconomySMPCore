@@ -1,134 +1,81 @@
 package com.nyretha.home.command;
 
-import com.nyretha.home.listener.HomeRenameListener;
+import com.nyretha.NyrethaCore;
 import com.nyretha.home.model.HomeManager;
 import com.nyretha.home.service.HomeConfig;
+import org.bukkit.ChatColor;
 import org.bukkit.Location;
-import org.bukkit.Sound;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
-import org.bukkit.plugin.Plugin;
-import org.bukkit.scheduler.BukkitRunnable;
-import org.bukkit.scheduler.BukkitTask;
-import org.jetbrains.annotations.NotNull;
 
-import java.util.HashMap;
 import java.util.Map;
-import java.util.UUID;
 
 public class HomeCommand implements CommandExecutor {
+
     private final HomeManager homeManager;
     private final HomeConfig homeConfig;
-    private final Plugin plugin;
-    private final Map<UUID, BukkitTask> activeTeleports = new HashMap<>();
-    private final Map<UUID, Location> teleportPositions = new HashMap<>();
+    private final NyrethaCore plugin;
 
-    public HomeCommand(HomeManager homeManager, HomeConfig homeConfig, Plugin plugin) {
+    public HomeCommand(HomeManager homeManager, HomeConfig homeConfig, NyrethaCore plugin) {
         this.homeManager = homeManager;
         this.homeConfig = homeConfig;
         this.plugin = plugin;
     }
 
     @Override
-    public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
-        if (!(sender instanceof Player)) {
-            sender.sendMessage("§cOnly players can use this command.");
+    public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
+        if (!(sender instanceof Player player)) {
+            sender.sendMessage(ChatColor.RED + "Only players can use home commands.");
             return true;
         }
 
-        Player player = (Player) sender;
-        String cmdName = command.getName().toLowerCase();
+        String cmd = label.toLowerCase();
 
-        if (cmdName.equals("sethome")) {
-            String homeName = "home";
-            if (args.length > 0) {
-                String arg = args[0];
-                try {
-                    int slotNum = Integer.parseInt(arg);
-                    if (slotNum < 1 || slotNum > 5) {
-                        player.sendMessage("§cHome slots must be between 1 and 5!");
-                        return true;
-                    }
-                    homeName = String.valueOf(slotNum);
-                } catch (NumberFormatException e) {
-                    homeName = arg;
-                }
-            }
+        // Load homes lazily if missing
+        Map<String, Location> homes = homeManager.getHomes(player.getUniqueId());
+        if (homes.isEmpty()) {
+            homes = homeConfig.getHomes(player.getUniqueId());
+            homeManager.loadHomes(player.getUniqueId(), homes);
+        }
 
-            homeManager.setHome(player.getUniqueId(), homeName, player.getLocation());
-            player.sendMessage("§aHome §e" + homeName + " §aset successfully!");
-            player.playSound(player.getLocation(), Sound.ENTITY_PLAYER_LEVELUP, 1.0f, 1.0f);
+        if (cmd.equals("sethome")) {
+            String name = args.length > 0 ? args[0] : "home";
+            Location loc = player.getLocation();
+
+            homeManager.setHome(player.getUniqueId(), name, loc);
+            homeConfig.saveHome(player.getUniqueId(), name, loc);
+            player.sendMessage(ChatColor.GREEN + "Home '" + name + "' set successfully!");
             return true;
         }
 
-        if (cmdName.equals("home")) {
-            String homeName = "home";
-            if (args.length > 0) {
-                String arg = args[0];
-                try {
-                    int slotNum = Integer.parseInt(arg);
-                    if (slotNum >= 1 && slotNum <= 5) {
-                        homeName = String.valueOf(slotNum);
-                    } else {
-                        homeName = arg;
-                    }
-                } catch (NumberFormatException e) {
-                    homeName = arg;
-                }
+        if (cmd.equals("delhome")) {
+            if (args.length == 0) {
+                player.sendMessage(ChatColor.RED + "Usage: /delhome <name>");
+                return true;
             }
+            String name = args[0];
+            if (homeManager.deleteHome(player.getUniqueId(), name)) {
+                homeConfig.removeHome(player.getUniqueId(), name);
+                player.sendMessage(ChatColor.GREEN + "Home '" + name + "' deleted!");
+            } else {
+                player.sendMessage(ChatColor.RED + "Home '" + name + "' does not exist.");
+            }
+            return true;
+        }
 
-            Location targetLoc = homeManager.getHome(player.getUniqueId(), homeName);
+        if (cmd.equals("home")) {
+            String name = args.length > 0 ? args[0] : "home";
+            Location loc = homeManager.getHome(player.getUniqueId(), name);
 
-            if (targetLoc == null) {
-                player.sendMessage("§cHome §e" + homeName + " §cnot found.");
+            if (loc == null) {
+                player.sendMessage(ChatColor.RED + "Home '" + name + "' not found! Your homes: " + String.join(", ", homes.keySet()));
                 return true;
             }
 
-            int countdownSeconds = homeConfig.getTeleportCountdown();
-            if (countdownSeconds <= 0) {
-                player.teleport(targetLoc);
-                String msg = homeConfig.getMessage("teleported");
-                if (msg != null && !msg.isEmpty()) player.sendMessage(msg);
-                return true;
-            }
-
-            if (activeTeleports.containsKey(player.getUniqueId())) {
-                player.sendMessage("§cYou are already teleporting!");
-                return true;
-            }
-
-            teleportPositions.put(player.getUniqueId(), player.getLocation().clone());
-            player.sendMessage(homeConfig.getMessage("countdown").replace("%seconds%", String.valueOf(countdownSeconds)));
-
-            BukkitTask task = new BukkitRunnable() {
-                int timeLeft = countdownSeconds;
-
-                @Override
-                public void run() {
-                    Location startLoc = teleportPositions.get(player.getUniqueId());
-                    if (startLoc == null || player.getLocation().distanceSquared(startLoc) > 0.23) {
-                        activeTeleports.remove(player.getUniqueId());
-                        teleportPositions.remove(player.getUniqueId());
-                        player.sendMessage(homeConfig.getMessage("cancelled"));
-                        cancel();
-                        return;
-                    }
-
-                    timeLeft--;
-                    if (timeLeft <= 0) {
-                        activeTeleports.remove(player.getUniqueId());
-                        teleportPositions.remove(player.getUniqueId());
-                        player.teleport(targetLoc);
-                        String msg = homeConfig.getMessage("teleported");
-                        if (msg != null && !msg.isEmpty()) player.sendMessage(msg);
-                        cancel();
-                    }
-                }
-            }.runTaskTimer(plugin, 20L, 20L);
-
-            activeTeleports.put(player.getUniqueId(), task);
+            player.teleport(loc);
+            player.sendMessage(ChatColor.GREEN + "Teleported to home '" + name + "'!");
             return true;
         }
 
