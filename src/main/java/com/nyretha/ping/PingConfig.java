@@ -5,12 +5,10 @@ import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.io.File;
-import java.io.IOException;
 
-public class PingConfig {
+public final class PingConfig {
 
     private final JavaPlugin plugin;
-    private File file;
     private FileConfiguration config;
 
     public PingConfig(JavaPlugin plugin) {
@@ -19,29 +17,42 @@ public class PingConfig {
     }
 
     public void load() {
-        file = new File(plugin.getDataFolder(), "ping.yml");
+        File file = new File(
+                plugin.getDataFolder(),
+                "core/ping/ping.yml"
+        );
 
         if (!file.exists()) {
-            plugin.saveResource("ping.yml", false);
+            File parent = file.getParentFile();
+
+            if (parent != null) {
+                parent.mkdirs();
+            }
+
+            try {
+                plugin.saveResource(
+                        "core/ping/ping.yml",
+                        false
+                );
+            } catch (IllegalArgumentException e) {
+                plugin.getLogger().warning(
+                        "Could not find embedded resource: core/ping/ping.yml"
+                );
+            }
         }
 
-        config = YamlConfiguration.loadConfiguration(file);
-    }
-
-    public FileConfiguration getConfig() {
-        return config;
-    }
-
-    public void save() {
-        try {
-            config.save(file);
-        } catch (IOException exception) {
-            plugin.getLogger().severe("Could not save ping.yml!");
-            exception.printStackTrace();
+        if (file.exists()) {
+            config = YamlConfiguration.loadConfiguration(file);
+        } else {
+            config = new YamlConfiguration();
         }
     }
 
     public void reload() {
         load();
+    }
+
+    public FileConfiguration getConfig() {
+        return config;
     }
 }
