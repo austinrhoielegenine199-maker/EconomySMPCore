@@ -1,0 +1,146 @@
+enable-flakes: true
+title: "ѕʜᴏᴘ - ꜰʟᴀᴋᴇ ѕʜᴏᴘ"
+size: 27
+
+items:
+  common_key:
+    material: TRIPWIRE_HOOK
+    slot: 2
+    price: 600
+    name: "#249A1Aᴄᴏᴍᴍᴏɴ ᴋᴇʏ"
+    lore:
+      - "#FFFFFFBuy Price: #73cffa%price%x #73cffa&lFlakes"
+    give-command: "cratekeys give %player% common 1"
+
+  prime_key:
+    material: TRIPWIRE_HOOK
+    slot: 3
+    price: 1500
+    name: "#2388D6ᴘʀɪᴍᴇ ᴋᴇʏ"
+    lore:
+      - "#FFFFFFBuy Price: #73cffa%price%x #73cffa&lFlakes"
+    give-command: "cratekeys give %player% prime 1"
+
+  gold_key:
+    material: TRIPWIRE_HOOK
+    slot: 4
+    price: 3500
+    name: "#E6BB00ɢᴏʟᴅ ᴋᴇʏ"
+    lore:
+      - "#FFFFFFBuy Price: #73cffa%price%x #73cffa&lFlakes"
+    give-command: "cratekeys give %player% gold 1"
+
+  amethyst_key:
+    material: TRIPWIRE_HOOK
+    slot: 5
+    price: 6000
+    name: "#6F3BAFᴀᴍᴇᴛʜʏѕᴛ ᴋᴇʏ"
+    lore:
+      - "#FFFFFFBuy Price: #73cffa%price%x #73cffa&lFlakes"
+    give-command: "cratekeys give %player% amethyst 1"
+
+  crimson_key:
+    material: TRIPWIRE_HOOK
+    slot: 6
+    price: 3000
+    name: "#C62119ᴄʀɪᴍѕᴏɴ ᴋᴇʏ"
+    lore:
+      - "#FFFFFFBuy Price: #73cffa%price%x #73cffa&lFlakes"
+    give-command: "cratekeys give %player% crimson 1"
+
+  pig_spawner:
+    material: SPAWNER
+    slot: 9
+    price: 250
+    name: "#FF55FFSpawner"
+    lore:
+      - "#FFFF55Pig"
+      - "#FFFFFFBuy Price: #73cffa%price%x #73cffa&lFlakes"
+    give-command: "spawner give %player% pig 1"
+
+  cow_spawner:
+    material: SPAWNER
+    slot: 10
+    price: 450
+    name: "#FF55FFSpawner"
+    lore:
+      - "#FFFF55Cow"
+      - "#FFFFFFBuy Price: #73cffa%price%x #73cffa&lFlakes"
+    give-command: "spawner give %player% cow 1"
+
+  zombie_spawner:
+    material: SPAWNER
+    slot: 11
+    price: 500
+    name: "#FF55FFSpawner"
+    lore:
+      - "#FFFF55Zombie"
+      - "#FFFFFFBuy Price: #73cffa%price%x #73cffa&lFlakes"
+    give-command: "spawner give %player% zombie 1"
+
+  spider_spawner:
+    material: SPAWNER
+    slot: 12
+    price: 600
+    name: "#FF55FFSpawner"
+    lore:
+      - "#FFFF55Spider"
+      - "#FFFFFFBuy Price: #73cffa%price%x #73cffa&lFlakes"
+    give-command: "spawner give %player% spider 1"
+
+  skeleton_spawner:
+    material: SPAWNER
+    slot: 13
+    price: 700
+    name: "#FF55FFSpawner"
+    lore:
+      - "#FFFF55Skeleton"
+      - "#FFFFFFBuy Price: #73cffa%price%x #73cffa&lFlakes"
+    give-command: "spawner give %player% skeleton 1"
+
+  creeper_spawner:
+    material: SPAWNER
+    slot: 14
+    price: 800
+    name: "#FF55FFSpawner"
+    lore:
+      - "#FFFF55Creeper"
+      - "#FFFFFFBuy Price: #73cffa%price%x #73cffa&lFlakes"
+    give-command: "spawner give %player% creeper 1"
+
+  zombified_piglin_spawner:
+    material: SPAWNER
+    slot: 15
+    price: 900
+    name: "#FF55FFSpawner"
+    lore:
+      - "#FFFF55Zombified Piglin"
+      - "#FFFFFFBuy Price: #73cffa%price%x #73cffa&lFlakes"
+    give-command: "spawner give %player% zombified_piglin 1"
+
+  blaze_spawner:
+    material: SPAWNER
+    slot: 16
+    price: 1100
+    name: "#FF55FFSpawner"
+    lore:
+      - "#FFFF55Blaze"
+      - "#FFFFFFBuy Price: #73cffa%price%x #73cffa&lFlakes"
+    give-command: "spawner give %player% blaze 1"
+
+  iron_golem_spawner:
+    material: SPAWNER
+    slot: 17
+    price: 1300
+    name: "#FF55FFSpawner"
+    lore:
+      - "#FFFF55Iron Golem"
+      - "#FFFFFFBuy Price: #73cffa%price%x #73cffa&lFlakes"
+    give-command: "spawner give %player% iron_golem 1"
+
+back:
+  material: RED_STAINED_GLASS_PANE
+  slot: 18
+  name: "#FF0000ʙᴀᴄᴋ"
+  lore:
+    - "#FFFFFFClick to return"
