@@ -14,7 +14,6 @@ items:
       - '#38C1FCPVP: #FF5555Enabled'
       - '#38C1FCDifficulty: #FF5555Hard'
       - '#38C1FCkeepInventory: #FF5555False'
-      - '#AAAAAAWorth: #00FF00$4'
 
   economy:
     material: GOLD_INGOT
@@ -25,7 +24,6 @@ items:
       - '#FFFFFFThis allows you to buy better things like armor and pvp gear.'
       - ''
       - '#38C1FCCommands: #FFFFFF/sell and /auction'
-      - '#AAAAAAWorth: #00FF00$5'
 
   rules:
     material: KNOWLEDGE_BOOK
@@ -36,7 +34,6 @@ items:
       - '#FFFFFFfollow the rules or be subject to punishment.'
       - ''
       - '#38C1FCCommand: #FFFFFF/rules'
-      - '#AAAAAAWorth: #00FF00$10'
 
   leaderboards:
     material: CLOCK
@@ -47,7 +44,6 @@ items:
       - '#FFFFFFcompete for the top spots.'
       - ''
       - '#38C1FCCommand: #FFFFFF/leaderboards'
-      - '#AAAAAAWorth: #00FF00$25'
 
   afkshards:
     material: AMETHYST_SHARD
@@ -58,7 +54,6 @@ items:
       - '#FFFFFFbuy things like spawners, keys, and more.'
       - ''
       - '#38C1FCCommand: #FFFFFF/afk'
-      - '#AAAAAAWorth: #00FF00$50'
 
   settings:
     material: GRAY_DYE
@@ -69,7 +64,6 @@ items:
       - '#FFFFFFbased on your preferences.'
       - ''
       - '#38C1FCCommand: #FFFFFF/settings'
-      - '#AAAAAAWorth: #00FF00$1'
 
   rtp:
     material: OAK_SAPLING
@@ -84,4 +78,3 @@ items:
       - '#38C1FCEnd: #FFFFFF225k x 225k'
       - ''
       - '#38C1FCCommand: #FFFFFF/rtp'
-      - '#AAAAAAWorth: #00FF00$3'
