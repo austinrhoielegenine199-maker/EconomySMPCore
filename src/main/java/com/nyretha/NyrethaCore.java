@@ -56,7 +56,10 @@ public final class NyrethaCore extends JavaPlugin {
     public void onEnable() {
         instance = this;
 
-        getDataFolder().mkdirs();
+        // Establish the core data folder for the plugin
+        if (!getDataFolder().exists()) {
+            getDataFolder().mkdirs();
+        }
 
         extractAllConfigs();
 
@@ -225,6 +228,7 @@ public final class NyrethaCore extends JavaPlugin {
         saveConfigSafely("core/moderation/staffmoderation.yml");
         saveConfigSafely("core/ping/ping.yml");
         saveConfigSafely("core/tp/tpasystem.yml");
+        
         saveConfigSafely("core/shop/shopgui.yml");
         saveConfigSafely("core/shop/categories/gear.yml");
         saveConfigSafely("core/shop/categories/end.yml");
@@ -234,26 +238,15 @@ public final class NyrethaCore extends JavaPlugin {
     }
 
     private void saveConfigSafely(String resourcePath) {
-        File file = new File(
-                getDataFolder(),
-                resourcePath
-        );
-
-        if (file.getParentFile() != null) {
-            file.getParentFile().mkdirs();
-        }
-
+        File file = new File(getDataFolder(), resourcePath);
+        
         if (!file.exists()) {
+            file.getParentFile().mkdirs();
             try {
-                saveResource(
-                        resourcePath,
-                        false
-                );
+                // saveResource safely duplicates the internal file structure to the plugin folder
+                saveResource(resourcePath, false);
             } catch (IllegalArgumentException e) {
-                getLogger().warning(
-                        "Failed to find resource: " +
-                        resourcePath
-                );
+                getLogger().warning("Failed to find or save resource inside jar: " + resourcePath);
             }
         }
     }
