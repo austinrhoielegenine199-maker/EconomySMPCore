@@ -1,63 +1,31 @@
 package com.nyretha.economy.service;
 
 import com.nyretha.NyrethaCore;
-import org.bukkit.Sound;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 
 import java.io.File;
-import java.text.DecimalFormat;
 
-public class EconomyConfig {
+public class EconomyConfigService {
 
     private final NyrethaCore plugin;
-    private File file;
     private FileConfiguration config;
+    private File configFile;
 
-    public EconomyConfig(NyrethaCore plugin) {
+    public EconomyConfigService(NyrethaCore plugin) {
         this.plugin = plugin;
-        loadConfig();
+        reloadConfig();
     }
 
-    public void loadConfig() {
-        file = new File(plugin.getDataFolder(), "core/eco/economy.yml");
-        if (!file.exists()) {
-            file.getParentFile().mkdirs();
+    public void reloadConfig() {
+        configFile = new File(plugin.getDataFolder(), "core/eco/economy.yml");
+        if (!configFile.exists()) {
             plugin.saveResource("core/eco/economy.yml", false);
         }
-        config = YamlConfiguration.loadConfiguration(file);
+        config = YamlConfiguration.loadConfiguration(configFile);
     }
 
     public FileConfiguration getConfig() {
         return config;
-    }
-
-    public String getCurrencySymbol() {
-        return config.getString("economy.currency.symbol", "$");
-    }
-
-    public boolean isNumberFormattingEnabled() {
-        return config.getBoolean("economy.number_formatting.enabled", true);
-    }
-
-    public Sound getSound(String path) {
-        String soundName = config.getString("economy.sounds." + path, "");
-        try {
-            return Sound.valueOf(soundName.toUpperCase());
-        } catch (IllegalArgumentException e) {
-            return null;
-        }
-    }
-
-    public String formatAmount(double amount) {
-        if (isNumberFormattingEnabled()) {
-            DecimalFormat formatter = new DecimalFormat("#,##0.00");
-            return formatter.format(amount);
-        }
-        return String.valueOf(amount);
-    }
-
-    public String getMessage(String path) {
-        return config.getString("messages." + path, "");
     }
 }
