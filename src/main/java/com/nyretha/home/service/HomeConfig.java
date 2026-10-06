@@ -4,7 +4,6 @@ import com.nyretha.NyrethaCore;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.World;
-import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 
@@ -17,8 +16,10 @@ import java.util.UUID;
 public class HomeConfig {
 
     private final NyrethaCore plugin;
-    private File file;
-    private FileConfiguration config;
+    private File homesFile;
+    private FileConfiguration homesConfig;
+    private File guiFile;
+    private FileConfiguration guiConfig;
 
     public HomeConfig(NyrethaCore plugin) {
         this.plugin = plugin;
@@ -26,48 +27,61 @@ public class HomeConfig {
     }
 
     public void loadConfig() {
-        file = new File(plugin.getDataFolder(), "core/home/homes.yml");
-        if (!file.exists()) {
+        homesFile = new File(plugin.getDataFolder(), "core/home/homes.yml");
+        if (!homesFile.exists()) {
             try {
-                file.getParentFile().mkdirs();
-                file.createNewFile();
+                homesFile.getParentFile().mkdirs();
+                homesFile.createNewFile();
             } catch (IOException e) {
                 plugin.getLogger().severe("Could not create homes.yml!");
             }
         }
-        config = YamlConfiguration.loadConfiguration(file);
+        homesConfig = YamlConfiguration.loadConfiguration(homesFile);
+
+        guiFile = new File(plugin.getDataFolder(), "core/home/homegui.yml");
+        if (!guiFile.exists()) {
+            plugin.saveResource("core/home/homegui.yml", false);
+        }
+        guiConfig = YamlConfiguration.loadConfiguration(guiFile);
+    }
+
+    public FileConfiguration getGuiConfig() {
+        return guiConfig;
     }
 
     public void saveHome(UUID uuid, String name, Location loc) {
         String path = "homes." + uuid.toString() + "." + name.toLowerCase();
-        config.set(path + ".world", loc.getWorld().getName());
-        config.set(path + ".x", loc.getX());
-        config.set(path + ".y", loc.getY());
-        config.set(path + ".z", loc.getZ());
-        config.set(path + ".yaw", loc.getYaw());
-        config.set(path + ".pitch", loc.getPitch());
+        homesConfig.set(path + ".name", name);
+        homesConfig.set(path + ".world", loc.getWorld().getName());
+        homesConfig.set(path + ".x", loc.getX());
+        homesConfig.set(path + ".y", loc.getY());
+        homesConfig.set(path + ".z", loc.getZ());
+        homesConfig.set(path + ".yaw", loc.getYaw());
+        homesConfig.set(path + ".pitch", loc.getPitch());
         save();
     }
 
     public void removeHome(UUID uuid, String name) {
-        config.set("homes." + uuid.toString() + "." + name.toLowerCase(), null);
+        homesConfig.set("homes." + uuid.toString() + "." + name.toLowerCase(), null);
         save();
     }
 
     public Map<String, Location> getHomes(UUID uuid) {
         Map<String, Location> homes = new HashMap<>();
-        ConfigurationSection section = config.getConfigurationSection("homes." + uuid.toString());
-        if (section != null) {
-            for (String key : section.getKeys(false)) {
-                World world = Bukkit.getWorld(section.getString(key + ".world", "world"));
-                double x = section.getDouble(key + ".x");
-                double y = section.getDouble(key + ".y");
-                double z = section.getDouble(key + ".z");
-                float yaw = (float) section.getDouble(key + ".yaw");
-                float pitch = (float) section.getDouble(key + ".pitch");
+        if (homesConfig.contains("homes." + uuid.toString())) {
+            var section = homesConfig.getConfigurationSection("homes." + uuid.toString());
+            if (section != null) {
+                for (String key : section.getKeys(false)) {
+                    World world = Bukkit.getWorld(section.getString(key + ".world", "world"));
+                    double x = section.getDouble(key + ".x");
+                    double y = section.getDouble(key + ".y");
+                    double z = section.getDouble(key + ".z");
+                    float yaw = (float) section.getDouble(key + ".yaw");
+                    float pitch = (float) section.getDouble(key + ".pitch");
 
-                if (world != null) {
-                    homes.put(key, new Location(world, x, y, z, yaw, pitch));
+                    if (world != null) {
+                        homes.put(key.toLowerCase(), new Location(world, x, y, z, yaw, pitch));
+                    }
                 }
             }
         }
@@ -76,7 +90,7 @@ public class HomeConfig {
 
     private void save() {
         try {
-            config.save(file);
+            homesConfig.save(homesFile);
         } catch (IOException e) {
             plugin.getLogger().severe("Could not save homes.yml!");
         }
