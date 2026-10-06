@@ -2,8 +2,10 @@ package com.nyretha.home.model;
 
 import org.bukkit.Location;
 
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
 import java.util.UUID;
 
 public class HomeManager {
@@ -27,6 +29,15 @@ public class HomeManager {
             return true;
         }
         return false;
+    }
+
+    public boolean removeHome(UUID uuid, String name) {
+        return deleteHome(uuid, name);
+    }
+
+    public Set<String> getHomeNames(UUID uuid) {
+        Map<String, Location> homes = userHomes.get(uuid);
+        return homes != null ? homes.keySet() : Collections.emptySet();
     }
 
     public Map<String, Location> getHomes(UUID uuid) {
