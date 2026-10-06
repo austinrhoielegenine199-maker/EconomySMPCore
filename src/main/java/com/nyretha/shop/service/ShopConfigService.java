@@ -1,56 +1,53 @@
 package com.nyretha.shop.service;
 
-import org.yaml.snakeyaml.Yaml;
-import java.io.InputStream;
+import com.nyretha.NyrethaCore;
+import org.bukkit.configuration.file.FileConfiguration;
+import org.bukkit.configuration.file.YamlConfiguration;
+
+import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
 
 public class ShopConfigService {
-    private Map<String, Object> mainShopConfig = new HashMap<>();
-    private final Map<String, Map<String, Object>> categoryConfigs = new HashMap<>();
 
-    @SuppressWarnings("unchecked")
+    private final NyrethaCore plugin;
+    private FileConfiguration shopGuiConfig;
+    private final Map<String, FileConfiguration> categoryConfigs = new HashMap<>();
+
+    public ShopConfigService(NyrethaCore plugin) {
+        this.plugin = plugin;
+    }
+
     public void loadConfigs() {
-        Yaml yaml = new Yaml();
-        
-        // 1. Load Main Shop Configuration
-        try (InputStream in = getClass().getClassLoader().getResourceAsStream("shop/shopgui.yml")) {
-            if (in != null) {
-                mainShopConfig = yaml.load(in);
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
+        categoryConfigs.clear();
+
+        // Load Main GUI
+        File shopGuiFile = new File(plugin.getDataFolder(), "core/shop/shopgui.yml");
+        if (shopGuiFile.exists()) {
+            this.shopGuiConfig = YamlConfiguration.loadConfiguration(shopGuiFile);
         }
 
-        // 2. Dynamically load category files based on the 'file' property inside shopgui.yml
-        Map<String, Map<String, Object>> categories = (Map<String, Map<String, Object>>) mainShopConfig.get("categories");
-        if (categories != null) {
-            for (Map.Entry<String, Map<String, Object>> entry : categories.entrySet()) {
-                String categoryKey = entry.getKey().toLowerCase();
-                Map<String, Object> catData = entry.getValue();
-                
-                String fileName = (String) catData.get("file");
-                if (fileName != null) {
-                    try (InputStream in = getClass().getClassLoader().getResourceAsStream("shop/categories/" + fileName)) {
-                        if (in != null) {
-                            Map<String, Object> data = yaml.load(in);
-                            if (data != null) {
-                                categoryConfigs.put(categoryKey, data);
-                            }
-                        }
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
+        // Dynamically load all category files inside core/shop/categories/
+        File categoriesDir = new File(plugin.getDataFolder(), "core/shop/categories");
+        if (categoriesDir.exists() && categoriesDir.isDirectory()) {
+            File[] files = categoriesDir.listFiles((dir, name) -> name.endsWith(".yml"));
+            if (files != null) {
+                for (File file : files) {
+                    categoryConfigs.put(file.getName(), YamlConfiguration.loadConfiguration(file));
                 }
             }
         }
     }
 
-    public Map<String, Object> getMainShopConfig() {
-        return mainShopConfig;
+    public FileConfiguration getShopGuiConfig() {
+        return shopGuiConfig;
     }
 
-    public Map<String, Object> getCategoryConfig(String categoryName) {
-        return categoryConfigs.get(categoryName.toLowerCase());
+    public FileConfiguration getCategoryConfig(String fileName) {
+        return categoryConfigs.get(fileName);
+    }
+
+    public Map<String, FileConfiguration> getCategoryConfigs() {
+        return categoryConfigs;
     }
 }
