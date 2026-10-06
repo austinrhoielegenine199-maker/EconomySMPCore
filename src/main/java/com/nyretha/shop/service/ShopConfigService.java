@@ -21,13 +21,11 @@ public class ShopConfigService {
     public void loadConfigs() {
         categoryConfigs.clear();
 
-        // Load Main GUI
         File shopGuiFile = new File(plugin.getDataFolder(), "core/shop/shopgui.yml");
         if (shopGuiFile.exists()) {
             this.shopGuiConfig = YamlConfiguration.loadConfiguration(shopGuiFile);
         }
 
-        // Dynamically load all category files inside core/shop/categories/
         File categoriesDir = new File(plugin.getDataFolder(), "core/shop/categories");
         if (categoriesDir.exists() && categoriesDir.isDirectory()) {
             File[] files = categoriesDir.listFiles((dir, name) -> name.endsWith(".yml"));
@@ -37,6 +35,10 @@ public class ShopConfigService {
                 }
             }
         }
+    }
+
+    public FileConfiguration getMainShopConfig() {
+        return shopGuiConfig;
     }
 
     public FileConfiguration getShopGuiConfig() {
