@@ -1,255 +1,124 @@
 gui:
-  title: ʜᴏᴍᴇѕ
+  title: "ʜᴏᴍᴇѕ"
   rows: 4
 
 slots:
   team-banner: 10
   team-dye: 19
   beds:
-  - 12
-  - 13
-  - 14
-  - 15
-  - 16
+    - 12
+    - 13
+    - 14
+    - 15
+    - 16
   dyes:
-  - 21
-  - 22
-  - 23
-  - 24
-  - 25
+    - 21
+    - 22
+    - 23
+    - 24
+    - 25
 
 items:
-
   empty-bed:
     material: LIGHT_GRAY_BED
     name: '&7ɴᴏ ʜᴏᴍᴇ ѕᴇᴛ'
     lore:
-    - '&7- &fClick to set ʜᴏᴍᴇ #009bff{number}'
+      - '&7- &fClick to set ʜᴏᴍᴇ #009bff{number}'
 
   empty-dye:
     material: GRAY_DYE
-    name: '&7ɴᴏ ʜᴏᴍᴇ ѕᴇᴛ'
+    name: '&7ɴᴏ ʜᴏ繆ᴇ ѕᴇᴛ'
     lore:
-    - '&7- &fClick to set ʜᴏᴍᴇ #009bff{number}'
+      - '&7- &fClick to set ʜᴏᴍᴇ #009bff{number}'
 
   existing-bed:
     material: LIGHT_BLUE_BED
     name: '#009bffʜᴏᴍᴇ #009bff{number}{name}'
     lore:
-    - '&fClick to teleport'
+      - '&fClick to teleport'
 
   existing-dye:
     material: BLUE_DYE
     name: '#009bffʜᴏᴍᴇ #009bff{number}{name}'
     lore:
-    - '&fClick to delete'
+      - '&fClick to delete'
 
   no-permission-bed:
     material: RED_BED
     name: '#FF1D1Dɴᴏ ᴘᴇʀᴍɪѕѕɪᴏɴ'
     lore:
-    - '&fBuy #009bffNyretha+ &fin /store'
+      - '&fBuy #009bffNyretha+ &fin /store'
 
   no-permission-dye:
     material: RED_DYE
     name: '#FF1D1Dɴᴏ ᴘᴇʀᴍɪѕѕɪᴏɴ'
     lore:
-    - '&fBuy #009bffNyretha++ &fin /store'
+      - '&fBuy #009bffNyretha++ &fin /store'
 
   team-banner-no-team:
     material: RED_BANNER
     name: '#FF1D1Dᴛᴇᴀᴍ ʜᴏᴍᴇ'
     lore:
-    - '&fYou are not in a team'
+      - '&fYou are not in a team'
 
   team-banner-has-home:
     material: WHITE_BANNER
     name: '#009bffᴛᴇᴀᴍ ʜᴏᴍᴇ'
     lore:
-    - '&fClick to teleport'
+      - '&fClick to teleport'
 
   team-banner-no-home:
     material: WHITE_BANNER
     name: '&7ᴛᴇᴀᴍ ʜᴏᴍᴇ'
     lore:
-    - '&fClick to create a team home'
+      - '&fClick to create a team home'
 
   team-dye-no-team:
     material: RED_DYE
     name: '#FF1D1Dᴛᴇᴀᴍ ʜᴏᴍᴇ'
     lore:
-    - '&fYou are not in a team'
+      - '&fYou are not in a team'
 
   team-dye-has-home-manageable:
     material: BLUE_DYE
     name: '#009bffᴅᴇʟᴇᴛᴇ'
     lore:
-    - '&fClick to delete team home'
+      - '&fClick to delete team home'
 
   team-dye-has-home-no-permission:
     material: GRAY_DYE
     name: '#FF1D1Dᴛᴇᴀᴍ ʜᴏᴍᴇ'
     lore:
-    - '&fYou can''t manage team home'
+      - '&fYou can''t manage team home'
 
   team-dye-no-home:
     material: GRAY_DYE
     name: '&7ᴛᴇᴀᴍ ʜᴏᴍᴇ'
     lore:
-    - '&fClick to create a team home'
+      - '&fClick to create a team home'
 
 delete-confirm:
-  title: Confirm Delete
+  title: "Confirm Delete"
   rows: 3
-
   cancel:
     slot: 11
     material: RED_STAINED_GLASS_PANE
     name: '#FF1D1Dᴄᴀɴᴄᴇʟ'
     lore:
-    - '&fClick to cancel'
-
+      - '&fClick to cancel'
   home-display:
     slot: 13
     material: BLUE_DYE
     name: '#009bffʜᴏᴍᴇ #009bff{number}{name}'
-
   confirm:
     slot: 15
     material: LIME_STAINED_GLASS_PANE
     name: '#3AFF00ᴄᴏɴꜰɪʀᴍ'
     lore:
-    - '&fClick to delete'
+      - '&fClick to delete'
 
-  warning:
-    material: LIME_STAINED_GLASS_PANE
-    name: '#3AFF00ᴄᴏɴꜰɪʀᴍ'
-    lore: '&fClick to confirm'
-
-team-delete-confirm:
-  title: ᴄᴏɴꜰɪʀᴍ ᴅᴇʟᴇᴛᴇ
-  rows: 3
-
-  cancel:
-    slot: 11
-    material: RED_STAINED_GLASS_PANE
-    name: '#FF0000ᴄᴀɴᴄᴇʟ'
-    lore:
-    - '#FFFFFFClick to cancel'
-
-  team-home-icon:
-    slot: 13
-    material: WHITE_BANNER
-    name: '#009bffᴛᴇᴀᴍ ʜᴏᴍᴇ'
-    lore: []
-
-  confirm:
-    slot: 15
-    material: LIME_STAINED_GLASS_PANE
-    name: '#00FF00ᴄᴏɴꜰɪʀᴍ'
-    lore:
-    - '#FFFFFFClick to delete'
-
-confirm-delete:
-  title: Confirm Delete
-  size: 27
-  cancel:
-    slot: 11
-    material: RED_STAINED_GLASS_PANE
-    name: '#FFFFFFCancel'
-    lore: '#AAAAAAClick to cancel'
-  home-display:
-    slot: 13
-    material: WHITE_BED
-    name: '#FFFFFF%name%'
-  confirm:
-    slot: 15
-    material: LIME_STAINED_GLASS_PANE
-    name: '#FFFFFFConfirm'
-    lore: '#AAAAAAClick to delete'
-
-team-home-delete:
-  confirm:
-    lore: '&fClick again to confirm'
-
-home-icons:
-  title: Home Icons %page%/%pages%
-  size: 54
-  icon:
-    name: '#FFFFFF%icon%'
-    lore: '#AAAAAA&oClick to use this icon'
-  current:
-    slot: 49
-    name: '#FFFFFFCurrent Icon'
-    lore-icon: '#AAAAAA&o%icon%'
-    lore-home: '#AAAAAA&o%home%'
-  previous:
-    slot: 45
-    material: ARROW
-    name: '#FFFFFFPrevious'
-    lore: '#AAAAAA&oGo to page %page%.'
-    lore-none: '#AAAAAA&oNo previous page.'
-  next:
-    slot: 53
-    material: ARROW
-    name: '#FFFFFFNext'
-    lore: '#AAAAAA&oGo to page %page%.'
-  back:
-    slot: 46
-    material: RED_STAINED_GLASS_PANE
-    name: '#FF5555Back'
-    lore: '#AAAAAA&oReturn to homes.'
-  default:
-    slot: 50
-    material: WHITE_BED
-    name: '#FFFFFFDefault'
-    lore: '#AAAAAA&oUse the default bed icon.'
-  search:
-    slot: 52
-    material: OAK_SIGN
-    name: '#FFFFFFSearch'
-    lore: '#AAAAAA&oFilter items'
-
-# Teleport countdown (moving cancels it). countdown-seconds: 0 = instant. "" = send nothing.
 teleport:
   countdown-seconds: 5
   countdown: '&7Teleporting in #2399FF%seconds%s'
   cancelled: '&cTeleport cancelled because you moved.'
   teleported: '&7You teleported to your home'
-
-home-manage:
-  title: '%name%'
-  title-unnamed: Home %number%
-  buttons:
-    teleport:
-      slot: 0
-      material: LODESTONE
-      name: '#FFFFFFTeleport'
-      lore:
-      - '#AAAAAA&oClick to teleport'
-    rename:
-      slot: 1
-      material: WRITABLE_BOOK
-      name: '#FFFFFFRename'
-      lore:
-      - '#AAAAAA&oClick to rename'
-    icon:
-      slot: 2
-      material: WHITE_BED
-      name: '#FFFFFFIcon'
-      lore:
-      - '#AAAAAA&oClick to select home icon'
-    delete:
-      slot: 4
-      material: LAVA_BUCKET
-      name: '#FFFFFFDelete'
-      lore:
-      - '#AAAAAA&oClick to delete'
-  sign:
-    material: OAK_SIGN
-    lines:
-    - ''
-    - ↑↑↑↑↑↑↑↑↑↑↑↑
-    - New Name
-    - ''
-  fillers: {}
