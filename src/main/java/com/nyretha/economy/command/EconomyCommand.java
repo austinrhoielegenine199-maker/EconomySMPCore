@@ -155,4 +155,39 @@ public class EconomyCommand implements CommandExecutor, TabCompleter {
                 case "set" -> {
                     if (isFlakes) eco.setFlakes(target.getUniqueId(), amount);
                     else eco.setBalance(target.getUniqueId(), amount);
-                    sender.sendMessage(ColorUtils.color("&aSet &b" + targetName + "'s " + currencyName + " &
+                    sender.sendMessage(ColorUtils.color("&aSet &b" + targetName + "'s " + currencyName + " &ato &b" + amount));
+                }
+                default -> sender.sendMessage(ColorUtils.color("&cUnknown action: " + action));
+            }
+            return true;
+        }
+
+        return false;
+    }
+
+    @Override
+    public List<String> onTabComplete(CommandSender sender, Command command, String alias, String[] args) {
+        List<String> completions = new ArrayList<>();
+
+        if (alias.equalsIgnoreCase("eco")) {
+            if (args.length == 1) {
+                completions.add("give");
+                completions.add("take");
+                completions.add("set");
+            } else if (args.length == 2) {
+                return null;
+            } else if (args.length == 4) {
+                completions.add("money");
+                completions.add("flakes");
+            }
+        } else if (alias.equalsIgnoreCase("pay")) {
+            if (args.length == 1) {
+                return null;
+            } else if (args.length == 3) {
+                completions.add("flakes");
+            }
+        }
+
+        return completions;
+    }
+}
