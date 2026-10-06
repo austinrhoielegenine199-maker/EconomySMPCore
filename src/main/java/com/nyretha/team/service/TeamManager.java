@@ -80,6 +80,20 @@ public class TeamManager {
         return true;
     }
 
+    public boolean isInTeam(UUID uuid) {
+        return playerTeamMap.containsKey(uuid);
+    }
+
+    public String getTeamName(UUID uuid) {
+        Team team = playerTeamMap.get(uuid);
+        return team != null ? team.getName() : null;
+    }
+
+    public boolean hasTeamHome(String teamName) {
+        Team team = teamsByName.get(teamName.toLowerCase());
+        return team != null && team.getHome() != null;
+    }
+
     public void setTeamHome(String teamName, Location loc) {
         Team team = teamsByName.get(teamName.toLowerCase());
         if (team != null) {
