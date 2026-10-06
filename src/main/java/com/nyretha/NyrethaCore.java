@@ -98,7 +98,7 @@ public final class NyrethaCore extends JavaPlugin {
         );
 
         getServer().getPluginManager().registerEvents(
-                new ShopMenuListener(shopConfigService, this),
+                new ShopMenuListener(this, shopConfigService, economyConfigService),
                 this
         );
 
