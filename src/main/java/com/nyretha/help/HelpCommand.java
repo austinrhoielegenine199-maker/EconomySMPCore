@@ -3,6 +3,7 @@ package com.nyretha.help;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
+import org.bukkit.Sound;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -47,9 +48,16 @@ public class HelpCommand implements CommandExecutor, Listener {
                 )
         );
 
-        int size = helpConfig.getConfig().getInt("size", 27);
+        int size = helpConfig.getConfig().getInt(
+                "size",
+                27
+        );
 
-        Inventory inventory = Bukkit.createInventory(null, size, title);
+        Inventory inventory = Bukkit.createInventory(
+                null,
+                size,
+                title
+        );
 
         if (helpConfig.getConfig().isConfigurationSection("items")) {
             for (String key : helpConfig.getConfig()
@@ -68,7 +76,9 @@ public class HelpCommand implements CommandExecutor, Listener {
                 Material material;
 
                 try {
-                    material = Material.valueOf(materialName.toUpperCase());
+                    material = Material.valueOf(
+                            materialName.toUpperCase()
+                    );
                 } catch (IllegalArgumentException exception) {
                     continue;
                 }
@@ -91,7 +101,9 @@ public class HelpCommand implements CommandExecutor, Listener {
                         .getString(path + ".name");
 
                 if (name != null) {
-                    meta.setDisplayName(color(name));
+                    meta.setDisplayName(
+                            color(name)
+                    );
                 }
 
                 List<String> lore = helpConfig.getConfig()
@@ -114,7 +126,9 @@ public class HelpCommand implements CommandExecutor, Listener {
     }
 
     @EventHandler
-    public void onInventoryClick(InventoryClickEvent event) {
+    public void onInventoryClick(
+            InventoryClickEvent event
+    ) {
         String title = color(
                 helpConfig.getConfig().getString(
                         "title",
@@ -127,6 +141,70 @@ public class HelpCommand implements CommandExecutor, Listener {
         }
 
         event.setCancelled(true);
+
+        if (!(event.getWhoClicked() instanceof Player player)) {
+            return;
+        }
+
+        int slot = event.getRawSlot();
+
+        if (slot < 0 ||
+                slot >= event.getView()
+                        .getTopInventory()
+                        .getSize()) {
+            return;
+        }
+
+        ItemStack clickedItem =
+                event.getView()
+                        .getTopInventory()
+                        .getItem(slot);
+
+        if (clickedItem == null ||
+                clickedItem.getType() == Material.AIR) {
+            return;
+        }
+
+        playClickSound(player);
+    }
+
+    private void playClickSound(Player player) {
+        if (!helpConfig.getConfig().getBoolean(
+                "sound.enabled",
+                true
+        )) {
+            return;
+        }
+
+        String soundName = helpConfig.getConfig().getString(
+                "sound.name",
+                "UI_BUTTON_CLICK"
+        );
+
+        float volume = (float) helpConfig.getConfig().getDouble(
+                "sound.volume",
+                1.0
+        );
+
+        float pitch = (float) helpConfig.getConfig().getDouble(
+                "sound.pitch",
+                1.0
+        );
+
+        try {
+            Sound sound = Sound.valueOf(
+                    soundName.toUpperCase()
+            );
+
+            player.playSound(
+                    player.getLocation(),
+                    sound,
+                    volume,
+                    pitch
+            );
+
+        } catch (IllegalArgumentException ignored) {
+        }
     }
 
     private String color(String message) {
@@ -139,15 +217,25 @@ public class HelpCommand implements CommandExecutor, Listener {
         for (int i = 0; i < message.length(); i++) {
             char character = message.charAt(i);
 
-            if (character == '#' && i + 6 < message.length()) {
-                String hex = message.substring(i + 1, i + 7);
+            if (character == '#' &&
+                    i + 6 < message.length()) {
+
+                String hex = message.substring(
+                        i + 1,
+                        i + 7
+                );
 
                 if (hex.matches("[A-Fa-f0-9]{6}")) {
-                    result.append(ChatColor.COLOR_CHAR).append('x');
+                    result.append(
+                            ChatColor.COLOR_CHAR
+                    ).append('x');
 
-                    for (char hexCharacter : hex.toCharArray()) {
-                        result.append(ChatColor.COLOR_CHAR)
-                                .append(hexCharacter);
+                    for (char hexCharacter :
+                            hex.toCharArray()) {
+
+                        result.append(
+                                ChatColor.COLOR_CHAR
+                        ).append(hexCharacter);
                     }
 
                     i += 6;
