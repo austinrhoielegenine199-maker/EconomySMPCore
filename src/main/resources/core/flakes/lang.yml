@@ -1,0 +1,52 @@
+prefix-enable: true
+prefix: "&#A303F9ꜰʟᴀᴋᴇꜱ &7» "
+
+# General Messages
+no-permission: '&cYou have no permission for that!'
+player-only: 'Only Players can use this command!'
+player-not-found: "&cPlayer not found"
+reload-success: '&#00FF00Flakes reloaded success!'
+invalid-number: "&cInvaild number!"
+not-enough-flakes: "&cYou have not enough flakes!"
+not-enough-money: "&cYou have not enough money!"
+self-pay: "&cYou can´t give ur self flakes!"
+economy-not-available: "&cThe economy system is not available!"
+
+# Booster Messages
+booster-item-received: "&fYou received a &#A303F9%amount%x &fFlakes Booster for &#A303F9%time% &fhours!"
+booster-expired: "&cYour Flakes Booster has expired!"
+booster-activated: "&fYour Flakes Booster is now active for &#A303F9%time%&f hours!"
+booster-remaining: "&fYour Flakes Booster is active for another &#A303F9%time%&f!"
+
+# GUI Messages
+gui-updated: "&aFlakes gui reloaded success!"
+send-flakes-chat-input: |
+  &cPlease write the number in the chat,
+  &cor type cancel to cancel the input!
+send-flakes-chat-cancel: "&cInput cancelled!"
+
+# Payment Messages
+flakes-balance: "&fBalance: &#A303F9%flakes% flakes"
+flakes-balance-other: "&#00FF00%target% &fhas &#A303F9%flakes% flakes&f!"
+flakes-send: "&fYou sent &#A303F9%flakes_send% flakes &fto &#00FF00%player%"
+flakes-received: "&fYou received &#A303F9%flakes_received% flakes &ffrom &#00FF00%target_player%"
+flakes-given: "&fYou gave &#A303F9%flakes_given% flakes &fto &#00FF00%player%!"
+flakes-taken: "&fYou took &#A303F9%flakes_taken% flakes &ffrom &#00FF00%player%!"
+flakes-set: "&fYou set the flakes of &#00FF00%player% &fto &#A303F9%flakes_set%&f!"
+clear-all-success: "&aSuccessfully cleared all flakes from all players!"
+
+# Help Messages
+command-usage: |
+  &#A303F9&lFLAKES
+  &#A303F9➤ &f/flakes
+  &#A303F9➤ &f/flakes pay <player> <amount>
+  &#A303F9➤ &f/flakes bal <player>
+
+command-usage-admin: |
+  &#FF0000&lFLAKES ADMIN
+  &#FF0000➤ &f/flakes reload
+  &#FF0000➤ &f/flakes give <player> <amount>
+  &#FF0000➤ &f/flakes take <player> <amount>
+  &#FF0000➤ &f/flakes set <player> <amount>
+  &#FF0000➤ &f/flakes booster <player> <time> <amount>
+  &#FF0000➤ &f/flakes clear all-players
