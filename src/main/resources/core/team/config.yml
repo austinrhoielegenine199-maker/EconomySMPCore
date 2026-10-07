@@ -1,0 +1,9 @@
+chat-input:
+  SignAPI: true
+  ChatAPI: false
+
+sign-gui:
+  - ''
+  - ↑↑↑↑↑↑↑↑↑↑↑↑↑
+  - '   Name   '
+  - '             '
