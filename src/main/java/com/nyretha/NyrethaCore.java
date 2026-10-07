@@ -10,6 +10,7 @@ import com.nyretha.help.HelpConfig;
 import com.nyretha.home.command.HomeCommand;
 import com.nyretha.home.model.HomeManager;
 import com.nyretha.home.service.HomeConfig;
+import com.nyretha.listeners.GuiProtectionListener;
 import com.nyretha.moderation.command.BanCommand;
 import com.nyretha.moderation.command.MuteCommand;
 import com.nyretha.moderation.command.TempBanCommand;
@@ -102,6 +103,11 @@ public final class NyrethaCore extends JavaPlugin {
                 this
         );
 
+        getServer().getPluginManager().registerEvents(
+                new GuiProtectionListener(),
+                this
+        );
+
         getLogger().info("NyrethaCore v1.0 enabled.");
     }
 
@@ -177,7 +183,7 @@ public final class NyrethaCore extends JavaPlugin {
 
         register(
                 "mute",
-                new MuteCommand()
+                new MuteCommand(moderationService)
         );
 
         register(
