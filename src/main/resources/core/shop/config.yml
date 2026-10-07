@@ -1,0 +1,39 @@
+#You can change here the price lore and the lore line of the price in the item lore
+price-lore: "&a%price%"
+lore-line: 1
+
+cooldown: 1 #cooldown in seconds, this cooldown is buy cooldown
+
+economy:
+  provider: VAULT
+  currency-format: "#,##0.##"
+  abbreviations:
+    enabled: true
+    formats:
+      - 'K'
+      - 'M'
+      - 'B'
+      - 'T'
+
+gui-titles:
+  end: '&8ѕʜᴏᴘ - ᴇɴᴅ %page%'
+  gear: '&8ѕʜᴏᴘ - ɢᴇᴀʀ %page%'
+  food: '&8ѕʜᴏᴘ - ꜰᴏᴏᴅ %page%'
+  nether: '&8ѕʜᴏᴘ - ɴᴇᴛʜᴇʀ %page%'
+
+#Here you can change the back button in the GUI
+back-button:
+  displayname: '&#FF0000ʙᴀᴄᴋ'
+  material: RED_STAINED_GLASS_PANE
+  slot: 18
+  lore:
+    - '&fClick to return'
+
+#This Plugin supports custom sounds, you can change them here
+sounds:
+  click-sound: "ui.button.click"
+  decline-sound: "entity.villager.no"
+  buy-sound: "entity.experience_orb.pickup"
+  open-sound: ""
+  add-item-sound: "entity.experience_orb.pickup"
+  failed-sound: "entity.villager.no"
