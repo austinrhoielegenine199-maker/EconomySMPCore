@@ -1,0 +1,26 @@
+# Economy Settings
+economy:
+  provider: VAULT
+  currency-format: "#,##0.##"
+  abbreviations:
+    enabled: true
+    formats:
+      - 'K'
+      - 'M'
+      - 'B'
+      - 'T'
+
+# Settings for Paycore
+default-balance: 0
+offline-tab-completion: true
+offline-payment: true
+
+# Database & Storage Options
+database-file: "database.db"
+auto-save-interval: 300
+
+sounds:
+  click-sound: "UI_BUTTON_CLICK"
+  pay-sound: "ENTITY_PLAYER_LEVELUP"
+  change-page: "ITEM_BOOK_PAGE_TURN"
+  refresh-gui: "UI_TOAST_IN"
