@@ -1,19 +1,6 @@
 package com.nyretha.moderation.command;
 
 import com.nyretha.moderation.service.ModerationService;
-
-public class WarnCommand {
-    private final ModerationService moderationService;
-
-    public WarnCommand(ModerationService moderationService) {
-        this.moderationService = moderationService;
-    }
-
-    public void execute(String moderatorId, String targetUserId, String reason) {
-        if (targetUserId == null || targetUserId.isBlank()) {
-            package com.nyretha.moderation.command;
-
-import com.nyretha.moderation.service.ModerationService;
 import com.nyretha.utils.ColorUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
@@ -55,13 +42,5 @@ public class WarnCommand implements CommandExecutor {
 
         sender.sendMessage(ColorUtils.color("&aWarned &b" + targetName + " &afor: &f" + reason));
         return true;
-    }
-}
- Error] Invalid target user for warn command.");
-            return;
-        }
-
-        moderationService.addInfraction(targetUserId, moderatorId, reason, "WARN");
-        System.out.println("[Command] Moderator " + moderatorId + " successfully warned " + targetUserId + " for: " + reason);
     }
 }
