@@ -22,21 +22,17 @@ public class PriceManager {
 
     public void loadPrices() {
         prices.clear();
-        File folder = new File(plugin.getDataFolder(), "core/sell/prices");
-        if (!folder.exists()) folder.mkdirs();
+        File file = new File(plugin.getDataFolder(), "core/sell/prices.yml");
+        if (!file.exists()) {
+            plugin.saveResource("core/sell/prices.yml", false);
+        }
 
-        File[] files = folder.listFiles((dir, name) -> name.endsWith(".yml"));
-        if (files == null) return;
+        FileConfiguration config = YamlConfiguration.loadConfiguration(file);
 
-        for (File file : files) {
-            String category = file.getName().replace(".yml", "");
-            FileConfiguration config = YamlConfiguration.loadConfiguration(file);
-
-            if (config.contains("prices")) {
-                for (String key : config.getConfigurationSection("prices").getKeys(false)) {
-                    double price = config.getDouble("prices." + key);
-                    prices.put(key.toUpperCase(), new PriceModel(key, price, category));
-                }
+        if (config.contains("prices")) {
+            for (String key : config.getConfigurationSection("prices").getKeys(false)) {
+                double price = config.getDouble("prices." + key);
+                prices.put(key.toUpperCase(), new PriceModel(key, price, "general"));
             }
         }
     }
