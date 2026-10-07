@@ -4,7 +4,7 @@ flakes-enabled: true
 
 main-menu:
   slot: 15
-  material: AMETHYST_SHARD
+  material: SNOWBALL
   displayname: '&#A303F9ꜰʟᴀᴋᴇ ꜱʜᴏᴘ'
   lore:
     - '&fClick to view the flake shop'
