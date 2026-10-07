@@ -18,7 +18,7 @@ items:
     slot: 18
 
   confirm:
-    material: "AMETHYST_SHARD"
+    material: "SNOWBALL"
     name: '&#A303F9ꜰʟᴀᴋᴇꜱ'
     lore:
       - "&fClick to confirm payment"
