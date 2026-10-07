@@ -24,7 +24,7 @@ public class HomeService {
     }
 
     private void initDatabase() {
-        File folder = new File(plugin.getDataFolder(), "home");
+        File folder = new File(plugin.getDataFolder(), "core/home");
         if (!folder.exists()) folder.mkdirs();
 
         File dbFile = new File(folder, "database.db");
