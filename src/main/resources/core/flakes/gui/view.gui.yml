@@ -1,0 +1,45 @@
+gui:
+  title: "&8ꜱʜᴀʀᴅ (Page %current_page%)"
+  rows: 6
+  enabled: true
+
+background:
+  fill: false
+  material: "BLACK_STAINED_GLASS_PANE"
+  name: ""
+  lore: []
+
+items:
+  back-page:
+    material: "ARROW"
+    name: "&#00fc88ᴘʀᴇᴠɪᴏᴜꜱ"
+    lore:
+      - "&fClick to go to the previous page"
+    slot: 45
+
+  refresh:
+    material: "ANVIL"
+    name: "&#A303F9ꜰʟᴀᴋᴇꜱ"
+    lore:
+      - "&fClick to refresh"
+    slot: 49
+
+  next-page:
+    material: "ARROW"
+    name: "&#00fc88ɴᴇxᴛ"
+    lore:
+      - "&fClick to go to the next page"
+    slot: 53
+
+player:
+  online:
+    material: "PLAYER_HEAD"
+    name: "&#04fc04%player_name%"
+    lore:
+      - "&fClick to pay flakes"
+
+  offline:
+    material: "PLAYER_HEAD"
+    name: "&#fc0404%player_name%"
+    lore:
+      - "&fClick to pay flakes"
