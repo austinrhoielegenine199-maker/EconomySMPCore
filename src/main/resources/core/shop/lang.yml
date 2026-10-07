@@ -1,0 +1,86 @@
+#Here you can change the prefix of the plugin
+prefix-enable: true
+prefix: '&#00fc88ꜱʜᴏᴘ &7» '
+
+messages:
+  no-permission: '&cYou have no permission for that!'
+  player-only: 'Only Players can use this command!'
+  reload-success: '&#00FF00Shop reloaded success!'
+  category-unavailable: '&cThis shop is not available!'
+  shop-unavailable: '&cThis shop is not available!'
+  not-enough-money: "&cYou don't have enough money!"
+  not-enough-flakes: "&cYou don't have enough flakes!"
+  transaction-failed: '&cSend this a Server-Admin!'
+  inventory-full: '&cYour Inventory is full!'
+  addhanditem-usage: '&cUsage: /shop addhanditem <shop> <price> <slot> <page>'
+  addhanditem-shop-not-exist: '&cShop category "{shop}" does not exist!'
+  addhanditem-no-item: '&cYou must hold an item in your main hand!'
+  addhanditem-invalid-price: '&cInvalid price!'
+  addhanditem-invalid-slot: '&cSlot Invalid!'
+  addhanditem-success: '&fItem added to &#00FF00{shop}&f!'
+  addhanditem-failed: '&fFailed to add item: &c{error}&f!'
+  no-access: '&fYou cannot use this shop! &7({permission})'
+  removeitem-usage: '&cUsage: /shop removeitem <shop> <slot> <page>'
+  removeitem-shop-not-exist: '&cShop category does not exist!'
+  removeitem-invalid-slot: '&cSlot Invalid!'
+  removeitem-invalid-page: '&cPage must be 1 or greater!'
+  removeitem-item-not-found: '&cNo item found at slot {slot} on page {page} in {shop}!'
+  removeitem-success: '&aItem removed from {shop} (Slot: {slot}, Page: {page})!'
+  removeitem-failed: '&fFailed to remove item: &c{error}'
+  addshop-usage: '&cUsage: /shop addshop <name> <slot> <item> <displayname> <guiname>'
+  addshop-already-exists: '&cShop category {name} already exists!'
+  addshop-invalid-slot: '&cSlot Invalid!'
+  addshop-invalid-material: '&cInvalid material "{material}"!'
+  addshop-success: '&aShop category "{name}" added successfully!'
+  addshop-failed: '&fFailed to add shop: &c{error}'
+  addshop-invalid-gui-name: '&cGUI name must be a valid category key!'
+  removeshop-usage: '&cUsage: /shop removeshop <slot>'
+  removeshop-invalid-slot: '&cSlot Invalid!'
+  removeshop-no-shop-found: '&cNo shop found at slot {slot}!'
+  removeshop-success: '&aShop category removed from slot {slot}!'
+  removeshop-failed: '&fFailed to remove shop: &c{error}'
+  cooldown: "&cPlease wait some seconds!"
+
+action-bars:
+  reload-success: '&#00FF00Shop reloaded success!'
+  not-enough-money: "&cYou don't have enough money!"
+  not-enough-flakes: "&cYou don't have enough flakes!"
+  transaction-failed: '&cSend this a Server-Admin!'
+
+purchase-success:
+  module:
+    chat:
+      enabled: true
+      message:
+        - "&fYou bought &a{item} &ffor &#00FF00{price}&f!"
+    actionbar:
+      enabled: true
+      message:
+        - "&fYou bought &a{item} &ffor &#00FF00{price}&f!"
+    title:
+      enabled: false
+      message:
+        - ""
+    subtitle:
+      enabled: false
+      message:
+        - ""
+
+purchase-flakes:
+  module:
+    chat:
+      enabled: true
+      message:
+        - "&fYou bought a &a{item} &ffor &#00FF00{price} flakes&f!"
+    actionbar:
+      enabled: true
+      message:
+        - "&fYou bought a &a{item} &ffor &#00FF00{price} flakes&f!"
+    title:
+      enabled: false
+      message:
+        - ""
+    subtitle:
+      enabled: false
+      message:
+        - ""
