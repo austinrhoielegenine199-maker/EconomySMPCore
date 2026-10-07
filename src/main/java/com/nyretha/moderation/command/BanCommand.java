@@ -2,9 +2,17 @@ package com.nyretha.moderation.command;
 
 import com.nyretha.moderation.service.ConfigService;
 import com.nyretha.moderation.service.WebhookService;
-import java.util.Map;
+import com.nyretha.utils.ColorUtils;
+import org.bukkit.Bukkit;
+import org.bukkit.OfflinePlayer;
+import org.bukkit.command.Command;
+import org.bukkit.command.CommandExecutor;
+import org.bukkit.command.CommandSender;
 
-public class BanCommand {
+import java.util.Arrays;
+
+public class BanCommand implements CommandExecutor {
+
     private final ConfigService configService;
     private final WebhookService webhookService;
 
@@ -13,22 +21,33 @@ public class BanCommand {
         this.webhookService = webhookService;
     }
 
-    public void execute(String moderatorIGN, String targetIGN, String reason) {
-        if (targetIGN == null || targetIGN.isBlank()) {
-            System.out.println("[Command Error] Invalid target IGN.");
-            return;
+    @Override
+    public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
+        if (!sender.hasPermission("nyretha.staff.ban")) {
+            sender.sendMessage(ColorUtils.color("&cNo permission."));
+            return true;
         }
 
-        String duration = "Permanent";
-        
-        Map<String, String> placeholders = Map.of(
-            "{reason}", reason,
-            "{duration}", duration
+        if (args.length < 1) {
+            sender.sendMessage(ColorUtils.color("&cUsage: /ban <player> [reason]"));
+            return true;
+        }
+
+        OfflinePlayer target = Bukkit.getOfflinePlayer(args[0]);
+        String reason = (args.length > 1) ? String.join(" ", Arrays.copyOfRange(args, 1, args.length)) : "Banned by administrator.";
+
+        Bukkit.getBanList(org.bukkit.BanList.Type.NAME).addBan(
+                target.getName() != null ? target.getName() : args[0],
+                reason,
+                null,
+                sender.getName()
         );
-        String kickMessage = configService.getFormattedMessage("ban", placeholders);
 
-        System.out.println("[Command] " + moderatorIGN + " banned " + targetIGN + ". Kick Message:\n" + kickMessage);
+        if (target.isOnline() && target.getPlayer() != null) {
+            target.getPlayer().kickPlayer(ColorUtils.color("&cYou have been banned.\nReason: " + reason));
+        }
 
-        webhookService.sendBanLog(moderatorIGN, targetIGN, duration, reason, "BAN");
+        sender.sendMessage(ColorUtils.color("&aSuccessfully banned &b" + (target.getName() != null ? target.getName() : args[0])));
+        return true;
     }
 }
