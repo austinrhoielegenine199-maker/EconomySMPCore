@@ -1,0 +1,25 @@
+gui:
+  title: '&8ᴘᴀʏ ꜰʟᴀᴋᴇꜱ'
+  rows: 3
+
+background:
+  fill: false
+  material: "GRAY_STAINED_GLASS_PANE"
+  name: ""
+  lore: []
+  slots: 0-8
+
+items:
+  close:
+    material: "RED_STAINED_GLASS_PANE"
+    name: "&#FF0000ᴄʟᴏꜱᴇ"
+    lore:
+      - "&fClick to return"
+    slot: 18
+
+  confirm:
+    material: "AMETHYST_SHARD"
+    name: '&#A303F9ꜰʟᴀᴋᴇꜱ'
+    lore:
+      - "&fClick to confirm payment"
+    slot: 13
