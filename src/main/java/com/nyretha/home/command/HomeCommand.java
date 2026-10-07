@@ -34,15 +34,29 @@ public class HomeCommand implements CommandExecutor, TabCompleter {
             return true;
         }
 
-        String homeName = (args.length > 0) ? args[0].toLowerCase() : "1";
-
         if (label.equalsIgnoreCase("sethome")) {
+            String homeName;
+            
+            if (args.length > 0) {
+                homeName = args[0].toLowerCase();
+            } else {
+                // Auto-detect the next available home slot from 1 to 5
+                homeName = "1";
+                for (int i = 1; i <= 5; i++) {
+                    if (homeManager.getHome(player.getUniqueId(), String.valueOf(i)) == null) {
+                        homeName = String.valueOf(i);
+                        break;
+                    }
+                }
+            }
+
             homeManager.setHome(player.getUniqueId(), homeName, player.getLocation());
             player.sendMessage(ColorUtils.color("&aHome &b" + homeName + " &aset at your current location!"));
             return true;
         }
 
         if (label.equalsIgnoreCase("home")) {
+            String homeName = (args.length > 0) ? args[0].toLowerCase() : "1";
             Location loc = homeManager.getHome(player.getUniqueId(), homeName);
             if (loc == null) {
                 player.sendMessage(ColorUtils.color("&cHome &b" + homeName + " &cdoes not exist. Use /sethome " + homeName));
@@ -58,10 +72,9 @@ public class HomeCommand implements CommandExecutor, TabCompleter {
 
     @Override
     public List<String> onTabComplete(CommandSender sender, Command command, String alias, String[] args) {
-        // Tab-completes only numeric slots 1-5 instead of player names
         if (args.length == 1) {
             return Arrays.asList("1", "2", "3", "4", "5");
         }
-        return new ArrayList<>(); // Empty list stops Bukkit from auto-suggesting online player names
+        return new ArrayList<>();
     }
 }
