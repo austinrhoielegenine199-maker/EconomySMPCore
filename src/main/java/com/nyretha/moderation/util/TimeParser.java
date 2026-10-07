@@ -4,8 +4,12 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class TimeParser {
-    
+
     private static final Pattern TIME_PATTERN = Pattern.compile("(\\d+)([sSmMhHdDwW])");
+
+    public static long parseTimeToMillis(String shorthand) {
+        return parseToMillis(shorthand);
+    }
 
     public static long parseToMillis(String shorthand) {
         if (shorthand == null || shorthand.equalsIgnoreCase("permanent") || shorthand.equalsIgnoreCase("perm")) {
