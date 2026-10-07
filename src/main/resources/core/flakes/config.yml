@@ -1,0 +1,30 @@
+Flakes-give-options:
+  flakes-per-minute: 1
+
+command-aliases:
+  - flakes
+  - flake
+
+enabled-worlds:
+  - World1
+
+enabled-regions:
+  - afk1_example
+
+vip-perm:
+  enabled: true
+  flakes-per-minute: 2
+
+Sounds:
+  click-sound: "UI_BUTTON_CLICK"
+  plugin-reloaded: "ENTITY_PLAYER_LEVELUP"
+  booster-activate: "ENTITY_PLAYER_LEVELUP"
+
+flakes-booster:
+  material: "GLASS_BOTTLE"
+  name: '&#A20AD6ꜰʟᴀᴋᴇ ʙᴏᴏꜱᴛᴇʀ'
+  lore:
+    - '&7%amount%x Flake Production for %time% hours'
+    - '&8The booster lasts one day.'
+  flake-amount: 4
+  duration: 24
