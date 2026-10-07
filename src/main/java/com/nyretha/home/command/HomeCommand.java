@@ -1,20 +1,21 @@
 package com.nyretha.home.command;
 
 import com.nyretha.NyrethaCore;
-import com.nyretha.home.listener.HomeGuiListener;
 import com.nyretha.home.model.HomeManager;
 import com.nyretha.home.service.HomeConfig;
-import com.nyretha.team.service.TeamManager;
 import com.nyretha.utils.ColorUtils;
 import org.bukkit.Location;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
+import org.bukkit.command.TabCompleter;
 import org.bukkit.entity.Player;
 
-import java.util.Map;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
-public class HomeCommand implements CommandExecutor {
+public class HomeCommand implements CommandExecutor, TabCompleter {
 
     private final HomeManager homeManager;
     private final HomeConfig homeConfig;
@@ -29,37 +30,38 @@ public class HomeCommand implements CommandExecutor {
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
         if (!(sender instanceof Player player)) {
-            sender.sendMessage("Only players can use home commands.");
+            sender.sendMessage(ColorUtils.color("&cOnly players can execute home commands."));
             return true;
         }
 
-        String cmd = label.toLowerCase();
+        String homeName = (args.length > 0) ? args[0].toLowerCase() : "1";
 
-        if (cmd.equals("homes") || (cmd.equals("home") && args.length == 0)) {
-            TeamManager teamManager = NyrethaCore.getInstance().getTeamManager();
-            HomeGuiListener.openHomeGui(player, homeConfig, homeManager, teamManager);
+        if (label.equalsIgnoreCase("sethome")) {
+            homeManager.setHome(player.getUniqueId(), homeName, player.getLocation());
+            player.sendMessage(ColorUtils.color("&aHome &b" + homeName + " &aset at your current location!"));
             return true;
         }
 
-        if (cmd.equals("sethome")) {
-            String name = args.length > 0 ? args[0] : "home1";
-            homeManager.setHome(player.getUniqueId(), name, player.getLocation());
-            homeConfig.saveHome(player.getUniqueId(), name, player.getLocation());
-            player.sendMessage(ColorUtils.color("&aHome '" + name + "' set successfully!"));
-            return true;
-        }
-
-        if (cmd.equals("home")) {
-            String name = args[0].toLowerCase();
-            Location loc = homeManager.getHome(player.getUniqueId(), name);
+        if (label.equalsIgnoreCase("home")) {
+            Location loc = homeManager.getHome(player.getUniqueId(), homeName);
             if (loc == null) {
-                player.sendMessage(ColorUtils.color("&cHome '" + name + "' does not exist."));
+                player.sendMessage(ColorUtils.color("&cHome &b" + homeName + " &cdoes not exist. Use /sethome " + homeName));
                 return true;
             }
-            HomeGuiListener.startTeleportCountdown(player, loc, homeConfig.getGuiConfig());
+            player.teleport(loc);
+            player.sendMessage(ColorUtils.color("&aTeleported to home &b" + homeName + "&a."));
             return true;
         }
 
         return false;
+    }
+
+    @Override
+    public List<String> onTabComplete(CommandSender sender, Command command, String alias, String[] args) {
+        // Tab-completes only numeric slots 1-5 instead of player names
+        if (args.length == 1) {
+            return Arrays.asList("1", "2", "3", "4", "5");
+        }
+        return new ArrayList<>(); // Empty list stops Bukkit from auto-suggesting online player names
     }
 }
