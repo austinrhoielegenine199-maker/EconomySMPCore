@@ -1,6 +1,6 @@
 package com.nyretha.shop.flakes;
 
-import com.nyretha.shop.Shop;
+import com.nyretha.shop.Core;
 
 import java.io.File;
 import java.sql.Connection;
