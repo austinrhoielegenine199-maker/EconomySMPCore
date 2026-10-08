@@ -35,3 +35,5 @@ commands:
     description: Deny pending TPA request
   archiveaustxn:
     description: A Command for ArchiveAustxn
+  nv:
+    description: A night vision command.
