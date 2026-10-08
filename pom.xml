@@ -5,11 +5,11 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>com.nyretha</groupId>
-    <artifactId>EconomySMPCore</artifactId>
+    <artifactId>NyrethaCore</artifactId>
     <version>1.0.0</version>
     <packaging>jar</packaging>
 
-    <name>EconomySMPCore</name>
+    <name>NyrethaCore</name>
 
     <properties>
         <java.version>21</java.version>
@@ -35,6 +35,7 @@
     </dependencies>
 
     <build>
+        <finalName>NyrethaCore</finalName>
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
