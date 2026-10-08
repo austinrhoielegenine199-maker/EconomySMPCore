@@ -1,6 +1,6 @@
 package com.nyretha.shop.models;
 
-import com.nyretha.shop.Core;
+import com.nyretha.Core;
 import com.nyretha.shop.utils.HexColor;
 import com.nyretha.utils.PlayerUtil;
 import org.bukkit.Bukkit;
@@ -17,7 +17,7 @@ public class FlakeConfirmMenu {
     private static final Map<UUID, Long> CLICK_COOLDOWNS = new ConcurrentHashMap<>();
     private static final long COOLDOWN_MS = 250;
 
-    public static void handleFlakeBuyClick(Shop plugin, Player player, ShopItem shopItem, int amount, InventoryClickEvent event) {
+    public static void handleFlakeBuyClick(Core plugin, Player player, ShopItem shopItem, int amount, InventoryClickEvent event) {
         event.setCancelled(true);
 
         long currentTime = System.currentTimeMillis();
