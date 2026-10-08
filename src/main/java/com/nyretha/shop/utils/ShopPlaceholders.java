@@ -1,15 +1,15 @@
 package com.nyretha.shop.utils;
 
-import com.nyretha.shop.Core;
+import com.nyretha.Core;
 import me.clip.placeholderapi.expansion.PlaceholderExpansion;
 import org.bukkit.OfflinePlayer;
 import org.jetbrains.annotations.NotNull;
 
 public class ShopPlaceholders extends PlaceholderExpansion {
 
-    private final Shop plugin;
+    private final Core plugin;
 
-    public ShopPlaceholders(Shop plugin) {
+    public ShopPlaceholders(Core plugin) {
         this.plugin = plugin;
     }
 
