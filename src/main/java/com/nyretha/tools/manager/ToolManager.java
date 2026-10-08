@@ -1,26 +1,56 @@
-package com.nyretha.tools.model;
+package com.nyretha.tools.manager;
 
+import com.nyretha.Core;
+import com.nyretha.tools.model.CustomTool;
 import org.bukkit.Material;
-import java.util.List;
+import org.bukkit.configuration.ConfigurationSection;
+import org.bukkit.configuration.file.FileConfiguration;
+import org.bukkit.configuration.file.YamlConfiguration;
 
-public class CustomTool {
-    private final String id;
-    private final Material material;
-    private final String name;
-    private final List<String> lore;
-    private final int slot;
+import java.io.File;
+import java.util.HashMap;
+import java.util.Map;
 
-    public CustomTool(String id, Material material, String name, List<String> lore, int slot) {
-        this.id = id;
-        this.material = material;
-        this.name = name;
-        this.lore = lore;
-        this.slot = slot;
+public class ToolManager {
+
+    private final Core plugin;
+    private final Map<String, CustomTool> tools = new HashMap<>();
+
+    public ToolManager(Core plugin) {
+        this.plugin = plugin;
+        loadTools();
     }
 
-    public String getId() { return id; }
-    public Material getMaterial() { return material; }
-    public String getName() { return name; }
-    public List<String> getLore() { return lore; }
-    public int getSlot() { return slot; }
+    public void loadTools() {
+        tools.clear();
+        File file = new File(plugin.getDataFolder(), "core/tools/gui.yml");
+        if (!file.exists()) {
+            plugin.saveResource("core/tools/gui.yml", false);
+        }
+
+        FileConfiguration config = YamlConfiguration.loadConfiguration(file);
+        ConfigurationSection section = config.getConfigurationSection("Tools");
+
+        if (section != null) {
+            for (String key : section.getKeys(false)) {
+                String matStr = section.getString(key + ".material", "STONE");
+                Material material = Material.matchMaterial(matStr);
+                if (material == null) material = Material.STONE;
+
+                String displayName = section.getString(key + ".displayname", key);
+                int slot = section.getInt(key + ".slot", 0);
+                int page = section.getInt(key + ".page", 1);
+
+                tools.put(key.toLowerCase(), new CustomTool(key, material, displayName, slot, page));
+            }
+        }
+    }
+
+    public CustomTool getTool(String name) {
+        return tools.get(name.toLowerCase());
+    }
+
+    public Map<String, CustomTool> getTools() {
+        return tools;
+    }
 }
