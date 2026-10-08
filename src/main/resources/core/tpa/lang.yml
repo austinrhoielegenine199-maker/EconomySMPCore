@@ -1,0 +1,39 @@
+prefix-enable: false
+prefix: "&#00f986ᴛᴘᴀ &7»"
+
+messages:
+  no-permission: "&cYou don't have permission to do that!"
+  player-only: "&cOnly players can use this command!"
+  player-offline: "&cThat player is not online!"
+  tpahere-sent: "&fTPA HERE request sent to &#00f986%player%&f!"
+  self-request: "&cYou cannot send a TPA request to yourself!"
+  player-disabled: "&cThis player has disabled TPA requests!"
+  player-disabled-tpahere: "&cThis player has disabled TPA HERE requests!"
+  sender-offline: "&fThe player who sent the request is no longer online!"
+  no-pending-requests: "&cYou have no pending TPA requests!"
+  no-requests-to-cancel: "&cYou have no TPA requests to cancel!"
+  reload-success: "&aTPA has been reloaded!"
+  tpa-sent: "&fTPA request sent to &#00f986%player%&f!"
+  tpahere-received: "&fPlayer &#00f986%player% &fwants you to teleport to them!"
+  request-expired-sender: "&fYour TPA request to &#00f986%player% &fhas expired!"
+  request-expired-receiver: "&fThe TPA request from &#00f986%player% &fhas expired!"
+  request-cancelled-receiver: "&fPlayer &#00f986%player% &fcancelled their TPA request!"
+  request-accepted: "&fYou accepted the TPA request!"
+  request-denied: "&cYou denied the TPA request!"
+  request-cancelled: "&fYou cancelled the TPA request!"
+  teleported-to-sender: "&fYou were teleported to &#00f986%player%&f!"
+  target-teleported-to-you: "&fPlayer &#00f986%player% &fwas teleported to you!"
+  tpa-enabled: "&fYou have &#00FF00enabled&f TPA requests!"
+  tpa-disabled: "&fYou have &#FF0000disabled&f TPA requests!"
+  tpahere-disabled: "&fYou have &#FF0000disabled&f TPA HERE requests!"
+  tpahere-enabled: "&fYou have &#00FF00enabled&f TPA HERE requests!"
+  teleport-started: "&fTeleporting in &b%count% &fseconds"
+  teleport-cancelled: "&cTeleport cancelled!"
+  already-teleporting: "&cYou are already being teleported!"
+
+command-usage: |
+  &#00f986&lTPA
+  &#00f986➤ &f/tpa <player>
+  &#00f986➤ &f/tpahere <player>
+  &#00f986➤ &f/tpaccept
+  &#00f986➤ &f/tpadeny
