@@ -1,6 +1,6 @@
 package com.nyretha.shop.flakes;
 
-import com.nyretha.shop.Core;
+import com.nyretha.Core;
 
 import java.io.File;
 import java.sql.Connection;
@@ -14,12 +14,12 @@ import java.util.concurrent.ConcurrentHashMap;
 
 public class FlakesManager {
 
-    private final Shop plugin;
+    private final Core plugin;
     private final ConcurrentHashMap<UUID, Integer> flakeBalances = new ConcurrentHashMap<>();
     private File databaseFile;
     private String databaseUrl;
 
-    public FlakesManager(Shop plugin) {
+    public FlakesManager(Core plugin) {
         this.plugin = plugin;
         initDatabase();
     }
