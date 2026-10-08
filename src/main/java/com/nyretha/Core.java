@@ -14,7 +14,6 @@ import com.nyretha.rtp.command.RTPCommand;
 import com.nyretha.rtp.listener.RTPListener;
 import com.nyretha.sell.command.SellCommand;
 import com.nyretha.sell.listener.SellListener;
-import com.nyretha.sell.manager.PriceManager;
 import com.nyretha.sell.manager.SellManager;
 import com.nyretha.sell.manager.WorthManager;
 import com.nyretha.shop.flakes.FlakesManager;
@@ -46,7 +45,6 @@ public class Core extends JavaPlugin {
     private EconomyManager economyManager;
     private WorthManager worthManager;
     private SellManager sellManager;
-    private PriceManager priceManager;
     private TPAService tpaService;
 
     @Override
@@ -56,25 +54,22 @@ public class Core extends JavaPlugin {
         saveDefaultConfig();
         saveResourceFiles();
 
-        this.teamService = new TeamService(this);
-        this.homeService = new HomeService(this);
-        this.homeTeleportService = new HomeTeleportService(this);
-        this.flakesService = new FlakesService(this);
-        this.flakesManager = new FlakesManager(this);
-        this.langManager = new LangManager(this);
-        this.payService = new PayService(this);
-        this.economyManager = new EconomyManager(this);
-        this.worthManager = new WorthManager(this);
+        teamService = new TeamService(this);
+        homeService = new HomeService(this);
+        homeTeleportService = new HomeTeleportService(this);
+        flakesService = new FlakesService(this);
+        flakesManager = new FlakesManager(this);
+        langManager = new LangManager(this);
+        payService = new PayService(this);
+        economyManager = new EconomyManager(this);
+        worthManager = new WorthManager(this);
 
-        this.sellManager = new SellManager(
+        sellManager = new SellManager(
                 worthManager,
                 economyManager
         );
 
-        // PriceManager requires Core
-        this.priceManager = new PriceManager(this);
-
-        this.tpaService = new TPAService(this);
+        tpaService = new TPAService(this);
 
         registerCommands();
         registerListeners();
@@ -92,59 +87,49 @@ public class Core extends JavaPlugin {
     }
 
     private void registerCommands() {
-        if (getCommand("core") != null) {
+        if (getCommand("core") != null)
             getCommand("core").setExecutor(new CoreCommand());
-        }
 
-        if (getCommand("home") != null) {
+        if (getCommand("home") != null)
             getCommand("home").setExecutor(
                     new HomeCommand(homeService, teamService)
             );
-        }
 
-        if (getCommand("pay") != null) {
+        if (getCommand("pay") != null)
             getCommand("pay").setExecutor(
                     new PayCommand(payService, economyManager)
             );
-        }
 
-        if (getCommand("flakes") != null) {
+        if (getCommand("flakes") != null)
             getCommand("flakes").setExecutor(
                     new FlakesCommand(flakesService)
             );
-        }
 
-        if (getCommand("rtp") != null) {
+        if (getCommand("rtp") != null)
             getCommand("rtp").setExecutor(new RTPCommand());
-        }
 
-        if (getCommand("sell") != null) {
+        if (getCommand("sell") != null)
             getCommand("sell").setExecutor(
                     new SellCommand(sellManager)
             );
-        }
 
-        if (getCommand("team") != null) {
+        if (getCommand("team") != null)
             getCommand("team").setExecutor(
                     new TeamCommand(teamService)
             );
-        }
 
-        if (getCommand("tools") != null) {
+        if (getCommand("tools") != null)
             getCommand("tools").setExecutor(new ToolsCommand());
-        }
 
-        if (getCommand("tpa") != null) {
+        if (getCommand("tpa") != null)
             getCommand("tpa").setExecutor(
                     new TPACommand(tpaService)
             );
-        }
 
-        if (getCommand("tpaccept") != null) {
+        if (getCommand("tpaccept") != null)
             getCommand("tpaccept").setExecutor(
                     new TPAcceptCommand(tpaService)
             );
-        }
     }
 
     private void registerListeners() {
@@ -231,10 +216,6 @@ public class Core extends JavaPlugin {
 
     public TPAService getTpaService() {
         return tpaService;
-    }
-
-    public PriceManager getPriceManager() {
-        return priceManager;
     }
 
     public EconomyManager getEconomyManager() {
