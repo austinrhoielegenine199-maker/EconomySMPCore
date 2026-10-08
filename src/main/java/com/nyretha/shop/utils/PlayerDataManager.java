@@ -1,6 +1,6 @@
 package com.nyretha.shop.utils;
 
-import com.nyretha.shop.Core;
+import com.nyretha.Core;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 
@@ -9,11 +9,11 @@ import java.io.IOException;
 
 public class PlayerDataManager {
 
-    private final Shop plugin;
+    private final Core plugin;
     private File file;
     private FileConfiguration config;
 
-    public PlayerDataManager(Shop plugin) {
+    public PlayerDataManager(Core plugin) {
         this.plugin = plugin;
         init();
     }
