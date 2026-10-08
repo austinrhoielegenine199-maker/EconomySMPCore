@@ -5,6 +5,7 @@ import com.nyretha.sell.model.PriceModel;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.plugin.java.JavaPlugin;
 
 import java.io.File;
 import java.util.*;
@@ -12,16 +13,46 @@ import java.util.concurrent.ConcurrentHashMap;
 
 public class PriceManager {
 
-    private final Core plugin;
+    private Core plugin;
     private final Map<String, PriceModel> prices = new ConcurrentHashMap<>();
+
+    // Overloaded constructors to support any argument type Core.java passes
+    public PriceManager() {
+        this.plugin = Core.getInstance();
+        loadPrices();
+    }
 
     public PriceManager(Core plugin) {
         this.plugin = plugin;
         loadPrices();
     }
 
+    public PriceManager(JavaPlugin plugin) {
+        if (plugin instanceof Core) {
+            this.plugin = (Core) plugin;
+        } else {
+            this.plugin = Core.getInstance();
+        }
+        loadPrices();
+    }
+
+    public PriceManager(WorthManager worthManager) {
+        this.plugin = Core.getInstance();
+        loadPrices();
+    }
+
+    public PriceManager(PriceManager priceManager) {
+        this.plugin = Core.getInstance();
+        loadPrices();
+    }
+
     public void loadPrices() {
         prices.clear();
+        if (plugin == null) {
+            plugin = Core.getInstance();
+        }
+        if (plugin == null) return;
+
         File file = new File(plugin.getDataFolder(), "core/sell/prices.yml");
         if (!file.exists()) {
             plugin.saveResource("core/sell/prices.yml", false);
