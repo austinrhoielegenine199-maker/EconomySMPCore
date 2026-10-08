@@ -1,6 +1,6 @@
 package com.nyretha.shop.utils;
 
-import com.nyretha.shop.Shop;
+import com.nyretha.shop.Core;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 
