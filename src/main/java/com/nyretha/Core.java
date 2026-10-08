@@ -16,6 +16,7 @@ import com.nyretha.sell.command.SellCommand;
 import com.nyretha.sell.listener.SellListener;
 import com.nyretha.sell.manager.PriceManager;
 import com.nyretha.sell.manager.SellManager;
+import com.nyretha.sell.manager.WorthManager;
 import com.nyretha.shop.utils.EconomyManager;
 import com.nyretha.team.command.TeamCommand;
 import com.nyretha.team.listener.TeamListener;
@@ -39,6 +40,7 @@ public class Core extends JavaPlugin {
     private FlakesService flakesService;
     private PayService payService;
     private EconomyManager economyManager;
+    private WorthManager worthManager;
     private SellManager sellManager;
     private PriceManager priceManager;
     private TPAService tpaService;
@@ -50,21 +52,22 @@ public class Core extends JavaPlugin {
         saveDefaultConfig();
         saveResourceFiles();
 
-        // 1. Initialize core services
+        // 1. Initialize Core Services
         this.teamService = new TeamService(this);
         this.homeService = new HomeService(this);
         this.homeTeleportService = new HomeTeleportService(this);
         this.flakesService = new FlakesService(this);
         this.payService = new PayService(this);
         this.economyManager = new EconomyManager(this);
-        this.sellManager = new SellManager(this);
+        this.worthManager = new WorthManager(this);
+        this.sellManager = new SellManager(worthManager, economyManager);
         this.priceManager = new PriceManager(this);
         this.tpaService = new TPAService(this);
 
-        // 2. Register Commands with parameters
+        // 2. Register Commands
         registerCommands();
 
-        // 3. Register Listeners with parameters
+        // 3. Register Listeners
         registerListeners();
 
         getLogger().info("NyrethaCore enabled successfully!");
@@ -120,4 +123,5 @@ public class Core extends JavaPlugin {
     public HomeService getHomeService() { return homeService; }
     public TPAService getTpaService() { return tpaService; }
     public PriceManager getPriceManager() { return priceManager; }
+    public EconomyManager getEconomyManager() { return economyManager; }
 }
