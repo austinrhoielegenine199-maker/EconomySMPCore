@@ -14,7 +14,6 @@ import com.nyretha.rtp.command.RTPCommand;
 import com.nyretha.rtp.listener.RTPListener;
 import com.nyretha.sell.command.SellCommand;
 import com.nyretha.sell.listener.SellListener;
-import com.nyretha.sell.manager.PriceManager;
 import com.nyretha.sell.manager.SellManager;
 import com.nyretha.sell.manager.WorthManager;
 import com.nyretha.shop.flakes.FlakesManager;
@@ -46,7 +45,9 @@ public class Core extends JavaPlugin {
     private EconomyManager economyManager;
     private WorthManager worthManager;
     private SellManager sellManager;
-    private PriceManager priceManager;
+
+    private com.nyretha.sell.manager.PriceManager priceManager;
+
     private TPAService tpaService;
 
     @Override
@@ -64,9 +65,16 @@ public class Core extends JavaPlugin {
         this.langManager = new LangManager(this);
         this.payService = new PayService(this);
         this.economyManager = new EconomyManager(this);
+
         this.worthManager = new WorthManager(this);
-        this.sellManager = new SellManager(worthManager, economyManager);
-        this.priceManager = new PriceManager(this); // Properly initialized with Core reference
+        this.sellManager = new SellManager(
+                worthManager,
+                economyManager
+        );
+
+        this.priceManager =
+                new com.nyretha.sell.manager.PriceManager(this);
+
         this.tpaService = new TPAService(this);
 
         registerCommands();
@@ -80,56 +88,194 @@ public class Core extends JavaPlugin {
         if (flakesManager != null) {
             flakesManager.saveSync();
         }
+
         getLogger().info("NyrethaCore disabled!");
     }
 
     private void registerCommands() {
-        if (getCommand("core") != null) getCommand("core").setExecutor(new CoreCommand());
-        if (getCommand("home") != null) getCommand("home").setExecutor(new HomeCommand(homeService, teamService));
-        if (getCommand("pay") != null) getCommand("pay").setExecutor(new PayCommand(payService, economyManager));
-        if (getCommand("flakes") != null) getCommand("flakes").setExecutor(new FlakesCommand(flakesService));
-        if (getCommand("rtp") != null) getCommand("rtp").setExecutor(new RTPCommand());
-        if (getCommand("sell") != null) getCommand("sell").setExecutor(new SellCommand(sellManager));
-        if (getCommand("team") != null) getCommand("team").setExecutor(new TeamCommand(teamService));
-        if (getCommand("tools") != null) getCommand("tools").setExecutor(new ToolsCommand());
-        if (getCommand("tpa") != null) getCommand("tpa").setExecutor(new TPACommand(tpaService));
-        if (getCommand("tpaccept") != null) getCommand("tpaccept").setExecutor(new TPAcceptCommand(tpaService));
-    }
 
-    private void registerListeners() {
-        getServer().getPluginManager().registerEvents(new HomeListener(homeService, homeTeleportService, teamService), this);
-        getServer().getPluginManager().registerEvents(new PayListener(payService), this);
-        getServer().getPluginManager().registerEvents(new RTPListener(), this);
-        getServer().getPluginManager().registerEvents(new SellListener(sellManager), this);
-        getServer().getPluginManager().registerEvents(new TeamListener(teamService), this);
-        getServer().getPluginManager().registerEvents(new ToolListener(), this);
-        getServer().getPluginManager().registerEvents(new TPAListener(tpaService), this);
-    }
+        if (getCommand("core") != null) {
+            getCommand("core").setExecutor(
+                    new CoreCommand()
+            );
+        }
 
-    private void saveResourceFiles() {
-        String[] resources = {
-            "core/flakes/config.yml", "core/flakes/lang.yml",
-            "core/home/config.yml", "core/home/lang.yml",
-            "core/pay/config.yml", "core/pay/lang.yml",
-            "core/rtp/config.yml", "core/rtp/lang.yml",
-            "core/sell/config.yml", "core/sell/lang.yml", "core/sell/prices.yml", "core/sell/sellaxe.yml",
-            "core/shop/config.yml", "core/shop/lang.yml",
-            "core/team/config.yml", "core/team/lang.yml",
-            "core/tools/gui.yml", "core/tools/lang.yml",
-            "core/tpa/config.yml", "core/tpa/lang.yml"
-        };
-        for (String res : resources) {
-            saveResource(res, false);
+        if (getCommand("home") != null) {
+            getCommand("home").setExecutor(
+                    new HomeCommand(
+                            homeService,
+                            teamService
+                    )
+            );
+        }
+
+        if (getCommand("pay") != null) {
+            getCommand("pay").setExecutor(
+                    new PayCommand(
+                            payService,
+                            economyManager
+                    )
+            );
+        }
+
+        if (getCommand("flakes") != null) {
+            getCommand("flakes").setExecutor(
+                    new FlakesCommand(flakesService)
+            );
+        }
+
+        if (getCommand("rtp") != null) {
+            getCommand("rtp").setExecutor(
+                    new RTPCommand()
+            );
+        }
+
+        if (getCommand("sell") != null) {
+            getCommand("sell").setExecutor(
+                    new SellCommand(sellManager)
+            );
+        }
+
+        if (getCommand("team") != null) {
+            getCommand("team").setExecutor(
+                    new TeamCommand(teamService)
+            );
+        }
+
+        if (getCommand("tools") != null) {
+            getCommand("tools").setExecutor(
+                    new ToolsCommand()
+            );
+        }
+
+        if (getCommand("tpa") != null) {
+            getCommand("tpa").setExecutor(
+                    new TPACommand(tpaService)
+            );
+        }
+
+        if (getCommand("tpaccept") != null) {
+            getCommand("tpaccept").setExecutor(
+                    new TPAcceptCommand(tpaService)
+            );
         }
     }
 
-    public static Core getInstance() { return instance; }
-    public TeamService getTeamService() { return teamService; }
-    public HomeService getHomeService() { return homeService; }
-    public TPAService getTpaService() { return tpaService; }
-    public PriceManager getPriceManager() { return priceManager; }
-    public EconomyManager getEconomyManager() { return economyManager; }
-    public Economy getEconomy() { return economyManager != null ? economyManager.getEconomy() : null; }
-    public FlakesManager getFlakesManager() { return flakesManager; }
-    public LangManager getLangManager() { return langManager; }
+    private void registerListeners() {
+
+        getServer().getPluginManager().registerEvents(
+                new HomeListener(
+                        homeService,
+                        homeTeleportService,
+                        teamService
+                ),
+                this
+        );
+
+        getServer().getPluginManager().registerEvents(
+                new PayListener(payService),
+                this
+        );
+
+        getServer().getPluginManager().registerEvents(
+                new RTPListener(),
+                this
+        );
+
+        getServer().getPluginManager().registerEvents(
+                new SellListener(sellManager),
+                this
+        );
+
+        getServer().getPluginManager().registerEvents(
+                new TeamListener(teamService),
+                this
+        );
+
+        getServer().getPluginManager().registerEvents(
+                new ToolListener(),
+                this
+        );
+
+        getServer().getPluginManager().registerEvents(
+                new TPAListener(tpaService),
+                this
+        );
+    }
+
+    private void saveResourceFiles() {
+
+        String[] resources = {
+                "core/flakes/config.yml",
+                "core/flakes/lang.yml",
+
+                "core/home/config.yml",
+                "core/home/lang.yml",
+
+                "core/pay/config.yml",
+                "core/pay/lang.yml",
+
+                "core/rtp/config.yml",
+                "core/rtp/lang.yml",
+
+                "core/sell/config.yml",
+                "core/sell/lang.yml",
+                "core/sell/prices.yml",
+                "core/sell/sellaxe.yml",
+
+                "core/shop/config.yml",
+                "core/shop/lang.yml",
+
+                "core/team/config.yml",
+                "core/team/lang.yml",
+
+                "core/tools/gui.yml",
+                "core/tools/lang.yml",
+
+                "core/tpa/config.yml",
+                "core/tpa/lang.yml"
+        };
+
+        for (String resource : resources) {
+            saveResource(resource, false);
+        }
+    }
+
+    public static Core getInstance() {
+        return instance;
+    }
+
+    public TeamService getTeamService() {
+        return teamService;
+    }
+
+    public HomeService getHomeService() {
+        return homeService;
+    }
+
+    public TPAService getTpaService() {
+        return tpaService;
+    }
+
+    public com.nyretha.sell.manager.PriceManager getPriceManager() {
+        return priceManager;
+    }
+
+    public EconomyManager getEconomyManager() {
+        return economyManager;
+    }
+
+    public Economy getEconomy() {
+        return economyManager != null
+                ? economyManager.getEconomy()
+                : null;
+    }
+
+    public FlakesManager getFlakesManager() {
+        return flakesManager;
+    }
+
+    public LangManager getLangManager() {
+        return langManager;
+    }
 }
