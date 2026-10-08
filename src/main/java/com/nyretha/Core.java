@@ -64,7 +64,6 @@ public class Core extends JavaPlugin {
         this.langManager = new LangManager(this);
         this.payService = new PayService(this);
         this.economyManager = new EconomyManager(this);
-
         this.worthManager = new WorthManager(this);
 
         this.sellManager = new SellManager(
@@ -72,9 +71,8 @@ public class Core extends JavaPlugin {
                 economyManager
         );
 
-        // Use the no-argument constructor.
-        // Core.instance has already been set above.
-        this.priceManager = new PriceManager();
+        // PriceManager requires Core
+        this.priceManager = new PriceManager(this);
 
         this.tpaService = new TPAService(this);
 
@@ -194,30 +192,22 @@ public class Core extends JavaPlugin {
         String[] resources = {
                 "core/flakes/config.yml",
                 "core/flakes/lang.yml",
-
                 "core/home/config.yml",
                 "core/home/lang.yml",
-
                 "core/pay/config.yml",
                 "core/pay/lang.yml",
-
                 "core/rtp/config.yml",
                 "core/rtp/lang.yml",
-
                 "core/sell/config.yml",
                 "core/sell/lang.yml",
                 "core/sell/prices.yml",
                 "core/sell/sellaxe.yml",
-
                 "core/shop/config.yml",
                 "core/shop/lang.yml",
-
                 "core/team/config.yml",
                 "core/team/lang.yml",
-
                 "core/tools/gui.yml",
                 "core/tools/lang.yml",
-
                 "core/tpa/config.yml",
                 "core/tpa/lang.yml"
         };
