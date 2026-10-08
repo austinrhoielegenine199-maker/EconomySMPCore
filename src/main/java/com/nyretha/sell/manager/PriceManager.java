@@ -13,10 +13,15 @@ import java.util.concurrent.ConcurrentHashMap;
 
 public class PriceManager {
 
-    private final Core plugin;
+    private Core plugin;
 
     private final Map<String, PriceModel> prices =
             new ConcurrentHashMap<>();
+
+    public PriceManager() {
+        this.plugin = Core.getInstance();
+        loadPrices();
+    }
 
     public PriceManager(Core plugin) {
         this.plugin = plugin;
@@ -24,6 +29,14 @@ public class PriceManager {
     }
 
     public void loadPrices() {
+        if (plugin == null) {
+            plugin = Core.getInstance();
+        }
+
+        if (plugin == null) {
+            return;
+        }
+
         prices.clear();
 
         File file = new File(
@@ -72,9 +85,7 @@ public class PriceManager {
             return null;
         }
 
-        return prices.get(
-                item.getType().name()
-        );
+        return prices.get(item.getType().name());
     }
 
     public Map<String, PriceModel> getAllPrices() {
