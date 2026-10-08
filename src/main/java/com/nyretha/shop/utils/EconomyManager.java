@@ -1,15 +1,15 @@
 package com.nyretha.shop.utils;
 
-import com.nyretha.shop.Core;
+import com.nyretha.Core;
 import net.milkbowl.vault.economy.Economy;
 import org.bukkit.plugin.RegisteredServiceProvider;
 
 public class EconomyManager {
 
-    private final Shop plugin;
+    private final Core plugin;
     private Economy economy;
 
-    public EconomyManager(Shop plugin) {
+    public EconomyManager(Core plugin) {
         this.plugin = plugin;
         setupEconomy();
     }
