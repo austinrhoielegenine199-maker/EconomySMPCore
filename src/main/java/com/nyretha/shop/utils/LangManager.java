@@ -1,6 +1,6 @@
 package com.nyretha.shop.utils;
 
-import com.nyretha.shop.Core;
+import com.nyretha.Core;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 
@@ -8,10 +8,10 @@ import java.io.File;
 
 public class LangManager {
 
-    private final Shop plugin;
+    private final Core plugin;
     private FileConfiguration langConfig;
 
-    public LangManager(Shop plugin) {
+    public LangManager(Core plugin) {
         this.plugin = plugin;
         reload();
     }
