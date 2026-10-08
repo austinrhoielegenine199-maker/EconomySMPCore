@@ -1,6 +1,6 @@
 package com.nyretha.shop.utils;
 
-import com.nyretha.shop.Shop;
+import com.nyretha.shop.Core;
 import net.milkbowl.vault.economy.Economy;
 import org.bukkit.plugin.RegisteredServiceProvider;
 
