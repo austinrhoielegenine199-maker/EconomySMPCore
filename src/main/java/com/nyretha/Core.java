@@ -55,7 +55,6 @@ public class Core extends JavaPlugin {
     public void onEnable() {
         instance = this;
 
-        saveDefaultConfig();
         saveResourceFiles();
 
         teamService = new TeamService(this);
