@@ -9,6 +9,7 @@ import org.bukkit.configuration.file.YamlConfiguration;
 
 import java.io.File;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class ToolManager {
@@ -40,8 +41,9 @@ public class ToolManager {
                 String displayName = section.getString(key + ".displayname", key);
                 int slot = section.getInt(key + ".slot", 0);
                 int page = section.getInt(key + ".page", 1);
+                List<String> lore = section.getStringList(key + ".lore");
 
-                tools.put(key.toLowerCase(), new CustomTool(key, material, displayName, slot, page));
+                tools.put(key.toLowerCase(), new CustomTool(key, material, displayName, slot, page, lore));
             }
         }
     }
