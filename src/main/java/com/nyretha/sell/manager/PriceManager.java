@@ -2,6 +2,7 @@ package com.nyretha.sell.manager;
 
 import com.nyretha.Core;
 import com.nyretha.sell.model.PriceModel;
+import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.inventory.ItemStack;
@@ -13,15 +14,10 @@ import java.util.concurrent.ConcurrentHashMap;
 
 public class PriceManager {
 
-    private Core plugin;
+    private final Core plugin;
 
     private final Map<String, PriceModel> prices =
             new ConcurrentHashMap<>();
-
-    public PriceManager() {
-        this.plugin = Core.getInstance();
-        loadPrices();
-    }
 
     public PriceManager(Core plugin) {
         this.plugin = plugin;
@@ -29,14 +25,6 @@ public class PriceManager {
     }
 
     public void loadPrices() {
-        if (plugin == null) {
-            plugin = Core.getInstance();
-        }
-
-        if (plugin == null) {
-            return;
-        }
-
         prices.clear();
 
         File file = new File(
@@ -45,29 +33,24 @@ public class PriceManager {
         );
 
         if (!file.exists()) {
-            plugin.saveResource(
-                    "core/sell/prices.yml",
-                    false
-            );
+            plugin.saveResource("core/sell/prices.yml", false);
         }
 
         FileConfiguration config =
                 YamlConfiguration.loadConfiguration(file);
 
-        if (!config.contains("prices")) {
+        ConfigurationSection section =
+                config.getConfigurationSection("prices");
+
+        if (section == null) {
+            plugin.getLogger().warning(
+                    "No 'prices' section found in prices.yml!"
+            );
             return;
         }
 
-        if (config.getConfigurationSection("prices") == null) {
-            return;
-        }
-
-        for (String key :
-                config.getConfigurationSection("prices")
-                        .getKeys(false)) {
-
-            double price =
-                    config.getDouble("prices." + key);
+        for (String key : section.getKeys(false)) {
+            double price = section.getDouble(key);
 
             prices.put(
                     key.toUpperCase(),
@@ -78,6 +61,10 @@ public class PriceManager {
                     )
             );
         }
+
+        plugin.getLogger().info(
+                "Loaded " + prices.size() + " item prices."
+        );
     }
 
     public PriceModel getPrice(ItemStack item) {
@@ -85,7 +72,17 @@ public class PriceManager {
             return null;
         }
 
-        return prices.get(item.getType().name());
+        return prices.get(item.getType().name().toUpperCase());
+    }
+
+    public double getPriceValue(ItemStack item) {
+        PriceModel model = getPrice(item);
+
+        if (model == null) {
+            return 0.0;
+        }
+
+        return model.getPrice();
     }
 
     public Map<String, PriceModel> getAllPrices() {
