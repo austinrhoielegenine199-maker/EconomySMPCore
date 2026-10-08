@@ -14,7 +14,9 @@ import java.util.concurrent.ConcurrentHashMap;
 public class PriceManager {
 
     private final Core plugin;
-    private final Map<String, PriceModel> prices = new ConcurrentHashMap<>();
+
+    private final Map<String, PriceModel> prices =
+            new ConcurrentHashMap<>();
 
     public PriceManager(Core plugin) {
         this.plugin = plugin;
@@ -25,29 +27,43 @@ public class PriceManager {
         prices.clear();
 
         File file = new File(
-            plugin.getDataFolder(),
-            "core/sell/prices.yml"
+                plugin.getDataFolder(),
+                "core/sell/prices.yml"
         );
 
         if (!file.exists()) {
-            plugin.saveResource("core/sell/prices.yml", false);
+            plugin.saveResource(
+                    "core/sell/prices.yml",
+                    false
+            );
         }
 
         FileConfiguration config =
-            YamlConfiguration.loadConfiguration(file);
+                YamlConfiguration.loadConfiguration(file);
 
-        if (config.contains("prices")) {
-            for (String key :
-                    config.getConfigurationSection("prices").getKeys(false)) {
+        if (!config.contains("prices")) {
+            return;
+        }
 
-                double price =
+        if (config.getConfigurationSection("prices") == null) {
+            return;
+        }
+
+        for (String key :
+                config.getConfigurationSection("prices")
+                        .getKeys(false)) {
+
+            double price =
                     config.getDouble("prices." + key);
 
-                prices.put(
+            prices.put(
                     key.toUpperCase(),
-                    new PriceModel(key, price, "general")
-                );
-            }
+                    new PriceModel(
+                            key,
+                            price,
+                            "general"
+                    )
+            );
         }
     }
 
@@ -56,7 +72,9 @@ public class PriceManager {
             return null;
         }
 
-        return prices.get(item.getType().name());
+        return prices.get(
+                item.getType().name()
+        );
     }
 
     public Map<String, PriceModel> getAllPrices() {
