@@ -17,6 +17,7 @@ import com.nyretha.sell.listener.SellListener;
 import com.nyretha.sell.manager.PriceManager;
 import com.nyretha.sell.manager.SellManager;
 import com.nyretha.sell.manager.WorthManager;
+import com.nyretha.shop.flakes.FlakesManager;
 import com.nyretha.shop.utils.EconomyManager;
 import com.nyretha.team.command.TeamCommand;
 import com.nyretha.team.listener.TeamListener;
@@ -38,6 +39,7 @@ public class Core extends JavaPlugin {
     private HomeService homeService;
     private HomeTeleportService homeTeleportService;
     private FlakesService flakesService;
+    private FlakesManager flakesManager;
     private PayService payService;
     private EconomyManager economyManager;
     private WorthManager worthManager;
@@ -52,11 +54,12 @@ public class Core extends JavaPlugin {
         saveDefaultConfig();
         saveResourceFiles();
 
-        // 1. Initialize Core Services
+        // Initialize Services & Managers
         this.teamService = new TeamService(this);
         this.homeService = new HomeService(this);
         this.homeTeleportService = new HomeTeleportService(this);
         this.flakesService = new FlakesService(this);
+        this.flakesManager = new FlakesManager(this);
         this.payService = new PayService(this);
         this.economyManager = new EconomyManager(this);
         this.worthManager = new WorthManager(this);
@@ -64,10 +67,10 @@ public class Core extends JavaPlugin {
         this.priceManager = new PriceManager(this);
         this.tpaService = new TPAService(this);
 
-        // 2. Register Commands
+        // Register Commands
         registerCommands();
 
-        // 3. Register Listeners
+        // Register Listeners
         registerListeners();
 
         getLogger().info("NyrethaCore enabled successfully!");
@@ -124,4 +127,5 @@ public class Core extends JavaPlugin {
     public TPAService getTpaService() { return tpaService; }
     public PriceManager getPriceManager() { return priceManager; }
     public EconomyManager getEconomyManager() { return economyManager; }
+    public FlakesManager getFlakesManager() { return flakesManager; }
 }
