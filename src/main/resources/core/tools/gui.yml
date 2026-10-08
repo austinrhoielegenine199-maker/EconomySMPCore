@@ -1,0 +1,99 @@
+blacklist-blocks:
+  - "BEDROCK"
+  - "BARRIER"
+  - "SPAWNER"
+
+title: "&8ᴛᴏᴏʟꜱ"
+rows: 3
+pages: 2
+
+fill:
+  enabled: false
+  material: "BLACK_STAINED_GLASS_PANE"
+  display-name: ""
+  slots: "0-8,18-26"
+
+icons:
+  previous-page-slot: 18
+  previous-page:
+    material: ARROW
+    displayname: "&#009bffᴘʀᴇᴠɪᴏᴜꜱ"
+    lore:
+      - "&fClick to go to the previous page"
+
+  next-page-slot: 26
+  next-page:
+    material: ARROW
+    displayname: "&#009bffɴᴇxᴛ"
+    lore:
+      - "&fClick to go to the next page"
+
+Tools:
+  drill:
+    material: NETHERITE_PICKAXE
+    displayname: "&#009bffꜰʟᴀᴋᴇ ᴅʀɪʟʟ"
+    slot: 11
+    page: 1
+  treechopper:
+    material: NETHERITE_AXE
+    displayname: "&#009bffꜰʟᴀᴋᴇ ᴛʀᴇᴇ ᴄʜᴏᴘᴘᴇʀ"
+    slot: 12
+    page: 1
+  shovel:
+    material: NETHERITE_SHOVEL
+    displayname: "&#009bffꜰʟᴀᴋᴇ ꜱʜᴏᴠᴇʟ"
+    slot: 13
+    page: 1
+  hoe:
+    material: NETHERITE_HOE
+    displayname: "&#009bffꜰʟᴀᴋᴇ ʜᴏᴇ"
+    slot: 14
+    page: 1
+  enderpearl:
+    material: ENDER_PEARL
+    displayname: "&#009bffꜰʟᴀᴋᴇ ᴇɴᴅᴇʀ ᴘᴇᴀʀʟ"
+    slot: 15
+    page: 1
+  rocket:
+    material: FIREWORK_ROCKET
+    displayname: "&#009bffꜰʟᴀᴋᴇ ʀᴏᴄᴋᴇᴛ"
+    slot: 16
+    page: 1
+  waterbucket:
+    material: WATER_BUCKET
+    displayname: "&#009bffꜰʟᴀᴋᴇ ᴡᴀᴛᴇʀ ʙᴜᴄᴋᴇᴛ"
+    slot: 10
+    page: 1
+  lavabucket:
+    material: LAVA_BUCKET
+    displayname: "&#009bffꜰʟᴀᴋᴇ ʟᴀᴠᴀ ʙᴜᴄᴋᴇᴛ"
+    slot: 9
+    page: 1
+  jump:
+    material: FEATHER
+    displayname: "&#009bffꜰʟᴀᴋᴇ ᴊᴜᴍᴘ"
+    slot: 17
+    page: 1
+  totem:
+    material: TOTEM_OF_UNDYING
+    displayname: "&#009bffꜰʟᴀᴋᴇ ᴛᴏᴛᴇᴍ"
+    slot: 10
+    page: 2
+  chunkdrill:
+    material: NETHERITE_PICKAXE
+    displayname: "&#009bffꜰʟᴀᴋᴇ ᴄʜᴜɴᴋ ᴅʀɪʟʟ"
+    slot: 9
+    page: 2
+
+Close-button:
+  material: RED_STAINED_GLASS_PANE
+  display-name: "&#FF0000ᴄʟᴏꜱᴇ"
+  lore:
+    - "&fclick to close"
+  slot: 18
+
+sounds:
+  close-sound: "ui.button.click"
+  inventory-full-sound: "entity.villager.no"
+  tool-given-sound: "entity.experience_orb.pickup"
+  reload-sound: "entity.player.levelup"
