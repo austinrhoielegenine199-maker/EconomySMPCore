@@ -66,10 +66,7 @@ public class Core extends JavaPlugin {
         this.economyManager = new EconomyManager(this);
         this.worthManager = new WorthManager(this);
         this.sellManager = new SellManager(worthManager, economyManager);
-        
-        // --- LINE 67 FIX IS RIGHT HERE ---
-        this.priceManager = new PriceManager(this);
-        
+        this.priceManager = new PriceManager(this); // Properly initialized with Core reference
         this.tpaService = new TPAService(this);
 
         registerCommands();
