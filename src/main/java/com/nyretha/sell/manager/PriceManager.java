@@ -1,10 +1,10 @@
 package com.nyretha.sell.manager;
 
+import com.nyretha.Core;
 import com.nyretha.sell.model.PriceModel;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.plugin.java.JavaPlugin;
 
 import java.io.File;
 import java.util.*;
@@ -12,10 +12,10 @@ import java.util.concurrent.ConcurrentHashMap;
 
 public class PriceManager {
 
-    private final JavaPlugin plugin;
+    private final Core plugin;
     private final Map<String, PriceModel> prices = new ConcurrentHashMap<>();
 
-    public PriceManager(JavaPlugin plugin) {
+    public PriceManager(Core plugin) {
         this.plugin = plugin;
         loadPrices();
     }
