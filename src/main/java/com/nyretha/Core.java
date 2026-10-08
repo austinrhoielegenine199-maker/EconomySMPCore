@@ -14,6 +14,7 @@ import com.nyretha.rtp.command.RTPCommand;
 import com.nyretha.rtp.listener.RTPListener;
 import com.nyretha.sell.command.SellCommand;
 import com.nyretha.sell.listener.SellListener;
+import com.nyretha.sell.manager.PriceManager;
 import com.nyretha.sell.manager.SellManager;
 import com.nyretha.sell.manager.WorthManager;
 import com.nyretha.shop.flakes.FlakesManager;
@@ -45,9 +46,7 @@ public class Core extends JavaPlugin {
     private EconomyManager economyManager;
     private WorthManager worthManager;
     private SellManager sellManager;
-
-    private com.nyretha.sell.manager.PriceManager priceManager;
-
+    private PriceManager priceManager;
     private TPAService tpaService;
 
     @Override
@@ -67,13 +66,15 @@ public class Core extends JavaPlugin {
         this.economyManager = new EconomyManager(this);
 
         this.worthManager = new WorthManager(this);
+
         this.sellManager = new SellManager(
                 worthManager,
                 economyManager
         );
 
-        this.priceManager =
-                new com.nyretha.sell.manager.PriceManager(this);
+        // Use the no-argument constructor.
+        // Core.instance has already been set above.
+        this.priceManager = new PriceManager();
 
         this.tpaService = new TPAService(this);
 
@@ -93,28 +94,19 @@ public class Core extends JavaPlugin {
     }
 
     private void registerCommands() {
-
         if (getCommand("core") != null) {
-            getCommand("core").setExecutor(
-                    new CoreCommand()
-            );
+            getCommand("core").setExecutor(new CoreCommand());
         }
 
         if (getCommand("home") != null) {
             getCommand("home").setExecutor(
-                    new HomeCommand(
-                            homeService,
-                            teamService
-                    )
+                    new HomeCommand(homeService, teamService)
             );
         }
 
         if (getCommand("pay") != null) {
             getCommand("pay").setExecutor(
-                    new PayCommand(
-                            payService,
-                            economyManager
-                    )
+                    new PayCommand(payService, economyManager)
             );
         }
 
@@ -125,9 +117,7 @@ public class Core extends JavaPlugin {
         }
 
         if (getCommand("rtp") != null) {
-            getCommand("rtp").setExecutor(
-                    new RTPCommand()
-            );
+            getCommand("rtp").setExecutor(new RTPCommand());
         }
 
         if (getCommand("sell") != null) {
@@ -143,9 +133,7 @@ public class Core extends JavaPlugin {
         }
 
         if (getCommand("tools") != null) {
-            getCommand("tools").setExecutor(
-                    new ToolsCommand()
-            );
+            getCommand("tools").setExecutor(new ToolsCommand());
         }
 
         if (getCommand("tpa") != null) {
@@ -162,7 +150,6 @@ public class Core extends JavaPlugin {
     }
 
     private void registerListeners() {
-
         getServer().getPluginManager().registerEvents(
                 new HomeListener(
                         homeService,
@@ -204,7 +191,6 @@ public class Core extends JavaPlugin {
     }
 
     private void saveResourceFiles() {
-
         String[] resources = {
                 "core/flakes/config.yml",
                 "core/flakes/lang.yml",
@@ -257,7 +243,7 @@ public class Core extends JavaPlugin {
         return tpaService;
     }
 
-    public com.nyretha.sell.manager.PriceManager getPriceManager() {
+    public PriceManager getPriceManager() {
         return priceManager;
     }
 
