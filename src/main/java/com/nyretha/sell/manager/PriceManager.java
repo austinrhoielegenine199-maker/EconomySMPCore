@@ -24,17 +24,25 @@ public class PriceManager {
     public void loadPrices() {
         prices.clear();
 
-        File file = new File(plugin.getDataFolder(), "core/sell/prices.yml");
+        File file = new File(
+            plugin.getDataFolder(),
+            "core/sell/prices.yml"
+        );
 
         if (!file.exists()) {
             plugin.saveResource("core/sell/prices.yml", false);
         }
 
-        FileConfiguration config = YamlConfiguration.loadConfiguration(file);
+        FileConfiguration config =
+            YamlConfiguration.loadConfiguration(file);
 
         if (config.contains("prices")) {
-            for (String key : config.getConfigurationSection("prices").getKeys(false)) {
-                double price = config.getDouble("prices." + key);
+            for (String key :
+                    config.getConfigurationSection("prices").getKeys(false)) {
+
+                double price =
+                    config.getDouble("prices." + key);
+
                 prices.put(
                     key.toUpperCase(),
                     new PriceModel(key, price, "general")
@@ -44,10 +52,11 @@ public class PriceManager {
     }
 
     public PriceModel getPrice(ItemStack item) {
-        if (item == null) return null;
+        if (item == null) {
+            return null;
+        }
 
-        String type = item.getType().name();
-        return prices.get(type);
+        return prices.get(item.getType().name());
     }
 
     public Map<String, PriceModel> getAllPrices() {
