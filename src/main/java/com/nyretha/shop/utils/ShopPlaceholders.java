@@ -1,6 +1,6 @@
 package com.nyretha.shop.utils;
 
-import com.nyretha.shop.Shop;
+import com.nyretha.shop.Core;
 import me.clip.placeholderapi.expansion.PlaceholderExpansion;
 import org.bukkit.OfflinePlayer;
 import org.jetbrains.annotations.NotNull;
