@@ -1,6 +1,6 @@
 package com.nyretha.shop.models;
 
-import com.nyretha.shop.Shop;
+import com.nyretha.shop.Core;
 import com.nyretha.shop.utils.HexColor;
 import com.nyretha.utils.PlayerUtil;
 import org.bukkit.Bukkit;
