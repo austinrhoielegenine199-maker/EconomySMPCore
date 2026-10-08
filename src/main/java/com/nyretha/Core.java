@@ -19,6 +19,7 @@ import com.nyretha.sell.manager.SellManager;
 import com.nyretha.sell.manager.WorthManager;
 import com.nyretha.shop.flakes.FlakesManager;
 import com.nyretha.shop.utils.EconomyManager;
+import com.nyretha.shop.utils.LangManager;
 import com.nyretha.team.command.TeamCommand;
 import com.nyretha.team.listener.TeamListener;
 import com.nyretha.team.service.TeamService;
@@ -28,18 +29,19 @@ import com.nyretha.tpa.command.TPACommand;
 import com.nyretha.tpa.command.TPAcceptCommand;
 import com.nyretha.tpa.listener.TPAListener;
 import com.nyretha.tpa.service.TPAService;
+import net.milkbowl.vault.economy.Economy;
 import org.bukkit.plugin.java.JavaPlugin;
 
 public class Core extends JavaPlugin {
 
     private static Core instance;
 
-    // Services & Managers
     private TeamService teamService;
     private HomeService homeService;
     private HomeTeleportService homeTeleportService;
     private FlakesService flakesService;
     private FlakesManager flakesManager;
+    private LangManager langManager;
     private PayService payService;
     private EconomyManager economyManager;
     private WorthManager worthManager;
@@ -54,12 +56,12 @@ public class Core extends JavaPlugin {
         saveDefaultConfig();
         saveResourceFiles();
 
-        // Initialize Services & Managers
         this.teamService = new TeamService(this);
         this.homeService = new HomeService(this);
         this.homeTeleportService = new HomeTeleportService(this);
         this.flakesService = new FlakesService(this);
         this.flakesManager = new FlakesManager(this);
+        this.langManager = new LangManager(this);
         this.payService = new PayService(this);
         this.economyManager = new EconomyManager(this);
         this.worthManager = new WorthManager(this);
@@ -67,10 +69,7 @@ public class Core extends JavaPlugin {
         this.priceManager = new PriceManager(this);
         this.tpaService = new TPAService(this);
 
-        // Register Commands
         registerCommands();
-
-        // Register Listeners
         registerListeners();
 
         getLogger().info("NyrethaCore enabled successfully!");
@@ -78,6 +77,9 @@ public class Core extends JavaPlugin {
 
     @Override
     public void onDisable() {
+        if (flakesManager != null) {
+            flakesManager.saveSync();
+        }
         getLogger().info("NyrethaCore disabled!");
     }
 
@@ -127,5 +129,7 @@ public class Core extends JavaPlugin {
     public TPAService getTpaService() { return tpaService; }
     public PriceManager getPriceManager() { return priceManager; }
     public EconomyManager getEconomyManager() { return economyManager; }
+    public Economy getEconomy() { return economyManager != null ? economyManager.getEconomy() : null; }
     public FlakesManager getFlakesManager() { return flakesManager; }
+    public LangManager getLangManager() { return langManager; }
 }
