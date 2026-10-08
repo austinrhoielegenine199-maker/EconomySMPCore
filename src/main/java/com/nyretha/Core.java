@@ -14,6 +14,7 @@ import com.nyretha.rtp.command.RTPCommand;
 import com.nyretha.rtp.listener.RTPListener;
 import com.nyretha.sell.command.SellCommand;
 import com.nyretha.sell.listener.SellListener;
+import com.nyretha.sell.manager.PriceManager;
 import com.nyretha.sell.manager.SellManager;
 import com.nyretha.sell.manager.WorthManager;
 import com.nyretha.shop.flakes.FlakesManager;
@@ -45,6 +46,7 @@ public class Core extends JavaPlugin {
     private EconomyManager economyManager;
     private WorthManager worthManager;
     private SellManager sellManager;
+    private PriceManager priceManager;
     private TPAService tpaService;
 
     @Override
@@ -57,12 +59,21 @@ public class Core extends JavaPlugin {
         teamService = new TeamService(this);
         homeService = new HomeService(this);
         homeTeleportService = new HomeTeleportService(this);
+
         flakesService = new FlakesService(this);
         flakesManager = new FlakesManager(this);
+
         langManager = new LangManager(this);
+
         payService = new PayService(this);
         economyManager = new EconomyManager(this);
+
         worthManager = new WorthManager(this);
+
+        /*
+         * Loads core/sell/prices.yml
+         */
+        priceManager = new PriceManager(this);
 
         sellManager = new SellManager(
                 worthManager,
@@ -87,52 +98,76 @@ public class Core extends JavaPlugin {
     }
 
     private void registerCommands() {
-        if (getCommand("core") != null)
-            getCommand("core").setExecutor(new CoreCommand());
 
-        if (getCommand("home") != null)
+        if (getCommand("core") != null) {
+            getCommand("core").setExecutor(
+                    new CoreCommand()
+            );
+        }
+
+        if (getCommand("home") != null) {
             getCommand("home").setExecutor(
-                    new HomeCommand(homeService, teamService)
+                    new HomeCommand(
+                            homeService,
+                            teamService
+                    )
             );
+        }
 
-        if (getCommand("pay") != null)
+        if (getCommand("pay") != null) {
             getCommand("pay").setExecutor(
-                    new PayCommand(payService, economyManager)
+                    new PayCommand(
+                            payService,
+                            economyManager
+                    )
             );
+        }
 
-        if (getCommand("flakes") != null)
+        if (getCommand("flakes") != null) {
             getCommand("flakes").setExecutor(
                     new FlakesCommand(flakesService)
             );
+        }
 
-        if (getCommand("rtp") != null)
-            getCommand("rtp").setExecutor(new RTPCommand());
+        if (getCommand("rtp") != null) {
+            getCommand("rtp").setExecutor(
+                    new RTPCommand()
+            );
+        }
 
-        if (getCommand("sell") != null)
+        if (getCommand("sell") != null) {
             getCommand("sell").setExecutor(
                     new SellCommand(sellManager)
             );
+        }
 
-        if (getCommand("team") != null)
+        if (getCommand("team") != null) {
             getCommand("team").setExecutor(
                     new TeamCommand(teamService)
             );
+        }
 
-        if (getCommand("tools") != null)
-            getCommand("tools").setExecutor(new ToolsCommand());
+        if (getCommand("tools") != null) {
+            getCommand("tools").setExecutor(
+                    new ToolsCommand()
+            );
+        }
 
-        if (getCommand("tpa") != null)
+        if (getCommand("tpa") != null) {
             getCommand("tpa").setExecutor(
                     new TPACommand(tpaService)
             );
+        }
 
-        if (getCommand("tpaccept") != null)
+        if (getCommand("tpaccept") != null) {
             getCommand("tpaccept").setExecutor(
                     new TPAcceptCommand(tpaService)
             );
+        }
     }
 
     private void registerListeners() {
+
         getServer().getPluginManager().registerEvents(
                 new HomeListener(
                         homeService,
@@ -174,25 +209,34 @@ public class Core extends JavaPlugin {
     }
 
     private void saveResourceFiles() {
+
         String[] resources = {
                 "core/flakes/config.yml",
                 "core/flakes/lang.yml",
+
                 "core/home/config.yml",
                 "core/home/lang.yml",
+
                 "core/pay/config.yml",
                 "core/pay/lang.yml",
+
                 "core/rtp/config.yml",
                 "core/rtp/lang.yml",
+
                 "core/sell/config.yml",
                 "core/sell/lang.yml",
                 "core/sell/prices.yml",
                 "core/sell/sellaxe.yml",
+
                 "core/shop/config.yml",
                 "core/shop/lang.yml",
+
                 "core/team/config.yml",
                 "core/team/lang.yml",
+
                 "core/tools/gui.yml",
                 "core/tools/lang.yml",
+
                 "core/tpa/config.yml",
                 "core/tpa/lang.yml"
         };
@@ -234,5 +278,17 @@ public class Core extends JavaPlugin {
 
     public LangManager getLangManager() {
         return langManager;
+    }
+
+    public WorthManager getWorthManager() {
+        return worthManager;
+    }
+
+    public SellManager getSellManager() {
+        return sellManager;
+    }
+
+    public PriceManager getPriceManager() {
+        return priceManager;
     }
 }
